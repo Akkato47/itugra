@@ -1,67 +1,59 @@
-# Express Starter
+# Digital hackaton
 
-**Express Starter** is a boilerplate for creating APIs using Node.js with Express, Drizzle ORM, PostgreSQL, and Redis. This project offers a quick start and convenient setup for services with a database and cache.
+## 📋 Содержание
 
-## 📋 Contents
-
-- [About the Project](#-about-the-project)
-- [Checklist](#-checklist)
-- [Technologies](#-technologies)
-- [Installation](#-installation)
-- [Environment Setup](#-environment-setup)
-- [Running the Application](#️-running-the-application)
-- [Commands](#-commands)
-- [License](#-license)
-- [Compatibility](#-compatibility)
-
+- [О проекте](#-о-проекте)
+- [Чек лист](#-чек-лист)
+- [Технологии](#-технологии)
+- [Установка](#-установка)
+- [Настройка окружения](#-настройка-окружения)
+- [Запуск приложения](#️-запуск-приложения)
+- [Команды](#-команды)
+- [Лицензия](#-лицензия)
 ---
 
-## 🚀 About the Project
+## 🚀 О проекте
 
-The Express Drizzle Redis Starter provides a foundation for rapidly deploying backend applications. It includes ready-to-use integration with Redis and PostgreSQL, along with a REST API structure.
+Express Drizzle Redis Starter предоставляет основу для быстрого разворачивания backend-приложений. Проект содержит уже настроенную интеграцию с Redis и PostgreSQL, а также готовую к использованию структуру REST API.
 
-## ✔ Checklist
+## ✔ Чек-лист
 
-Implemented features in the project:
+Реализованные возможности в проекте
 
 - [x] Express.
 - [x] PostgreSQL.
 - [x] Drizzle ORM.
-- [x] Basic database migrations configured.
+- [x] Настроены базовые миграции базы данных.
 - [x] Redis.
-- [x] Dockerfile and Docker Compose.
+- [x] Dockerfile и Docker compose.
 - [x] Mail sender.
 - [x] S3 uploads.
-- [x] OAuth2.0 authorization via Yandex.
-- [ ] OAuth2.0 authorization via VK.
-- [ ] ELK.
-- [ ] Prometheus and Grafana.
-- [ ] RabbitMQ/Kafka.
+- [x] Подключена OAuth2.0 авторизация через Яндекс.
 
-## 🛠 Technologies
+## 🛠 Технологии
 
-The project is based on the following technologies and libraries:
+Проект построен на основе следующих технологий и библиотек:
 
-- **[Node.js](https://nodejs.org/)** – JavaScript runtime for server-side programming
-- **[Express](https://expressjs.com/)** – minimalist and flexible web framework for Node.js
-- **[Drizzle ORM](https://orm.drizzle.team/)** – ORM for PostgreSQL
-- **[Redis](https://redis.io/)** – high-performance cache and message broker
-- **[Docker](https://www.docker.com/)** – containerization and dependency management
+- **[Node.js](https://nodejs.org/)** – среда выполнения JavaScript на сервере
+- **[Express](https://expressjs.com/)** – минималистичный и гибкий веб-фреймворк для Node.js
+- **[Drizzle ORM](https://orm.drizzle.team/)** – ORM для PostgreSQL
+- **[Redis](https://redis.io/)** – высокопроизводительный кэш и брокер сообщений
+- **[Docker](https://www.docker.com/)** – контейнеризация и управление зависимостями
 
-## 📦 Installation
+## 📦 Установка
 
-1. Clone the repository:
+1. Клонируйте репозиторий:
 
    ```bash
    git clone https://github.com/Akkato47/express-drizzle-redis-starter.git
    cd express-drizzle-redis-starter
    ```
 
-2. Ensure that **Docker** and **Docker Compose** are installed on your machine. This project uses Docker for containerizing services.
+2. Убедитесь, что на вашем компьютере установлены **Docker** и **Docker Compose**. Этот проект использует Docker для контейнеризации сервисов.
 
-## 🔧 Environment Setup
+## 🔧 Настройка окружения
 
-Create a `.env` file in the root folder of the project and fill it with the values based on the example below or the `.env.example`:
+Создайте файл `.env` в корневой папке проекта и заполните его, используя пример ниже или `.env.example`:
 
 ```env
 PORT=8000
@@ -98,30 +90,26 @@ YANDEX_CLIENT_ID=your_yandex_client_id
 YANDEX_CLIENT_SECRET=your_yandex_client_secret
 ```
 
-## ▶️ Running the Application
+## ▶️ Запуск приложения
 
-You can start the project using Docker Compose:
+Запустить проект можно с помощью Docker Compose:
 
 ```bash
 docker-compose up -d --build
 ```
 
-After a successful start, the project will be available at: `http://localhost:8000/api`.
+После успешного запуска проект будет доступен по адресу: `http://localhost:8000/api`.
 
-## 📜 Commands
+## 📜 Команды
 
-- **`docker-compose up`**: starts the project in Docker.
-- **`docker-compose down`**: stops and removes containers.
-- **`yarn dev`**: starts the project locally for development (without Docker).
-- **`yarn migrate`**: runs database migrations.
-- **`yarn generate`**: generates necessary files based on the Drizzle schema.
+- **`docker-compose up`**: запускает проект в Docker.
+- **`docker-compose down`**: останавливает и удаляет контейнеры.
+- **`yarn dev`**: локальный запуск проекта для разработки (без Docker).
+- **`yarn migrate`**: запуск миграций базы данных.
+- **`yarn generate`**: генерация необходимых файлов на основе схемы Drizzle.
 
-## ⚖️ License
+## ⚖️ Лицензия
 
-This project is licensed under the [MIT License](LICENSE).
-
-## 🔥 Compatibility
-
-- [React-starter](https://github.com/SergeyV1S/react-starter) by [V1S](https://github.com/SergeyV1S)
+Этот проект лицензирован под [MIT License](LICENSE).
 
 ---
