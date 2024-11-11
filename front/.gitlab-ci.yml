@@ -1,0 +1,32 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HUB_USER: "$DOCKER_HUB_USERNAME"
+  DOCKER_HUB_PASSWORD: "$DOCKER_HUB_PASSWORD"
+  SERVER_IP: "$SERVER_IP"
+  SERVER_USER: root
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  only:
+    - main
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_HUB_USER/digital-front:latest .
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker push $DOCKER_HUB_USER/digital-front:latest
+
+deploy:
+  stage: deploy
+  only:
+    - main
+  script:
+    - echo "Deploying to server..."
+    - ssh $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-front:latest && docker stop front || true && docker rm front || true && docker run -d -p 3000:5173 --name front $DOCKER_HUB_USER/digital-front:latest"
