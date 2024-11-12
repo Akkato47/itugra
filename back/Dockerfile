@@ -82,6 +82,4 @@ ENV PORT="${PORT}" \
 
 EXPOSE ${PORT}
 
-RUN yarn migrate:prod
-
 CMD ["node", "/var/www/dist/main.js"]
