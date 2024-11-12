@@ -40,10 +40,6 @@ export default {
       secret: env.JWT_REFRESH_SECRET,
       expiresIn: isProduction ? env.REFRESH_TOKEN_EXPIRES_IN : '12h',
     },
-    passwordReset: {
-      secret: env.JWT_PASSWORD_RESET_SECRET,
-      expiresIn: '1d',
-    },
   },
   bucket: {
     key: env.BUCKET_KEY,

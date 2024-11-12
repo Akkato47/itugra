@@ -5,7 +5,7 @@ import type { TDecodedToken } from '../types/decodedToken.interface';
 
 type TGenerateOptions = {
   payload: string | object | Buffer;
-  tokenType: 'access' | 'refresh' | 'passwordReset';
+  tokenType: 'access' | 'refresh';
 };
 
 type TVerifyOptions = {
@@ -18,12 +18,6 @@ function selectFunc(tokenType: TGenerateOptions['tokenType']) {
     return {
       secret: config.jwt.refresh.secret,
       expiresIn: config.jwt.refresh.expiresIn || '30d',
-    };
-  }
-  if (tokenType === 'passwordReset') {
-    return {
-      secret: config.jwt.passwordReset.secret,
-      expiresIn: config.jwt.passwordReset.expiresIn || '5m',
     };
   }
   return {

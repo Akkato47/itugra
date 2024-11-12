@@ -20,7 +20,7 @@ build:
     - if: '$CI_COMMIT_BRANCH == "main"'
   script:
     - echo "Building Docker image..."
-    - docker build -t $DOCKER_HUB_USER/digital-front:latest .
+    - bash ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $DOCKER_HUB_USER/digital-front:latest .
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker push $DOCKER_HUB_USER/digital-front:latest
 
