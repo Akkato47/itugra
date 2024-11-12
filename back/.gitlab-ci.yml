@@ -8,7 +8,6 @@ variables:
   DOCKER_HUB_PASSWORD: '$DOCKER_HUB_PASSWORD'
   SERVER_IP: '$SERVER_IP'
   SERVER_USER: root
-  PROJECT_PATH: '/var/www/digital'
   SSH_PRIVATE_KEY: '$SSH_PRIVATE_KEY'
 
 stages:
@@ -17,33 +16,24 @@ stages:
 
 build:
   stage: build
-  only:
-    - main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
   script:
-    - echo "Building Docker image for backend..."
-    - docker-compose -f docker-compose.yaml build express-app
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_HUB_USER/digital-front:latest .
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-    - docker push $DOCKER_HUB_USER/digital-backend:latest
+    - docker push $DOCKER_HUB_USER/digital-front:latest
 
 deploy:
   stage: deploy
-  only:
-    - main
   rules:
-    - when: manual
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
   before_script:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
   script:
-    - echo "Deploying to server..."
-    - ssh "$SERVER_USER"@"$SERVER_IP" "mkdir -p $PROJECT_PATH"
-    - scp -o StrictHostKeyChecking=no docker-compose.yaml "$SERVER_USER"@"$SERVER_IP":"$PROJECT_PATH/docker-compose.yaml"
-    - ssh "$SERVER_USER"@"$SERVER_IP" <<EOF
-      cd $PROJECT_PATH;
-      docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD";
-      docker-compose pull;
-      docker-compose down;
-      docker-compose up -d;
-      EOF
+    - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-front:latest && docker stop front || true && docker rm front || true && docker run -d -p 5173:5173 --name front $DOCKER_HUB_USER/digital-front:latest"
+    - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker system prune -a -f"
