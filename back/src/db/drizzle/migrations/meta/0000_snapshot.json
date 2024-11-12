@@ -167,12 +167,8 @@
           "name": "user_profle_info_user_uid_users_uid_fk",
           "tableFrom": "user_profle_info",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_uid"
-          ],
-          "columnsTo": [
-            "uid"
-          ],
+          "columnsFrom": ["user_uid"],
+          "columnsTo": ["uid"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -268,30 +264,22 @@
         "users_oauth_id_unique": {
           "name": "users_oauth_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "oauth_id"
-          ]
+          "columns": ["oauth_id"]
         },
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         },
         "users_mail_unique": {
           "name": "users_mail_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         },
         "users_phone_unique": {
           "name": "users_phone_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "phone"
-          ]
+          "columns": ["phone"]
         }
       }
     }
@@ -300,12 +288,7 @@
     "public.role": {
       "name": "role",
       "schema": "public",
-      "values": [
-        "ORG",
-        "USER",
-        "ADMIN",
-        "SU"
-      ]
+      "values": ["ORG", "USER", "ADMIN", "SU"]
     }
   },
   "schemas": {},

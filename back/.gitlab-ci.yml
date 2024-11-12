@@ -4,12 +4,12 @@ services:
   - docker:dind
 
 variables:
-  DOCKER_HUB_USER: "$DOCKER_HUB_USERNAME"
-  DOCKER_HUB_PASSWORD: "$DOCKER_HUB_PASSWORD"
-  SERVER_IP: "$SERVER_IP"
+  DOCKER_HUB_USER: '$DOCKER_HUB_USERNAME'
+  DOCKER_HUB_PASSWORD: '$DOCKER_HUB_PASSWORD'
+  SERVER_IP: '$SERVER_IP'
   SERVER_USER: root
-  PROJECT_PATH: "/var/www/digital"
-  SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY"
+  PROJECT_PATH: '/var/www/digital'
+  SSH_PRIVATE_KEY: '$SSH_PRIVATE_KEY'
 
 stages:
   - build
@@ -29,7 +29,7 @@ deploy:
   stage: deploy
   only:
     - main
-  rules: 
+  rules:
     - when: manual
   before_script:
     - mkdir -p ~/.ssh
@@ -41,9 +41,9 @@ deploy:
     - ssh "$SERVER_USER"@"$SERVER_IP" "mkdir -p $PROJECT_PATH"
     - scp -o StrictHostKeyChecking=no docker-compose.yaml "$SERVER_USER"@"$SERVER_IP":"$PROJECT_PATH/docker-compose.yaml"
     - ssh "$SERVER_USER"@"$SERVER_IP" <<EOF
-        cd $PROJECT_PATH;
-        docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD";
-        docker-compose pull;
-        docker-compose down;
-        docker-compose up -d;
+      cd $PROJECT_PATH;
+      docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD";
+      docker-compose pull;
+      docker-compose down;
+      docker-compose up -d;
       EOF
