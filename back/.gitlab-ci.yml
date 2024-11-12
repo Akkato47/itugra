@@ -21,7 +21,7 @@ build:
     - main
   script:
     - echo "Building Docker image for backend..."
-    - docker-compose -f docker-compose.yml build express-app
+    - docker-compose -f docker-compose.yaml build express-app
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker tag express-app $DOCKER_HUB_USER/digital-backend:latest
     - docker push $DOCKER_HUB_USER/digital-backend:latest
