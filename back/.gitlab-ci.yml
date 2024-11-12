@@ -41,9 +41,11 @@ deploy:
     - >
       ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP '
         ENV_ARGS=""
-        while read -r line; do
-          VAR="$(echo "$line" | awk -F= '\''{print "-e " $1 "=" $2}'\'')"
-          ENV_ARGS="$ENV_ARGS $VAR"
+        while IFS= read -r line; do
+          if [[ ! -z "$line" && "$line" != \#* ]]; then
+            VAR="-e $line"
+            ENV_ARGS="$ENV_ARGS $VAR"
+          fi
         done < <(echo "$ENV_FILE")
         docker pull $DOCKER_HUB_USER/digital-back:latest &&
         docker stop back || true &&
