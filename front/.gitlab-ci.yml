@@ -16,8 +16,8 @@ stages:
 
 build:
   stage: build
-  only:
-    - main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
   script:
     - echo "Building Docker image..."
     - docker build -t $DOCKER_HUB_USER/digital-front:latest .
@@ -26,10 +26,9 @@ build:
 
 deploy:
   stage: deploy
-  only:
-    - main
   rules:
-    - when: manual
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
   before_script:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
