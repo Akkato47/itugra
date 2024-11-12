@@ -32,6 +32,7 @@ deploy:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
+    - ssh -i ~/.ssh/id_rsa -T $SERVER_USER@$SERVER_IP || echo "SSH key failed to load"
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
   script:
     - echo "Deploying to server..."
@@ -39,4 +40,4 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-    - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-front:latest && docker stop front || true && docker rm front || true && docker run -d -p 3000:5173 --name front $DOCKER_HUB_USER/digital-front:latest"
+    - ssh -v -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-front:latest && docker stop front || true && docker rm front || true && docker run -d -p 3000:5173 --name front $DOCKER_HUB_USER/digital-front:latest"
