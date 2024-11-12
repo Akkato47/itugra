@@ -54,4 +54,4 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: redis_secret
-    command: sh -c "yarn --ignore-engines && yarn generate && yarn migrate && yarn dev"
+    command: sh -c "yarn generate && yarn migrate && yarn node /var/www/dist/main.js"

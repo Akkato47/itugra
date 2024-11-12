@@ -23,13 +23,14 @@ build:
     - echo "Building Docker image for backend..."
     - docker-compose -f docker-compose.yaml build express-app
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-    - docker tag express-app $DOCKER_HUB_USER/digital-backend:latest
     - docker push $DOCKER_HUB_USER/digital-backend:latest
 
 deploy:
   stage: deploy
   only:
     - main
+  rules: 
+    - when: manual
   before_script:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
@@ -38,7 +39,7 @@ deploy:
   script:
     - echo "Deploying to server..."
     - ssh "$SERVER_USER"@"$SERVER_IP" "mkdir -p $PROJECT_PATH"
-    - scp -o StrictHostKeyChecking=no docker-compose.yml "$SERVER_USER"@"$SERVER_IP":"$PROJECT_PATH/docker-compose.yml"
+    - scp -o StrictHostKeyChecking=no docker-compose.yaml "$SERVER_USER"@"$SERVER_IP":"$PROJECT_PATH/docker-compose.yaml"
     - ssh "$SERVER_USER"@"$SERVER_IP" <<EOF
         cd $PROJECT_PATH;
         docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD";
