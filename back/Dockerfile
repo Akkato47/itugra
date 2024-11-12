@@ -48,6 +48,7 @@ COPY --from=builder /var/www/node_modules ./node_modules
 COPY --from=builder /var/www/dist ./dist
 COPY --from=builder /var/www/src/db/drizzle/migrations ./dist/db/drizzle/migrations
 COPY --from=builder /var/www/yarn.lock .
+COPY --from=builder /var/www/docker-start-db.sh .
 
 COPY package.json ./
 
@@ -82,4 +83,4 @@ ENV PORT="${PORT}" \
 
 EXPOSE ${PORT}
 
-CMD ["node", "/var/www/dist/main.js"]
+CMD ["sh", "docker-start-db.sh"]
