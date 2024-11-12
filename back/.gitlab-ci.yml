@@ -38,5 +38,5 @@ deploy:
     - source $ENV_FILE
     - echo $PORT
     - echo $REDIS_PASSWORD
-    - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-back:latest && docker stop back || true && docker rm back || true && docker run -d --restart unless-stopped --net host -p 127.0.0.1:8000:8000 --name back $DOCKER_HUB_USER/digital-back:latest"
+    - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-back:latest && docker stop back || true && docker rm back || true && bash ./env-as-e.sh $ENV_FILE | xargs docker run -d --restart unless-stopped --net host -p 127.0.0.1:8000:8000 --name back $DOCKER_HUB_USER/digital-back:latest"
     # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker system prune -a -f"
