@@ -35,7 +35,9 @@ export const useSignIn = () => {
     }
   });
 
-  const onSubmit = async (values: z.infer<typeof signInPhoneSchema | typeof signInMailSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof signInPhoneSchema | typeof signInMailSchema>
+  ) => {
     await posLoginMutation.mutateAsync({ params: values });
   };
 

@@ -4,7 +4,14 @@ import { PatternFormat } from "react-number-format";
 import type { z } from "zod";
 
 import { Button } from "@shared/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@shared/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@shared/ui/form";
 import { Input } from "@shared/ui/input";
 import { PasswordInput } from "@shared/ui/password-input";
 

@@ -7,6 +7,7 @@ export const usePostLogoutMutation = (
 ) =>
   useMutation({
     mutationKey: ["postLogout"],
-    mutationFn: ({ config }) => postLogout({ config: { ...settings?.config, ...config } }),
+    mutationFn: ({ config }) =>
+      postLogout({ config: { ...settings?.config, ...config } }),
     ...settings?.options
   });

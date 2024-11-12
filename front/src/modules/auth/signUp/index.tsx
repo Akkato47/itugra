@@ -6,8 +6,21 @@ import type { z } from "zod";
 
 import { PATHS } from "@shared/constants";
 import { Button } from "@shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@shared/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@shared/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@shared/ui/form";
 import { Input } from "@shared/ui/input";
 import { PasswordInput } from "@shared/ui/password-input";
 
