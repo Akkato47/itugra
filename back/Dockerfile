@@ -84,4 +84,4 @@ EXPOSE ${PORT}
 
 RUN echo ${PORT}
 
-CMD [ "sh", "docker-start-db.sh" ]
+CMD [ "bash", "docker-start-db.sh" ]
