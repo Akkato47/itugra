@@ -1,0 +1,48 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HUB_USER: "$DOCKER_HUB_USERNAME"
+  DOCKER_HUB_PASSWORD: "$DOCKER_HUB_PASSWORD"
+  SERVER_IP: "$SERVER_IP"
+  SERVER_USER: root
+  PROJECT_PATH: "/var/www/digital"
+  SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY"
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  only:
+    - main
+  script:
+    - echo "Building Docker image for backend..."
+    - docker-compose -f docker-compose.yml build express-app
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker tag express-app $DOCKER_HUB_USER/digital-backend:latest
+    - docker push $DOCKER_HUB_USER/digital-backend:latest
+
+deploy:
+  stage: deploy
+  only:
+    - main
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+  script:
+    - echo "Deploying to server..."
+    - ssh "$SERVER_USER"@"$SERVER_IP" "mkdir -p $PROJECT_PATH"
+    - scp -o StrictHostKeyChecking=no docker-compose.yml "$SERVER_USER"@"$SERVER_IP":"$PROJECT_PATH/docker-compose.yml"
+    - ssh "$SERVER_USER"@"$SERVER_IP" <<EOF
+        cd $PROJECT_PATH;
+        docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD";
+        docker-compose pull;
+        docker-compose down;
+        docker-compose up -d;
+      EOF
