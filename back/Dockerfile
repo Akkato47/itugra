@@ -82,6 +82,6 @@ ENV PORT="${PORT}" \
 
 EXPOSE ${PORT}
 
-RUN echo ${PORT}
+RUN yarn migrate:prod
 
-CMD [ "bash", "docker-start-db.sh" ]
+CMD ["node", "/var/www/dist/main.js"]
