@@ -82,4 +82,6 @@ ENV PORT="${PORT}" \
 
 EXPOSE ${PORT}
 
-CMD ["node", "/var/www/dist/main.js"]
+RUN echo ${PORT}
+
+CMD [ "sh", "docker-start-db.sh" ]
