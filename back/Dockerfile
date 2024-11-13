@@ -34,7 +34,7 @@ WORKDIR /var/www
 
 COPY package.json ./
 
-RUN yarn install --production
+RUN yarn install
 
 COPY . .
 
@@ -44,11 +44,13 @@ FROM node:20.11-alpine
 
 WORKDIR /var/www
 
-COPY --from=builder /var/www/node_modules ./node_modules
+# COPY --from=builder /var/www/node_modules ./node_modules
 COPY --from=builder /var/www/dist ./dist
 COPY --from=builder /var/www/src/db/drizzle/migrations ./dist/db/drizzle/migrations
 COPY --from=builder /var/www/yarn.lock .
 COPY --from=builder /var/www/docker-start-db.sh .
+
+RUN yarn install --production
 
 COPY package.json ./
 
