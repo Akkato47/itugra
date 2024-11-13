@@ -1,5 +1,5 @@
-# services:
-#   - docker:dind
+services:
+  - docker:dind
 
 variables:
   TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
