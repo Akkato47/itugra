@@ -38,6 +38,8 @@ build:
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
+    - source $ENV_FILE
+    - echo $BASE_API_URL
     - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
     # - docker push $TAG_COMMIT
     # - docker push $TAG_LATEST
