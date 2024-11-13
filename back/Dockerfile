@@ -52,6 +52,7 @@ COPY --from=builder /var/www/docker-start-db.sh .
 
 COPY package.json ./
 
+
 ENV PORT="${PORT}" \
     NODE_ENV="${NODE_ENV}" \
     CLIENT_BASE_URL="${CLIENT_BASE_URL}" \
