@@ -13,6 +13,12 @@ RUN yarn install
 
 COPY . .
 
+RUN echo "DEBUG: BASE_API_URL=${BASE_API_URL}" && \
+    echo "DEBUG: BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" && \
+    echo "DEBUG: YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" && \
+    echo "DEBUG: YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" && \
+    echo "DEBUG: YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}"
+
 RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
     echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
