@@ -61,9 +61,10 @@ export const createUser = async (createUserDto: CreateUserDto) => {
     if (tryUser.length > 0) {
       throw new CustomError(HttpStatus.CONFLICT);
     }
-
-    const hashPassword = await hash(createUserDto.password, 10);
-    createUserDto.password = hashPassword;
+    if (createUserDto.password) {
+      const hashPassword = await hash(createUserDto.password, 10);
+      createUserDto.password = hashPassword;
+    }
 
     const user = await db
       .insert(users)

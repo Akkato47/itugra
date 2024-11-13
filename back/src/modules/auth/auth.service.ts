@@ -78,7 +78,6 @@ export const logout = async (uid: string, oAuthId?: string) => {
     }
     return true;
   } catch (error) {
-    console.log(error);
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
     }
