@@ -1,3 +1,9 @@
+ARG BASE_API_URL="${BASE_API_URL}" \ 
+    BASE_YANDEX_API_URL="${BASE_YANDEX_API_URL}" \
+    YANDEX_REDIRECT_URI="${YANDEX_REDIRECT_URI}" \
+    YANDEX_CLIENT_ID="${YANDEX_CLIENT_ID}" \
+    YANDEX_CLIENT_SECRET="${YANDEX_CLIENT_SECRET}"
+
 FROM node:20.11-alpine AS builder
 
 WORKDIR /var/www
@@ -6,13 +12,6 @@ COPY package.json ./
 RUN yarn install
 
 COPY . .
-
-ARG \ 
-    BASE_API_URL \ 
-    BASE_YANDEX_API_URL \
-    YANDEX_REDIRECT_URI \
-    YANDEX_CLIENT_ID \
-    YANDEX_CLIENT_SECRET
 
 RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
