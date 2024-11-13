@@ -1,8 +1,5 @@
-ARG BASE_API_URL
-ARG BASE_YANDEX_API_URL
-ARG YANDEX_REDIRECT_URI
-ARG YANDEX_CLIENT_ID
-ARG YANDEX_CLIENT_SECRET
+ARG ENV_FILE
+
 
 FROM node:20.11-alpine AS builder
 
@@ -13,17 +10,9 @@ RUN yarn install
 
 COPY . .
 
-RUN echo "DEBUG: BASE_API_URL=${BASE_API_URL}" && \
-    echo "DEBUG: BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" && \
-    echo "DEBUG: YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" && \
-    echo "DEBUG: YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" && \
-    echo "DEBUG: YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}"
+RUN echo "DEBUG: ENV_FILE=${ENV_FILE}" && 
 
-RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
-    echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
-    echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
-    echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
-    echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
+RUN echo "$ENV_FILE" > .env.production
 
 RUN yarn build
 
