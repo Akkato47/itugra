@@ -4,8 +4,8 @@ services:
 variables:
   TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
-  DOCKER_HOST: 'tcp://docker:2375'
-  DOCKER_TLS_CERTDIR: '' # Отключает использование TLS для Docker-in-Docker
+  # DOCKER_HOST: 'tcp://docker:2375'
+  # DOCKER_TLS_CERTDIR: '' # Отключает использование TLS для Docker-in-Docker
   DOCKER_HUB_USER: '$DOCKER_HUB_USERNAME'
   DOCKER_HUB_PASSWORD: '$DOCKER_HUB_PASSWORD'
   SERVER_IP: '$SERVER_IP'
