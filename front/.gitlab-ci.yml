@@ -52,7 +52,7 @@ deploy:
     - docker container rm -f $IMGNAME || true
     - source $ENV_FILE
     - echo $BASE_API_URL
-    - echo $ENV_FILE
+    - echo /builds/hackathons8730839/digital/front.tmp/ENV_FILE
     - docker run -d --restart unless-stopped -e BASE_API_URL=$BASE_API_URL -p 5173:5173 --name $IMGNAME $TAG_COMMIT
   after_script:
     - docker system prune -a -f

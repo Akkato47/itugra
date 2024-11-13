@@ -9,7 +9,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
-    "preview": "vite preview"
+    "serve": "vite preview --host 0.0.0.0 --port 5173"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
