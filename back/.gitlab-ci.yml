@@ -37,6 +37,7 @@ build:
     - $ENVIRONMENT_NAME
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
