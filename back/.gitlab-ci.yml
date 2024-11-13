@@ -18,11 +18,11 @@ workflow:
     - if: $CI_COMMIT_BRANCH ==  "main"
       variables:
         ENVIRONMENT_NAME: production
-        HOST: igniz.ru
+        HOST: api.igniz.ru
     - if: $CI_COMMIT_BRANCH == "stage"
       variables:
         ENVIRONMENT_NAME: stage
-        HOST: igniz.ru
+        HOST: api.igniz.ru
 
 stages:
   - build
