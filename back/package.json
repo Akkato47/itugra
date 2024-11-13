@@ -13,8 +13,7 @@
     "migrate": "ts-node src/db/drizzle/migrate.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix",
-    "format": "prettier --write .",
-    "prepare": "husky"
+    "format": "prettier --write ."
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -34,7 +34,7 @@ WORKDIR /var/www
 
 COPY package.json ./
 
-RUN yarn install
+RUN yarn install --production
 
 COPY . .
 
