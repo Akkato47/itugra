@@ -15,6 +15,12 @@ COPY . .
 
 RUN echo BASE_API_URL
 
+RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
+    echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
+    echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
+    echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
+    echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
+
 RUN yarn build
 
 FROM node:20.11-alpine
