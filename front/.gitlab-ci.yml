@@ -61,10 +61,10 @@ deploy:
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker container rm -f $IMGNAME || true
-    # - source $ENV_FILE
-    # - echo $BASE_API_URL
-    # - docker run -d --restart unless-stopped --env-file $ENV_FILE -p 5173:5173 --name $IMGNAME $TAG_COMMIT
-    - docker run -d --restart unless-stopped -p 5173:5173 --name $IMGNAME $TAG_COMMIT
+    - source $ENV_FILE
+    - echo $BASE_API_URL
+    - docker run -d --restart unless-stopped --env-file $ENV_FILE -p 5173:5173 --name $IMGNAME $TAG_COMMIT
+    # - docker run -d --restart unless-stopped -p 5173:5173 --name $IMGNAME $TAG_COMMIT
     # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-front:latest && docker stop front || true && docker rm front || true && docker run -d -p 5173:5173 --name front $DOCKER_HUB_USER/digital-front:latest"
     # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker system prune -a -f"
   after_script:
