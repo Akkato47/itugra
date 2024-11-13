@@ -50,9 +50,10 @@ COPY --from=builder /var/www/src/db/drizzle/migrations ./dist/db/drizzle/migrati
 # COPY --from=builder /var/www/yarn.lock .
 COPY --from=builder /var/www/docker-start-db.sh .
 
+COPY package.json ./
+
 RUN yarn install --production
 
-COPY package.json ./
 
 ENV PORT="${PORT}" \
     NODE_ENV="${NODE_ENV}" \
