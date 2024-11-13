@@ -7,6 +7,11 @@ variables:
   IMGNAME: "digital-front"
   DOCKER_HUB_USER: "$DOCKER_HUB_USERNAME"
   DOCKER_HUB_PASSWORD: "$DOCKER_HUB_PASSWORD"
+  BASE_API_URL: "$BASE_API_URL"
+  BASE_YANDEX_API_URL: "$BASE_YANDEX_API_URL"
+  YANDEX_REDIRECT_URI: "$YANDEX_REDIRECT_URI"
+  YANDEX_CLIENT_ID: "$YANDEX_CLIENT_ID"
+  YANDEX_CLIENT_SECRET: "$YANDEX_CLIENT_SECRET"
 
 workflow:
   rules:
@@ -35,9 +40,7 @@ build:
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
-    - source $ENV_FILE
-    - echo $BASE_API_URL
-    - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker build --build-arg BASE_API_URL=$BASE_API_URL --build-arg BASE_YANDEX_API_URL=$BASE_YANDEX_API_URL --build-arg YANDEX_REDIRECT_URI=$YANDEX_REDIRECT_URI --build-arg YANDEX_CLIENT_ID=$YANDEX_CLIENT_ID --build-arg YANDEX_CLIENT_SECRET=$YANDEX_CLIENT_SECRET -t $TAG_COMMIT -t $TAG_LATEST .
 
 deploy:
   image: docker:stable
@@ -50,9 +53,6 @@ deploy:
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker container rm -f $IMGNAME || true
-    - source $ENV_FILE
-    - echo $BASE_API_URL
-    - echo /builds/hackathons8730839/digital/front.tmp/ENV_FILE
-    - docker run -d --restart unless-stopped -e BASE_API_URL=$BASE_API_URL -p 5173:5173 --name $IMGNAME $TAG_COMMIT
+    - docker run -d --restart unless-stopped -p 5173:5173 --name $IMGNAME $TAG_COMMIT
   after_script:
     - docker system prune -a -f
