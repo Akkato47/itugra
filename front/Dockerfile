@@ -9,9 +9,9 @@ FROM node:20.11-alpine AS builder
 
 WORKDIR /var/www
 
-COPY package.json yarn.lock ./
+COPY package.json ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 COPY . .
 
@@ -23,8 +23,9 @@ WORKDIR /var/www
 
 COPY --from=builder /var/www/node_modules ./node_modules
 COPY --from=builder /var/www/dist ./dist
+COPY --from=builder /var/www/yarn.lock .
 
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 ENV BASE_API_URL="${BASE_API_URL}"\
     BASE_WS_URL="${BASE_WS_URL}" \
