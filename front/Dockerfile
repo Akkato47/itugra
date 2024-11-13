@@ -21,6 +21,8 @@ RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
     echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
     echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
 
+RUN echo cat .env.production
+
 RUN yarn build
 
 FROM node:20.11-alpine
