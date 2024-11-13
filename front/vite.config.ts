@@ -1,6 +1,9 @@
 import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
 import path from "path";
 import { defineConfig } from "vite";
+
+dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +14,15 @@ export default defineConfig({
       "@modules": path.resolve(__dirname, "./src/modules"),
       "@shared": path.resolve(__dirname, "./src/shared")
     }
+  },
+  define: {
+    "process.env": process.env
+  },
+  preview: {
+    port: 4173
+  },
+  server: {
+    port: 5173
   },
   envPrefix: ["VITE_", "BASE_", "YANDEX_"]
 });
