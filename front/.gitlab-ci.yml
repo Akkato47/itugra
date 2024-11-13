@@ -36,10 +36,7 @@ build:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
     - source $ENV_FILE
-    - echo "ENV_FILE содержимое:"
-    - cat $ENV_FILE # Проверка содержимого ENV_FILE
-    - sh ./env-as-build-args.sh $ENV_FILE # Вывод для проверки
-    - sh ./env-as-build-args.sh $ENV_FILE | xargs echo "Docker Build Args " # Проверка аргументов
+    - echo $BASE_API_URL
     - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
 
 deploy:

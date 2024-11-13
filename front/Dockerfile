@@ -26,8 +26,6 @@ RUN echo "BASE_API_URL=https://api.igniz.ru/api" > .env.production && \
     echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
     echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
 
-RUN cat .env.production
-
 RUN yarn build
 
 FROM node:20.11-alpine
