@@ -36,4 +36,4 @@ ENV BASE_API_URL="${BASE_API_URL}"\
 
 EXPOSE 5173
 
-CMD ["yarn", "preview", "--port", "5173"]
+CMD ["yarn", "preview", "--host", "0.0.0.0", "--port", "5173"]
