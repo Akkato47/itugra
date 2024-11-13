@@ -20,7 +20,7 @@ RUN echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}"
 RUN echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}"
 RUN echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}"
 
-RUN echo "BASE_API_URL=https://api.igniz.ru/api > .env.production && \
+RUN echo "BASE_API_URL=https://api.igniz.ru/api" > .env.production && \
     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
     echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
     echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
