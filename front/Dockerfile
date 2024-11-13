@@ -10,9 +10,10 @@ RUN yarn install
 
 COPY . .
 
-RUN echo "DEBUG: ENV_FILE=${ENV_FILE}" && 
+RUN cat "$ENV_FILE"
 
-RUN echo "$ENV_FILE" > .env.production
+COPY $ENV_FILE /tmp/ENV_FILE
+RUN cat /tmp/ENV_FILE > .env.production
 
 RUN yarn build
 
