@@ -22,7 +22,6 @@ workflow:
       variables:
         ENVIRONMENT_NAME: stage
         HOST: igniz.ru
-    - when: always
 
 stages:
   - build
