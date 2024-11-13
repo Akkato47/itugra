@@ -22,6 +22,13 @@ ENV BASE_API_URL="${BASE_API_URL}"\
     YANDEX_CLIENT_ID="${YANDEX_CLIENT_ID}" \
     YANDEX_CLIENT_SECRET="${YANDEX_CLIENT_SECRET}"
 
+RUN echo "BASE_API_URL=${BASE_API_URL}" > .env && \
+    echo "BASE_WS_URL=${BASE_WS_URL}" >> .env && \
+    echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env && \
+    echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env && \
+    echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env && \
+    echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env
+
 RUN yarn build
 
 FROM node:20.11-alpine
