@@ -15,11 +15,17 @@ COPY . .
 
 RUN echo BASE_API_URL
 
-RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
-    echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
-    echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
-    echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
-    echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
+# RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
+#     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
+#     echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}" >> .env.production && \
+#     echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
+#     echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
+
+RUN echo "BASE_API_URL=https://api.igniz.ru/api" > .env.production && \
+    echo "BASE_YANDEX_API_URL=https://oauth.yandex.ru" >> .env.production && \
+    echo "YANDEX_REDIRECT_URI=https://igniz.ru/oauth/yandex-callback" >> .env.production && \
+    echo "YANDEX_CLIENT_ID=b441f0dc862743b7924fd04ac019f573" >> .env.production && \
+    echo "YANDEX_CLIENT_SECRET=ada064c83a79464481f3780dce8edfaa" >> .env.production
 
 RUN yarn build
 
