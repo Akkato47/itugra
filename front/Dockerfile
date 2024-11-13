@@ -27,10 +27,10 @@ FROM node:20.11-alpine
 
 WORKDIR /var/www
 
-# Копируем собранные файлы и зависимости из builder
 COPY --from=builder /var/www/node_modules ./node_modules
 COPY --from=builder /var/www/dist ./dist
 COPY --from=builder /var/www/yarn.lock .
+COPY --from=builder /var/www/.env.production .
 
 COPY package.json ./
 

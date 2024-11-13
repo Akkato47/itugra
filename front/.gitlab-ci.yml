@@ -10,7 +10,7 @@ variables:
 
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH ==  "main"
+    - if: $CI_COMMIT_BRANCH == "main"
       variables:
         ENVIRONMENT_NAME: production
         HOST: igniz.ru
