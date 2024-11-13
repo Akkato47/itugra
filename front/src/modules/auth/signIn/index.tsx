@@ -38,7 +38,7 @@ const SignInPage = () => {
         )}
         <div className='flex justify-center items-center mt-3'>
           <Link
-            to={`${process.env.env.BASE_YANDEX_API_URL}/authorize?response_type=code&client_id=${process.env.env.YANDEX_CLIENT_ID}&redirect_uri=${process.env.env.YANDEX_REDIRECT_URI}&device_id=${generateUUIDv4()}`}
+            to={`${process.env.BASE_YANDEX_API_URL}/authorize?response_type=code&client_id=${process.env.YANDEX_CLIENT_ID}&redirect_uri=${process.env.YANDEX_REDIRECT_URI}&device_id=${generateUUIDv4()}`}
           >
             <img className='size-10' src='/Yandex_icon.png' alt='yandex_oAuth' />
           </Link>
