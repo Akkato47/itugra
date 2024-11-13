@@ -40,11 +40,12 @@ build:
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
-    - cat "$ENV_FILE"
-    - export $(cat "$ENV_FILE" | xargs)
-    - echo "DEBUG BASE_YANDEX_API_URL=$BASE_YANDEX_API_URL"
+    # - cat "$ENV_FILE"
+    # - export $(cat "$ENV_FILE" | xargs)
+    # - echo "DEBUG BASE_YANDEX_API_URL=$BASE_YANDEX_API_URL"
+    - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
     # - docker build --build-arg ENV_FILE="$ENV_FILE" -t $TAG_COMMIT -t $TAG_LATEST .
-    - docker build --build-arg BASE_API_URL=$BASE_API_URL --build-arg BASE_YANDEX_API_URL=$BASE_YANDEX_API_URL --build-arg YANDEX_REDIRECT_URI=$YANDEX_REDIRECT_URI --build-arg YANDEX_CLIENT_ID=$YANDEX_CLIENT_ID --build-arg YANDEX_CLIENT_SECRET=$YANDEX_CLIENT_SECRET -t $TAG_COMMIT -t $TAG_LATEST .
+    # - docker build --build-arg BASE_API_URL=$BASE_API_URL --build-arg BASE_YANDEX_API_URL=$BASE_YANDEX_API_URL --build-arg YANDEX_REDIRECT_URI=$YANDEX_REDIRECT_URI --build-arg YANDEX_CLIENT_ID=$YANDEX_CLIENT_ID --build-arg YANDEX_CLIENT_SECRET=$YANDEX_CLIENT_SECRET -t $TAG_COMMIT -t $TAG_LATEST .
 
 deploy:
   image: docker:stable
