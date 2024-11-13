@@ -1,5 +1,4 @@
 #!/bin/bash
-
 DOTENV=${1:-.env}
 
 cat $DOTENV \

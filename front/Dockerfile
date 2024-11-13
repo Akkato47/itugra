@@ -14,6 +14,13 @@ RUN yarn install
 
 COPY . .
 
+RUN echo "BASE_API_URL=${BASE_API_URL}"
+RUN echo "BASE_WS_URL=${BASE_WS_URL}"
+RUN echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}"
+RUN echo "YANDEX_REDIRECT_URI=${YANDEX_REDIRECT_URI}"
+RUN echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}"
+RUN echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}"
+
 RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
     echo "BASE_WS_URL=${BASE_WS_URL}" >> .env.production && \
     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
@@ -21,7 +28,7 @@ RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
     echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}" >> .env.production && \
     echo "YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}" >> .env.production
 
-RUN echo cat .env.production
+RUN cat .env.production
 
 RUN yarn build
 
