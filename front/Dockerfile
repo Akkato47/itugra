@@ -10,8 +10,6 @@ RUN yarn install
 
 COPY . .
 
-RUN cat "$ENV_FILE"
-
 COPY $ENV_FILE /tmp/ENV_FILE
 RUN cat /tmp/ENV_FILE > .env.production
 
