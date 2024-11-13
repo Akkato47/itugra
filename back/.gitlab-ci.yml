@@ -2,6 +2,8 @@
 #   - docker:dind
 
 variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
   DOCKER_HUB_USER: '$DOCKER_HUB_USERNAME'
   DOCKER_HUB_PASSWORD: '$DOCKER_HUB_PASSWORD'
   SERVER_IP: '$SERVER_IP'
@@ -35,7 +37,7 @@ build:
     - if: '$CI_COMMIT_BRANCH == "main"'
   script:
     - echo "Building Docker image..."
-    - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT .
+    - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
     # - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $DOCKER_HUB_USER/digital-back:latest .
     # - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     # - docker push $DOCKER_HUB_USER/digital-back:latest
