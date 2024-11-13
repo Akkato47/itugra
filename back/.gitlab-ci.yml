@@ -60,7 +60,7 @@ deploy:
   script:
     - docker container rm -f $IMGNAME || true
     - source $ENV_FILE
-    - docker run -d --restart unless-stopped  --net host -p 127.0.0.1:$PORT_BACKEND:$PORT_BACKEND  --name $IMGNAME $TAG_COMMIT
+    - docker run -d --restart unless-stopped  --net host -p 127.0.0.1:$PORT:$PORT --name $IMGNAME $TAG_COMMIT
   after_script:
     - docker system prune -a -f
       # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-back:latest && docker stop back || true && docker rm back || true && docker run -d --restart unless-stopped --net host -p 127.0.0.1:8000:8000 --name back $DOCKER_HUB_USER/digital-back:latest"
