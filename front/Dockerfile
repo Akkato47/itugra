@@ -13,7 +13,7 @@ RUN yarn install
 
 COPY . .
 
-RUN echo BASE_API_URL
+# RUN echo BASE_API_URL
 
 # RUN echo "BASE_API_URL=${BASE_API_URL}" > .env.production && \
 #     echo "BASE_YANDEX_API_URL=${BASE_YANDEX_API_URL}" >> .env.production && \
@@ -36,7 +36,7 @@ WORKDIR /var/www
 COPY --from=builder /var/www/node_modules ./node_modules
 COPY --from=builder /var/www/dist ./dist
 COPY --from=builder /var/www/yarn.lock .
-COPY --from=builder /var/www/.env.production .
+# COPY --from=builder /var/www/.env.production .
 
 COPY package.json ./
 
