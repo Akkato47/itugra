@@ -46,6 +46,11 @@ router.post(
 router.post('/profile-file', isAuthenticated, userController.addFile);
 // router.post("/friend-add/:tag", isAuthenticated, userController.addFriend);
 
+router.patch(
+  '/roadmap/:checkUid',
+  isAuthenticated,
+  userController.updateRoadmap
+);
 router.patch('/profile', isAuthenticated, userController.updateUser);
 router.patch('/profile-expe', isAuthenticated, userController.updateUserExp);
 router.patch(

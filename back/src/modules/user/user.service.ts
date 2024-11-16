@@ -977,6 +977,7 @@ export const getRoadmap = async (userUid: string) => {
       .where(eq(userProfleInfo.userUid, userUid));
     const roadmap = await db
       .select({
+        uid: userRoadmap.uid,
         name: userRoadmap.name,
         order: userRoadmap.order,
         done: userRoadmap.done,
@@ -986,6 +987,22 @@ export const getRoadmap = async (userUid: string) => {
       .orderBy(userRoadmap.order);
 
     return roadmap;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCheck = async (checkUid: string) => {
+  try {
+    const data = await db
+      .select()
+      .from(userRoadmap)
+      .where(eq(userRoadmap.uid, checkUid));
+    await db
+      .update(userRoadmap)
+      .set({ done: !data[0].done })
+      .where(eq(userRoadmap.uid, checkUid))
+      .execute();
   } catch (error) {
     throw error;
   }

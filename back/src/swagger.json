@@ -777,6 +777,36 @@
         }
       }
     },
+    "/user/roadmap/{checkUid}": {
+      "patch": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "checkUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Тег пользователя для поиска."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
     "/user/profile": {
       "patch": {
         "tags": ["User"],

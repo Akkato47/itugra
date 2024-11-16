@@ -281,3 +281,17 @@ export async function getRoadmap(
     next(error);
   }
 }
+
+export async function updateRoadmap(
+  req: Request<{ checkUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.updateCheck(req.params.checkUid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
