@@ -5,6 +5,7 @@ const router = Router();
 
 // router.get("/find/:query", isAuthenticated, userController.getCompany);
 // router.get("/find-user/:tag", isAuthenticated, userControl-ler.findUserTag);
+router.get('/roadmap', isAuthenticated, userController.getRoadmap);
 router.get('/profile/all/:tag', isAuthenticated, userController.getUserProfile);
 router.get(
   '/profile/experience',

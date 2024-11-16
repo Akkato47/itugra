@@ -910,7 +910,10 @@ export const deleteFile = async (userUid: string, uid: string) => {
   }
 };
 
-export const generateRoadmap = async (dto: CreateRoadmapDto) => {
+export const generateRoadmap = async (
+  userUid: string,
+  dto: CreateRoadmapDto
+) => {
   try {
     const gigachat = new GigaChat(
       'YzdmYmZkYjMtNzgyNS00MTAzLTkxM2QtOTY0ZTdmZmNlZWZkOjlhNjdiZTJkLTVjNTItNDAzOC05MWRiLTc2NGIzMTUzY2UwZQ==',
@@ -942,13 +945,44 @@ export const generateRoadmap = async (dto: CreateRoadmapDto) => {
     if (!data.hasOwnProperty('checklist')) {
       throw new CustomError(HttpStatus.I_AM_A_TEAPOT, 'Попробуйте снова');
     }
+    const profileInfo = await db
+      .select()
+      .from(userProfleInfo)
+      .where(eq(userProfleInfo.userUid, userUid));
     for (let index = 0; index < data.checklist.length; index++) {
       const element = data.checklist[index];
       await db.insert(userRoadmap).values({
+        profileInfoUid: profileInfo[0].uid,
         name: element.name,
         order: index,
       });
     }
+    await db
+      .update(userProfleInfo)
+      .set({ chosenCategory: dto.chosenCategory })
+      .where(eq(userProfleInfo.userUid, userUid));
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRoadmap = async (userUid: string) => {
+  try {
+    const profleInfo = await db
+      .select()
+      .from(userProfleInfo)
+      .where(eq(userProfleInfo.userUid, userUid));
+    const roadmap = await db
+      .select({
+        name: userRoadmap.name,
+        order: userRoadmap.order,
+        done: userRoadmap.done,
+      })
+      .from(userRoadmap)
+      .where(eq(userRoadmap.profileInfoUid, profleInfo[0].uid))
+      .orderBy(userRoadmap.order);
+
+    return roadmap;
   } catch (error) {
     throw error;
   }

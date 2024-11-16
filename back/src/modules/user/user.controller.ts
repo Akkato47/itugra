@@ -260,7 +260,21 @@ export async function generateRoadmap(
   next: NextFunction
 ) {
   try {
-    const result = await userService.generateRoadmap(req.body);
+    const result = await userService.generateRoadmap(req.user.uid, req.body);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getRoadmap(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.getRoadmap(req.user.uid);
 
     return res.status(200).json(result);
   } catch (error) {
