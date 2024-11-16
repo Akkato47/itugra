@@ -171,6 +171,27 @@
         }
       }
     },
+    "/user/rec": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
     "/user/find-user/{tag}": {
       "get": {
         "tags": ["User"],

@@ -268,6 +268,19 @@ export async function generateRoadmap(
   }
 }
 
+export async function getRecomendateEvents(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.getRecomendation(req.user.uid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
 export async function getRoadmap(
   req: Request,
   res: Response,

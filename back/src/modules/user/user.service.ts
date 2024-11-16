@@ -26,13 +26,14 @@ import {
   users,
   userSkills,
 } from '@/db/drizzle/schema/user/schema';
-import { and, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, arrayContains, eq, ilike, ne, or } from 'drizzle-orm';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
 import { skillPool } from '@/db/drizzle/schema/testing/schema';
 import { CreateRoadmapDto } from './dto/roadmap.dto';
 import { GigaChat } from 'gigachat-node';
 import { event } from '@/db/drizzle/schema/event/schema';
+import { StatusEnum } from '@/db/drizzle/schema/event/enums/status.enum';
 
 export const getUserByUID = async (uid: string) => {
   try {
@@ -1018,7 +1019,16 @@ export const getRecomendation = async (userUid: string) => {
     const events = await db
       .select()
       .from(event)
-      .where(sql`(${profleInfo[0].chosenCategory}) in ${event.categoryId}`);
+      .where(
+        and(
+          arrayContains(event.categoryId, [profleInfo[0].chosenCategory]),
+          or(
+            ne(event.status, StatusEnum.END),
+            ne(event.status, StatusEnum.CLOSED)
+          )
+        )
+      );
+    return events;
   } catch (error) {
     throw error;
   }
