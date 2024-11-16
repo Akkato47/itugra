@@ -34,7 +34,7 @@ export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
           answers: questionPool.answers,
         })
         .from(questionPool)
-        .where(eq(questionPool.skillUid, skill.uid));
+        .where(eq(questionPool.skillUid, skill.skillUid));
       skillQuestions.push(question);
     }
 

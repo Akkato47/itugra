@@ -2,6 +2,7 @@ import { boolean, jsonb, pgEnum, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
 import { eventBaseSchema } from './event-base.schema';
 import { FileType } from '@/modules/uploads/types/file.interface';
+import { users } from '../user/schema';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
 
@@ -25,4 +26,14 @@ export const eventDocs = pgTable('eventDocs', {
   eventRequestUid: uuid('event_uid')
     .notNull()
     .references(() => eventRequest.uid),
+});
+
+export const participants = pgTable('participants', {
+  ...baseSchema,
+  userUid: uuid('user_uid')
+    .notNull()
+    .references(() => users.uid),
+  eventUid: uuid('event_uid')
+    .notNull()
+    .references(() => event.uid),
 });
