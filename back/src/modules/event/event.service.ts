@@ -29,10 +29,43 @@ export const getRequests = async () => {
     throw error;
   }
 };
+export const getRequest = async (requstUid: string) => {
+  try {
+    const requests = await db
+      .select({
+        uid: eventRequest.uid,
+        name: eventRequest.name,
+        type: eventRequest.type,
+        approved: eventRequest.approved,
+        image: eventRequest.image,
+        watched: eventRequest.watched,
+        userName: users.fullName,
+      })
+      .from(eventRequest)
+      .where(eq(eventRequest.uid, requstUid))
+      .leftJoin(users, eq(users.uid, eventRequest.userUid));
+
+    return requests[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getEvents = async () => {
   try {
-    const events = await db.select().from(event);
+    const events = await db
+      .select({
+        uid: eventRequest.uid,
+        name: eventRequest.name,
+        type: eventRequest.type,
+        approved: eventRequest.approved,
+        image: eventRequest.image,
+        watched: eventRequest.watched,
+        userName: users.fullName,
+        description: eventRequest.description,
+      })
+      .from(event)
+      .leftJoin(users, eq(users.uid, eventRequest.userUid));
 
     return events;
   } catch (error) {

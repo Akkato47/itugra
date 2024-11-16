@@ -2,6 +2,20 @@ import { CreateRequestDto, MakeDecisions } from './dto/request.dto';
 import type { Request, Response, NextFunction } from 'express';
 import * as eventService from './event.service';
 
+export async function getRequest(
+  req: Request<{ requestUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getRequest(req.params.requestUid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getRequests(
   req: Request,
   res: Response,

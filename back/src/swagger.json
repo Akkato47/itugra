@@ -1523,6 +1523,30 @@
         }
       }
     },
+    "/event/request/{requestUid}": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "requestUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "requestUid "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/event/create/request": {
       "post": {
         "tags": ["Event"],
