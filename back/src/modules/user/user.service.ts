@@ -949,6 +949,9 @@ export const generateRoadmap = async (
       .select()
       .from(userProfleInfo)
       .where(eq(userProfleInfo.userUid, userUid));
+    await db
+      .delete(userRoadmap)
+      .where(eq(userRoadmap.profileInfoUid, profileInfo[0].uid));
     for (let index = 0; index < data.checklist.length; index++) {
       const element = data.checklist[index];
       await db.insert(userRoadmap).values({
