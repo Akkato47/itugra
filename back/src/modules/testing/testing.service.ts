@@ -23,20 +23,19 @@ export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
       .where(eq(categoryQuestions.categoryId, dto.category));
 
     const skillQuestions = [];
-    for (const skillUid of dto.skillsUid) {
+    const skills = await db
+      .select()
+      .from(userSkills)
+      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid));
+    for (const skill of skills) {
       const question = await db
         .select({
           questionBody: questionPool.question,
           answers: questionPool.answers,
         })
         .from(questionPool)
-        .where(eq(questionPool.skillUid, skillUid));
+        .where(eq(questionPool.skillUid, skill.uid));
       skillQuestions.push(question);
-
-      await db.insert(userSkills).values({
-        profileInfoUid: profileInfo[0].uid,
-        skillUid,
-      });
     }
 
     return [...categoryQuestionList, ...skillQuestions];

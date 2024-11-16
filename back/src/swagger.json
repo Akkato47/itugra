@@ -1993,12 +1993,6 @@
     "GenerateTestDto": {
       "type": "object",
       "properties": {
-        "skillsUid": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "category": {
           "type": "number"
         }
