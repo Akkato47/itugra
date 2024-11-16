@@ -13,6 +13,7 @@ export const paths = {
   MY_ROADMAP: "/myroadmap",
   SUPPORT_MEASURES: "/supportmeasures",
   TEAMS: "/profile/teams",
+  NAVZLYOT: "/na-vzlyot",
 
   // Настройки
   SETTINGS: "/settings",

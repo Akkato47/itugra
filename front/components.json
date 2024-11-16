@@ -12,6 +12,6 @@
   },
   "aliases": {
     "components": "src/shared",
-    "utils": "@shared/lib"
+    "utils": "@shared/lib/shade-cn"
   }
 }

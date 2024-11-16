@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { createLandingRoute } from "@pages/Landing";
+import { createNaVzlyotRoute } from "@pages/NaVzlyot";
 import { createSignInRoute, createYandexCallbackPageRoute } from "@pages/SignIn";
 import { createSignUpRoute } from "@pages/SignUp";
 
@@ -12,7 +13,8 @@ const router = createBrowserRouter([
   createSignUpRoute(),
   createYandexCallbackPageRoute(),
   createMainLayout(),
-  createSettingsLayout()
+  createSettingsLayout(),
+  createNaVzlyotRoute()
 ]);
 
 export const BrowserRouter = () => <RouterProvider router={router} />;

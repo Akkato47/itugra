@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import type { RouteObject } from "react-router-dom";
 
+import { createNaVzlyotRoute } from "@pages/NaVzlyot";
 import { createProfileRoute } from "@pages/Profile";
 import { createTeamProfileSettingsRoute } from "@pages/Settings";
 import { createTeamProfileRoute, createTeamsRoute } from "@pages/TeamProfile";
@@ -24,5 +25,6 @@ export const createMainLayout = (): RouteObject => ({
     createTeamsRoute(),
     createTeamProfileSettingsRoute(),
     createTeamProfileRoute()
+    // createNaVzlyotRoute()
   ]
 });
