@@ -12,7 +12,7 @@ const AdminLayout = () => {
 
   return (
     <>
-      <header className='border-b border-b-slate-300'>
+      <header className=''>
         <div className=' flex items-center justify-between py-2 container'>
           <Link to='/'>
             <LogoIcon />
