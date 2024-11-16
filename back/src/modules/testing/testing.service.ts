@@ -15,7 +15,10 @@ export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
       .from(userProfleInfo)
       .where(eq(userProfleInfo.userUid, userUid));
     const categoryQuestionList = await db
-      .select()
+      .select({
+        questionBody: categoryQuestions.question,
+        answers: categoryQuestions.answers,
+      })
       .from(categoryQuestions)
       .where(eq(categoryQuestions.categoryId, dto.category));
 

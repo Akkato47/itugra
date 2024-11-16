@@ -209,7 +209,6 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
     };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
