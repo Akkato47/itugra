@@ -2155,6 +2155,9 @@
               },
               "answer": {
                 "type": "string"
+              },
+              "chosenCategory": {
+                "type": "number"
               }
             }
           }

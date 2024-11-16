@@ -9,6 +9,7 @@ export class InterestedIn {
 }
 
 export class CreateRoadmapDto {
+  chosenCategory: number;
   testResult: TestResult[];
   interestedIn: InterestedIn[];
 }
