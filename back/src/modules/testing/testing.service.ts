@@ -5,9 +5,14 @@ import {
   questionPool,
 } from '@/db/drizzle/schema/testing/schema';
 import { eq } from 'drizzle-orm';
+import { userProfleInfo, userSkills } from '@/db/drizzle/schema/user/schema';
 
-export const generateTest = async (dto: GenerateTestDto) => {
+export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
   try {
+    const profileInfo = await db
+      .select()
+      .from(userProfleInfo)
+      .where(eq(userProfleInfo.userUid, userUid));
     const categoryQuestionList = await db
       .select()
       .from(categoryQuestions)
@@ -23,6 +28,11 @@ export const generateTest = async (dto: GenerateTestDto) => {
         .from(questionPool)
         .where(eq(questionPool.skillUid, skillUid));
       skillQuestions.push(question);
+
+      await db.insert(userSkills).values({
+        profileInfoUid: profileInfo[0].uid,
+        skillUid,
+      });
     }
 
     return {
