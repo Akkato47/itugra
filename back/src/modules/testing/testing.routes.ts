@@ -4,6 +4,8 @@ import * as testController from './testing.controller';
 
 const router = Router();
 
-router.post('/generate', isAuthenticated, testController.getTest);
+router.get('/skill-pool', isAuthenticated, testController.getSkills);
+
+router.post('/generate', isAuthenticated, testController.createTest);
 
 export default router;

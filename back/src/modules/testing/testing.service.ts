@@ -3,9 +3,23 @@ import { GenerateTestDto } from './dto/generate-test.dto';
 import {
   categoryQuestions,
   questionPool,
+  skillPool,
 } from '@/db/drizzle/schema/testing/schema';
 import { eq } from 'drizzle-orm';
 import { userProfleInfo, userSkills } from '@/db/drizzle/schema/user/schema';
+
+export const getSkillsList = async () => {
+  try {
+    return await db
+      .select({
+        uid: skillPool.uid,
+        name: skillPool.name,
+      })
+      .from(skillPool);
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
   try {

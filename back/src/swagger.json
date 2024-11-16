@@ -1441,9 +1441,35 @@
         }
       }
     },
+    "/test/skill-pool": {
+      "get": {
+        "tags": ["Test"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список skills успешно получен."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
     "/test/generate": {
       "post": {
         "tags": ["Testing"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
         "parameters": [
           {
             "in": "body",

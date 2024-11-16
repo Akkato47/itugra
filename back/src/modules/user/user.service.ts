@@ -14,8 +14,6 @@ import type {
   UpdateUserProfileInfoDto,
 } from './dto/update-user-info.dto';
 import { ErrorMessage } from '@/utils/enums/errors';
-import axios from 'axios';
-import config from '@/config';
 import { db } from '@/db/drizzle/connect';
 import type { UserInferSelect } from '@/db/drizzle/schema/user/schema';
 import {
@@ -126,6 +124,9 @@ export const createUser = async (createUserDto: CreateUserDto) => {
     if (createUserDto.password) {
       await db.update(users).set({ password: createUserDto.password });
     }
+
+    await db.insert(userProfleInfo).values({ userUid: user[0].uid }).execute();
+
     return user[0];
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -229,6 +230,7 @@ export const getUserProfile = async (tag: string) => {
 
     return response;
   } catch (error) {
+    console.log(error);
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
     }
