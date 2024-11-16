@@ -1,7 +1,11 @@
 import { Suspense, lazy } from "react";
 import type { RouteObject } from "react-router-dom";
 
-import { createAdminRequestsHistoryPageRoute, createAdminRequestsPageRoute } from "@pages/Admin";
+import {
+  createAdminRequestsHistoryPageRoute,
+  createAdminRequestsPageRoute,
+  createEditRequestPageRoute
+} from "@pages/Admin";
 
 import { paths } from "@shared/constants/react-router";
 import { Spinner } from "@shared/ui/spinner";
@@ -17,5 +21,9 @@ export const createAdminLayout = (): RouteObject => ({
   ),
   errorElement: <div className=''>Error</div>,
 
-  children: [createAdminRequestsPageRoute(), createAdminRequestsHistoryPageRoute()]
+  children: [
+    createAdminRequestsPageRoute(),
+    createAdminRequestsHistoryPageRoute(),
+    createEditRequestPageRoute()
+  ]
 });

@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 
+import { paths } from "@shared/constants/react-router";
 import { CustomImage, Heading } from "@shared/ui";
 
 export const EventCard = () => (
-  <Link to='ffsgfs' className='w-full'>
+  <Link to={`${paths.ADMIN}/e2c05fbb-b636-415f-b331-2b987b23cb91`} className='w-full'>
     <div className='flex gap-10 py-6 px-9 shadow-lg rounded-xl'>
-      <CustomImage src='/images/user.webp' alt='event_image' className='h-full w-48' />
+      <CustomImage src='/images/createTeamImage.webp' alt='event_image' className='h-full w-48' />
       <div className=''>
         <Heading variant='h3' className='text-[#0066B3]'>
           Лидеры региона – 2023

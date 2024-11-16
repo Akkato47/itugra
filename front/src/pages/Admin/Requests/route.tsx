@@ -27,3 +27,15 @@ export const createAdminRequestsHistoryPageRoute = (): RouteObject => ({
   ),
   errorElement: <div className=''>Error</div>
 });
+
+const EditRequestPage = lazy(() => import("./ui/EditRequest"));
+
+export const createEditRequestPageRoute = (): RouteObject => ({
+  path: ":requestUid",
+  element: (
+    <Suspense fallback={<Spinner />}>
+      <EditRequestPage />
+    </Suspense>
+  ),
+  errorElement: <div className=''>Error</div>
+});
