@@ -3,11 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
 import { HttpStatus } from '@/utils/enums/http-status';
 
-export async function isAuthenticated(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function isAdmin(req: Request, res: Response, next: NextFunction) {
   try {
     if (req.user.role !== RoleEnum.ADMIN) {
       return next(new CustomError(HttpStatus.FORBIDDEN));

@@ -27,6 +27,10 @@
     {
       "name": "Testing",
       "description": "Testing related endpoints"
+    },
+    {
+      "name": "Event",
+      "description": "Event related endpoints"
     }
   ],
   "schemes": ["http"],
@@ -1454,6 +1458,56 @@
           }
         }
       }
+    },
+    "/event/create/request": {
+      "post": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event успешно создана."
+          }
+        }
+      }
+    },
+    "/event/make/desicion": {
+      "post": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MakeDecisions"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event успешно создана."
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -1947,6 +2001,53 @@
         },
         "category": {
           "type": "number"
+        }
+      }
+    },
+    "CreateRequestDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "image": {
+          "type": "object",
+          "description": "Информация об изображении команды",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "fileUrl": {
+              "type": "string"
+            },
+            "thumbnailUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "items": {
+            "type": "string",
+            "enum": ["HACKATON", "MEETUP"]
+          }
+        }
+      }
+    },
+    "MakeDecisions": {
+      "type": "object",
+      "properties": {
+        "requestUid": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "boolean"
         }
       }
     }

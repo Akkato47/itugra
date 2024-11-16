@@ -1,0 +1,12 @@
+import { isAuthenticated } from '@/middleware/auth.middleware';
+import { Router } from 'express';
+import * as eventController from './event.controller';
+import { isAdmin } from '@/middleware/role.middleware';
+
+const router = Router();
+
+router.post('/create/request', isAuthenticated, eventController.createRequest);
+
+router.post('/make/desicion', isAuthenticated, eventController.makeDecision);
+
+export default router;

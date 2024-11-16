@@ -7,6 +7,8 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
+import { EventEnum } from './enums/event-types.enum';
+import { users } from '../user/schema';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
 
@@ -19,5 +21,8 @@ export const eventBaseSchema = {
   name: varchar('name', { length: 255 }).notNull(),
   image: jsonb('image').$type<ImageType>(),
   description: varchar('description', { length: 255 }),
-  type: eventEnum('type').notNull(),
+  type: eventEnum('type').$type<EventEnum>().notNull(),
+  userUid: uuid('userUid')
+    .notNull()
+    .references(() => users.uid),
 };

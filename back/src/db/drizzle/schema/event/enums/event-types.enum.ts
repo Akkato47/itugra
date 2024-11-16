@@ -1,4 +1,4 @@
-export enum EventTypes {
-    HACKATON = "Hackaton",
-    MEETUP = "MEETUP",
+export enum EventEnum {
+  HACKATON = 'HACKATON',
+  MEETUP = 'MEETUP',
 }
