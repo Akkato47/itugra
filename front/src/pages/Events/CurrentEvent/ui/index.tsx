@@ -1,20 +1,28 @@
-import { useLocation, useParams } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useParams } from "react-router-dom";
 
 import { RequestWidget } from "@widgets/request";
 
-import { Button } from "@shared/ui";
+import { translateEvenType, useGetEventByUidQuery } from "@entities/event";
+
+import { Skeleton } from "@shared/ui";
 
 const CurrentEventPage = () => {
-  const { requestUid } = useParams();
-  const { state } = useLocation();
+  const { eventUid } = useParams();
+  const { data, isPending } = useGetEventByUidQuery({ eventUid: eventUid! });
 
   return (
     <div className='w-full space-y-10'>
-      <RequestWidget />
-      <div className='flex items-center justify-end gap-4'>
-        <Button variant='default'>Подтвердить</Button>
-        <Button variant='destructive'>Отклонить</Button>
-      </div>
+      {data && (
+        <RequestWidget
+          description={data.data.description}
+          name={data.data.name}
+          org={data.data.userName}
+          type={translateEvenType(data.data.type)}
+          categoryId={data.data.categoryId}
+        />
+      )}
+      {isPending && <Skeleton className='w-full h-48' />}
     </div>
   );
 };

@@ -7,4 +7,5 @@ export interface ICreateRequestDto {
   type: ETypeEventEnum;
   registrationEnd: string;
   end: string;
+  categoryId: number[];
 }

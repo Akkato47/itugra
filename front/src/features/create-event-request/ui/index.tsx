@@ -5,11 +5,12 @@ import type { z } from "zod";
 import { ETypeEventEnum } from "@entities/event";
 
 import { formateDate } from "@shared/lib/formateDate";
-import { Button, Input, Label, Textarea } from "@shared/ui";
+import { Button, Checkbox, Input, Label, Textarea } from "@shared/ui";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@shared/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select";
 
 import { usePostCreateEventMutation } from "../api/usePostCreateEventMutation";
+import { categoryData } from "../constants/categoryData.constant";
 import type { createEventFormSchema } from "../lib/createEventFormSchema";
 import { useCreateEventForm } from "../model/useCreateEventForm";
 
@@ -30,10 +31,16 @@ export const CreateEventRequestForm = () => {
           thumbnailUrl: "string"
         },
         end: formateDate(data.end, "dash"),
-        registrationEnd: formateDate(data.registrationEnd, "dash")
+        registrationEnd: formateDate(data.registrationEnd, "dash"),
+        categoryId: data.categoryId
       }
     });
   };
+
+  const categoryOptions = Object.entries(categoryData).map(([label, value]) => ({
+    label,
+    value
+  }));
 
   return (
     <Form {...createEventForm}>
@@ -134,6 +141,41 @@ export const CreateEventRequestForm = () => {
         </div>
         <FormField
           control={createEventForm.control}
+          name='categoryId'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold text-black'>Категории</FormLabel>
+              <FormControl>
+                <div className='flex items-center gap-5'>
+                  {categoryOptions.map((option) => (
+                    <div key={option.value} className='flex items-center gap-2'>
+                      <Checkbox
+                        checked={field.value?.includes(option.value)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            field.onChange([...(field.value || []), option.value]);
+                          } else {
+                            field.onChange((field.value || []).filter((v) => v !== option.value));
+                          }
+                        }}
+                        id={`category-${option.value}`}
+                      />
+                      <label
+                        htmlFor={`category-${option.value}`}
+                        className='text-sm font-medium text-gray-900'
+                      >
+                        {option.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={createEventForm.control}
           name='description'
           render={({ field }) => (
             <FormItem>
@@ -154,7 +196,8 @@ export const CreateEventRequestForm = () => {
           disabled={
             !createEventForm.formState.dirtyFields.name ||
             !createEventForm.formState.dirtyFields.description ||
-            !createEventForm.formState.dirtyFields.type
+            !createEventForm.formState.dirtyFields.type ||
+            !createEventForm.getValues("categoryId")?.length
           }
         >
           Создать мероприятие

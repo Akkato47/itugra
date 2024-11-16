@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { queryClient } from "@shared/constants/tan-stack-query";
 import { toast } from "@shared/model/use-toast";
 
 import type { TPostCreateEventConfig } from "./postCreateEvent";
@@ -21,7 +20,6 @@ export const usePostCreateEventMutation = (
         className: "bg-green-600 text-white hover:bg-green-500",
         title: "Заявка на создание мероприятия отправлена!"
       });
-      queryClient.invalidateQueries({ queryKey: ["getUserExperience"] });
     },
     onError(error) {
       toast({

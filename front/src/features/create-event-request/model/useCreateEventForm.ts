@@ -12,6 +12,7 @@ export const useCreateEventForm = () =>
       description: "",
       type: "",
       end: "",
-      registrationEnd: ""
+      registrationEnd: "",
+      categoryId: []
     }
   });

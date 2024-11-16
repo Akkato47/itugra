@@ -7,6 +7,7 @@ interface ICreateEvent {
   description: string;
   registrationEnd: string;
   end: string;
+  categoryId: number[];
 }
 
 export type TPostCreateEventConfig = TRequestConfig<ICreateEvent>;

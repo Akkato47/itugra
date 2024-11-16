@@ -1,4 +1,4 @@
 export enum ETypeEventEnum {
-  HACKATON = "Hackaton",
+  HACKATON = "HACKATON",
   MEETUP = "MEETUP"
 }
