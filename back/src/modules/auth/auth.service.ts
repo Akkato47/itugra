@@ -13,7 +13,6 @@ import {
   IOAuthTokenResponse,
 } from './types/oauth.interface';
 import { OAuthEnum } from './enums/oauth.enum';
-import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
 import { UpdatePasswordDto } from './dto/update-security.dto';
 
 export const login = async (userData: LoginUserDto) => {
@@ -24,7 +23,16 @@ export const login = async (userData: LoginUserDto) => {
       uid: user.uid,
       oAuthId: user.oAuthId ? user.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image, tag: user.tag };
+    const data = {
+      role: user.role,
+      image: user.image,
+      tag: user.tag,
+      shortInfo: {
+        fullName: user.fullName,
+        mail: user.mail,
+        phone: user.phone,
+      },
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -42,7 +50,16 @@ export const register = async (userData: CreateUserDto) => {
       uid: user.uid,
       oAuthId: userData.oAuthId ? userData.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image, tag: user.tag };
+    const data = {
+      role: user.role,
+      image: user.image,
+      tag: user.tag,
+      shortInfo: {
+        fullName: user.fullName,
+        mail: user.mail,
+        phone: user.phone,
+      },
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -184,6 +201,11 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
       role: tryFindUser.role,
       image: tryFindUser.image,
       tag: tryFindUser.tag,
+      shortInfo: {
+        fullName: tryFindUser.fullName,
+        mail: tryFindUser.mail,
+        phone: tryFindUser.phone,
+      },
     };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
