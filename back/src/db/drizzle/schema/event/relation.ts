@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm';
-import { eventDocs, eventRequest, hackaton } from './schema';
+import { eventDocs, eventRequest, event } from './schema';
 
 export const requestRelation = relations(eventRequest, ({ many }) => ({
   eventDocs: many(eventDocs),
 }));
 
-export const hackatonRelation = relations(hackaton, ({ many }) => ({
+export const hackatonRelation = relations(event, ({ many }) => ({
   eventDocs: many(eventDocs),
 }));
 
@@ -14,8 +14,8 @@ export const eventDocRelation = relations(eventDocs, ({ one }) => ({
     fields: [eventDocs.eventRequestUid],
     references: [eventRequest.uid],
   }),
-  hackatons: one(hackaton, {
+  hackatons: one(event, {
     fields: [eventDocs.eventUid],
-    references: [hackaton.uid],
+    references: [event.uid],
   }),
 }));

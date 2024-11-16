@@ -9,8 +9,10 @@ import {
 } from 'drizzle-orm/pg-core';
 import { EventEnum } from './enums/event-types.enum';
 import { users } from '../user/schema';
+import { StatusEnum } from './enums/status.enum';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
+export const statusEnum = pgEnum('status_enum', ['WAITING', 'CLOSED', 'END']);
 
 export const eventBaseSchema = {
   uid: uuid('uid').defaultRandom().primaryKey().notNull(),
@@ -22,6 +24,12 @@ export const eventBaseSchema = {
   image: jsonb('image').$type<ImageType>(),
   description: varchar('description', { length: 255 }),
   type: eventEnum('type').$type<EventEnum>().notNull(),
+  status: statusEnum('status')
+    .$type<StatusEnum>()
+    .notNull()
+    .$default(() => StatusEnum.WAITING),
+  registrationEnd: date('registration_end').notNull(),
+  end: date('end').notNull(),
   userUid: uuid('userUid')
     .notNull()
     .references(() => users.uid),

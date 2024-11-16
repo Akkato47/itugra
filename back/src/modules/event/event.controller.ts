@@ -16,6 +16,20 @@ export async function getRequests(
   }
 }
 
+export async function getEvents(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getEvents();
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createRequest(
   req: Request<{}, {}, CreateRequestDto>,
   res: Response,

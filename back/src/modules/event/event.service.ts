@@ -3,7 +3,7 @@ import { CreateRequestDto, MakeDecisions } from './dto/request.dto';
 import {
   eventDocs,
   eventRequest,
-  hackaton,
+  event,
 } from '@/db/drizzle/schema/event/schema';
 import { eq } from 'drizzle-orm';
 import { EventEnum } from '@/db/drizzle/schema/event/enums/event-types.enum';
@@ -25,6 +25,16 @@ export const getRequests = async () => {
       .leftJoin(users, eq(users.uid, eventRequest.userUid));
 
     return requests;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEvents = async () => {
+  try {
+    const events = await db.select().from(event);
+
+    return events;
   } catch (error) {
     throw error;
   }
@@ -52,9 +62,8 @@ export const makeDecisions = async (userUid: string, dto: MakeDecisions) => {
       .where(eq(eventRequest.uid, dto.requestUid))
       .returning();
     const { createdAt, updatedAt, uid, watched, ...rest } = request[0];
-    console.log(request[0].type == EventEnum.HACKATON);
-    if (request[0].type === EventEnum.HACKATON && dto.decision) {
-      const newEvent = await db.insert(hackaton).values(rest).returning();
+    if (dto.decision) {
+      const newEvent = await db.insert(event).values(rest).returning();
       return {
         createdEvent: newEvent[0].uid,
       };

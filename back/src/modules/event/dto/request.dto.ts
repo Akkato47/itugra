@@ -7,6 +7,8 @@ export class CreateRequestDto implements Partial<InferInsertRequest> {
   image: ImageType;
   description: string;
   type: EventEnum;
+  registrationEnd: string;
+  end: string;
 }
 
 export class MakeDecisions {

@@ -36,3 +36,21 @@ export const categoryQuestions = pgTable('category_questions', {
 
 export type InferInsertCategoryQuestionPool =
   typeof categoryQuestions.$inferInsert;
+
+// export const roadmap = pgTable("roadmap", {
+//   ...baseSchema,
+// })
+// const g = {
+//   testResult: [
+//     {
+//       question: 'text',
+//       answer: 'text',
+//     },
+//   ],
+//   interestedIn: [
+//     {
+//       uid: 'skill uid',
+//       name: 'skill namee',
+//     },
+//   ],
+// };

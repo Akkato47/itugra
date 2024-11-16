@@ -1474,6 +1474,21 @@
         }
       }
     },
+    "/event/requests/all": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/event/create/request": {
       "post": {
         "tags": ["Event"],
@@ -2028,6 +2043,14 @@
             },
             "name": {
               "type": "string"
+            },
+            "registrationEnd": {
+              "type": "string",
+              "format": "date"
+            },
+            "end": {
+              "type": "string",
+              "format": "date"
             },
             "fileUrl": {
               "type": "string"

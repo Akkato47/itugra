@@ -13,7 +13,7 @@ export const eventRequest = pgTable('request', {
 
 export type InferInsertRequest = typeof eventRequest.$inferInsert;
 
-export const hackaton = pgTable('hackaton', {
+export const event = pgTable('event', {
   ...eventBaseSchema,
 });
 
