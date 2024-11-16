@@ -1443,7 +1443,7 @@
     },
     "/test/skill-pool": {
       "get": {
-        "tags": ["Test"],
+        "tags": ["Testing"],
         "security": [
           {
             "api_key": []

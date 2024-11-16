@@ -49,11 +49,9 @@ export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
       });
     }
 
-    return {
-      ...categoryQuestionList,
-      ...skillQuestions,
-    };
+    return [...categoryQuestionList, ...skillQuestions];
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
