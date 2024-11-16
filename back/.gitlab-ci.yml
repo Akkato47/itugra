@@ -5,8 +5,6 @@ variables:
   TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
   IMGNAME: 'digital-api'
-  # DOCKER_HOST: 'tcp://docker:2375'
-  # DOCKER_TLS_CERTDIR: '' # Отключает использование TLS для Docker-in-Docker
   DOCKER_HUB_USER: '$DOCKER_HUB_USERNAME'
   DOCKER_HUB_PASSWORD: '$DOCKER_HUB_PASSWORD'
   SERVER_IP: '$SERVER_IP'
@@ -42,8 +40,6 @@ build:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - echo "Building Docker image..."
     - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $TAG_COMMIT -t $TAG_LATEST .
-    # - sh ./env-as-build-args.sh $ENV_FILE | xargs docker build -t $DOCKER_HUB_USER/digital-back:latest .
-    # - docker push $DOCKER_HUB_USER/digital-back:latest
 
 deploy:
   image: docker:stable
@@ -53,11 +49,6 @@ deploy:
       when: manual
   tags:
     - $ENVIRONMENT_NAME
-  # before_script:
-  #   - mkdir -p ~/.ssh
-  #   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-  #   - chmod 600 ~/.ssh/id_rsa
-  #   - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
   script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker container rm -f $IMGNAME || true
@@ -65,5 +56,3 @@ deploy:
     - docker run -d --restart unless-stopped --env-file $ENV_FILE --net host -p $PORT:$PORT --name $IMGNAME $TAG_COMMIT
   after_script:
     - docker system prune -a -f
-      # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker pull $DOCKER_HUB_USER/digital-back:latest && docker stop back || true && docker rm back || true && docker run -d --restart unless-stopped --net host -p 127.0.0.1:8000:8000 --name back $DOCKER_HUB_USER/digital-back:latest"
-      # - ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "docker system prune -a -f"
