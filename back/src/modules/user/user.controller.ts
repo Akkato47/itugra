@@ -8,7 +8,7 @@ import type {
 } from './dto/update-user-info.dto';
 import type {
   CreateExperienceDto,
-  CreateSkillsDto,
+  CreateUserSkillsDto,
 } from './dto/create-user.dto';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
@@ -118,7 +118,7 @@ export async function createUserExperience(
 }
 
 export async function createUserSkills(
-  req: Request<{}, {}, CreateSkillsDto>,
+  req: Request<{}, {}, CreateUserSkillsDto>,
   res: Response,
   next: NextFunction
 ) {

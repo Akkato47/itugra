@@ -19,6 +19,7 @@ import type {
   FileType,
   ImageType,
 } from '@/modules/uploads/types/file.interface';
+import { skillPool } from '../testing/schema';
 
 export const roleEnum = pgEnum('role_enum', ['USER', 'ORG', 'ADMIN', 'SU']);
 export const viaEnum = pgEnum('via_enum', ['BASE', 'VK', 'YA', 'GOS', 'TG']);
@@ -73,8 +74,13 @@ export const userSkills = pgTable(
   'user_skills',
   {
     ...baseSchema,
-    name: varchar('name', { length: 255 }).default('').notNull(),
-    profileInfoUid: uuid('profile_info_uid').notNull(),
+    level: varchar('level', { length: 255 }).default('').notNull(),
+    skillUid: uuid('skill_uid')
+      .notNull()
+      .references(() => skillPool.uid),
+    profileInfoUid: uuid('profile_info_uid')
+      .notNull()
+      .references(() => userProfleInfo.uid),
   },
   (table) => {
     return {
@@ -91,8 +97,13 @@ export const userInterests = pgTable(
   'user_interests',
   {
     ...baseSchema,
-    name: varchar('name', { length: 255 }).default('').notNull(),
-    profileInfoUid: uuid('profile_info_uid').notNull(),
+    level: varchar('level', { length: 255 }).default('').notNull(),
+    skillUid: uuid('skill_uid')
+      .notNull()
+      .references(() => skillPool.uid),
+    profileInfoUid: uuid('profile_info_uid')
+      .notNull()
+      .references(() => userProfleInfo.uid),
   },
   (table) => {
     return {

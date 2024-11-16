@@ -1,8 +1,4 @@
-import type {
-  ExpInferInsert,
-  UserInferSelect,
-} from '@/db/drizzle/schema/user/schema';
-import type { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
+import type { ExpInferInsert } from '@/db/drizzle/schema/user/schema';
 
 export class CreateUserDto {
   fullName!: string;
@@ -21,6 +17,7 @@ export class CreateExperienceDto implements Partial<ExpInferInsert> {
   present: boolean;
 }
 
-export class CreateSkillsDto {
-  name!: string;
+export class CreateUserSkillsDto {
+  skillUid: string;
+  level: string;
 }

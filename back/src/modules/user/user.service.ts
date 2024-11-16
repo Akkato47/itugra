@@ -1,6 +1,6 @@
 import type {
   CreateExperienceDto,
-  CreateSkillsDto,
+  CreateUserSkillsDto,
   CreateUserDto,
 } from './dto/create-user.dto';
 import { CustomError } from '@/utils/custom_error';
@@ -30,6 +30,7 @@ import {
 import { and, eq, ilike, or } from 'drizzle-orm';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
+import { skillPool } from '@/db/drizzle/schema/testing/schema';
 
 export const getUserByUID = async (uid: string) => {
   try {
@@ -190,7 +191,7 @@ export const getUserProfile = async (tag: string) => {
     const skills = await db
       .select({
         uid: userSkills.uid,
-        name: userSkills.name,
+        name: userSkills.level,
       })
       .from(userSkills)
       .where(eq(userSkills.profileInfoUid, profileInfo[0].uid));
@@ -297,11 +298,14 @@ export const getUserSkills = async (userUid: string) => {
     const skills = await db
       .select()
       .from(userSkills)
-      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid));
+      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid))
+      .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid));
+
     const response = {
       userSkills: skills.map((skill) => ({
-        uid: skill.uid,
-        name: skill.name,
+        uid: skill.user_skills.uid,
+        name: skill.skill_pool.name,
+        level: skill.user_skills.level,
       })),
     };
     return response;
@@ -453,7 +457,10 @@ export const createExperience = async (
   }
 };
 
-export const createSkills = async (userUid: string, data: CreateSkillsDto) => {
+export const createSkills = async (
+  userUid: string,
+  data: CreateUserSkillsDto
+) => {
   try {
     const profileInfo = await db
       .select()

@@ -1,5 +1,5 @@
 {
-  "id": "a7b9100a-41fb-4bc1-aff5-5e5ee4dbd2f7",
+  "id": "f5e9e76c-69c0-49b2-947d-6b1d4e77c159",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -431,6 +431,152 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.category_questions": {
+      "name": "category_questions",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answers": {
+          "name": "answers",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.question_pool": {
+      "name": "question_pool",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answers": {
+          "name": "answers",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "question_pool_skill_uid_skill_pool_uid_fk": {
+          "name": "question_pool_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "question_pool",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.skill_pool": {
+      "name": "skill_pool",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.files": {
       "name": "files",
       "schema": "",
@@ -835,12 +981,18 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "level": {
+          "name": "level",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "default": "''"
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         },
         "profile_info_uid": {
           "name": "profile_info_uid",
@@ -851,8 +1003,34 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "user_skills_profile_info_uid_foreign": {
-          "name": "user_skills_profile_info_uid_foreign",
+        "user_interests_skill_uid_skill_pool_uid_fk": {
+          "name": "user_interests_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "user_interests",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_interests_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_interests_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_interests",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_interests_profile_info_uid_foreign": {
+          "name": "user_interests_profile_info_uid_foreign",
           "tableFrom": "user_interests",
           "tableTo": "user_profle_info",
           "columnsFrom": [
@@ -1034,12 +1212,18 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "level": {
+          "name": "level",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "default": "''"
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         },
         "profile_info_uid": {
           "name": "profile_info_uid",
@@ -1050,6 +1234,32 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "user_skills_skill_uid_skill_pool_uid_fk": {
+          "name": "user_skills_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "user_skills",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_skills_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_skills_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_skills",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "user_skills_profile_info_uid_foreign": {
           "name": "user_skills_profile_info_uid_foreign",
           "tableFrom": "user_skills",
