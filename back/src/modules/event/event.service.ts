@@ -20,6 +20,7 @@ export const getRequests = async () => {
         image: eventRequest.image,
         watched: eventRequest.watched,
         userName: users.fullName,
+        categoryId: eventRequest.categoryId,
       })
       .from(eventRequest)
       .leftJoin(users, eq(users.uid, eventRequest.userUid));
@@ -40,6 +41,7 @@ export const getRequest = async (requstUid: string) => {
         image: eventRequest.image,
         watched: eventRequest.watched,
         userName: users.fullName,
+        categoryId: eventRequest.categoryId,
       })
       .from(eventRequest)
       .where(eq(eventRequest.uid, requstUid))
@@ -63,6 +65,7 @@ export const getEvents = async () => {
         watched: eventRequest.watched,
         userName: users.fullName,
         description: eventRequest.description,
+        categoryId: eventRequest.categoryId,
       })
       .from(event)
       .leftJoin(users, eq(users.uid, eventRequest.userUid));

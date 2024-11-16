@@ -2,6 +2,7 @@ import { ImageType } from '@/modules/uploads/types/file.interface';
 import {
   boolean,
   date,
+  integer,
   jsonb,
   pgEnum,
   uuid,
@@ -30,6 +31,7 @@ export const eventBaseSchema = {
     .$default(() => StatusEnum.WAITING),
   registrationEnd: date('registration_end').notNull(),
   end: date('end').notNull(),
+  categoryId: integer('category_id').array(),
   userUid: uuid('userUid')
     .notNull()
     .references(() => users.uid),
