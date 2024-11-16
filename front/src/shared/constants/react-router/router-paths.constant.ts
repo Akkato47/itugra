@@ -2,6 +2,7 @@ export const paths = {
   // Auth
   SIGNIN: "/signIn",
   SIGNUP: "/signUp",
+  OAUTH_YANDEX: "/oauth/yandex-callback",
 
   // Authed Pages
 
