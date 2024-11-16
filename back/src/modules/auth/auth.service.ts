@@ -24,7 +24,7 @@ export const login = async (userData: LoginUserDto) => {
       uid: user.uid,
       oAuthId: user.oAuthId ? user.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image };
+    const data = { role: user.role, image: user.image, tag: user.tag };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -42,7 +42,7 @@ export const register = async (userData: CreateUserDto) => {
       uid: user.uid,
       oAuthId: userData.oAuthId ? userData.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image };
+    const data = { role: user.role, image: user.image, tag: user.tag };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -180,7 +180,11 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
       uid: tryFindUser.uid,
       oAuthId: userData.data.id,
     };
-    const data = { role: tryFindUser.role, image: tryFindUser.image };
+    const data = {
+      role: tryFindUser.role,
+      image: tryFindUser.image,
+      tag: tryFindUser.tag,
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     throw error;
