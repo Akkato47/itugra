@@ -95,7 +95,6 @@ export const getEvents = async () => {
 
     return events;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
