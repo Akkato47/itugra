@@ -10,7 +10,7 @@ const db_migrate = async () => {
   const migrationsFolder = config.app.isProduction
     ? path.join(__dirname, '../../../dist/db/drizzle/migrations')
     : path.join(__dirname, '../../../src/db/drizzle/migrations');
-  console.log(migrationsFolder, config.app.isProduction);
+
   await migrate(drizzle(migrationClient), {
     migrationsFolder: migrationsFolder,
   });

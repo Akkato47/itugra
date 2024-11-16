@@ -1,6 +1,5 @@
 import {
   integer,
-  json,
   jsonb,
   pgTable,
   text,
@@ -8,6 +7,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
+import { TAnswer } from './types/answer.type';
 
 export const skillPool = pgTable('skill_pool', {
   ...baseSchema,
@@ -17,7 +17,7 @@ export const skillPool = pgTable('skill_pool', {
 export const questionPool = pgTable('question_pool', {
   ...baseSchema,
   question: text('question').notNull(),
-  answers: jsonb('answers').array().notNull(),
+  answers: jsonb('answers').array().$type<TAnswer[]>().notNull(),
   skillUid: uuid('skill_uid')
     .notNull()
     .references(() => skillPool.uid),
@@ -26,6 +26,6 @@ export const questionPool = pgTable('question_pool', {
 export const categoryQuestions = pgTable('category_questions', {
   ...baseSchema,
   question: text('question').notNull(),
-  answers: jsonb('answers').array().notNull(),
+  answers: jsonb('answers').array().$type<TAnswer[]>().notNull(),
   categoryId: integer('category_id').notNull(),
 });
