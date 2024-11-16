@@ -1,5 +1,5 @@
 {
-  "printWidth": 90,
+  "printWidth": 100,
   "singleQuote": false,
   "jsxSingleQuote": true,
   "trailingComma": "none",
@@ -8,7 +8,15 @@
   "useTabs": false,
   "endOfLine": "lf",
   "arrowParens": "always",
-  "importOrder": ["^@app/(.*)$", "^@components/(.*)$", "^@shared/(.*)$", "^[./]"],
+  "importOrder": [
+    "^@app/(.*)$",
+    "^@pages/(.*)$",
+    "^@widgets/(.*)$",
+    "^@features/(.*)$",
+    "^@entities/(.*)$",
+    "^@shared/(.*)$",
+    "^[./]"
+  ],
   "importOrderSeparation": true,
   "importOrderGroupNamespaceSpecifiers": true,
   "importOrderSortSpecifiers": true,

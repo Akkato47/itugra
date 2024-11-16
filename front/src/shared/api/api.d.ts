@@ -1,1 +1,0 @@
-type UidConfig = RequestConfig<UidParams>;

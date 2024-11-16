@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer base {
+  * {
+    @apply font-Lato;
+  }
+}
+
+@layer utilities {
+  .clip-block-style {
+    clip-path: polygon(0 0, 83% 0, 100% 50%, 83% 100%, 0 100%, 0% 50%);
+  }
+} */

@@ -8,6 +8,7 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
+    "plugin:@conarti/feature-sliced/rules",
     "prettier"
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
@@ -15,9 +16,6 @@ module.exports = {
   plugins: ["react-refresh", "react", "@typescript-eslint"],
   root: true,
   rules: {
-    "react/prop-types": "off",
-    "@typescript-eslint/no-unused-expressions": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
     "no-undef": "off",
     "no-unused-vars": "off",
     "no-var": "error",
