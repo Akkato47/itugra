@@ -5,6 +5,7 @@ import { FileType } from '@/modules/uploads/types/file.interface';
 import { users } from '../user/schema';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
+export const statusEnum = pgEnum('status_enum', ['WAITING', 'CLOSED', 'END']);
 
 export const eventRequest = pgTable('request', {
   ...eventBaseSchema,
