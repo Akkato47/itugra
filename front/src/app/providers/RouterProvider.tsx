@@ -1,5 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import { createAdminLayout } from "@app/layouts/AdminLayout/route";
+
 import { createLandingRoute } from "@pages/Landing";
 import { createSignInRoute, createYandexCallbackPageRoute } from "@pages/SignIn";
 import { createSignUpRoute } from "@pages/SignUp";
@@ -12,7 +14,8 @@ const router = createBrowserRouter([
   createSignUpRoute(),
   createYandexCallbackPageRoute(),
   createMainLayout(),
-  createSettingsLayout()
+  createSettingsLayout(),
+  createAdminLayout()
 ]);
 
 export const BrowserRouter = () => <RouterProvider router={router} />;
