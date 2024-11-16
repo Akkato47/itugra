@@ -2149,6 +2149,12 @@
         "end": {
           "type": "string",
           "format": "date"
+        },
+        "categoryId": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
         }
       }
     },

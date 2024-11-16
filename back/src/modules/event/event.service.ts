@@ -27,6 +27,7 @@ export const getRequests = async () => {
 
     return requests;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -57,21 +58,20 @@ export const getEvents = async () => {
   try {
     const events = await db
       .select({
-        uid: eventRequest.uid,
-        name: eventRequest.name,
-        type: eventRequest.type,
-        approved: eventRequest.approved,
-        image: eventRequest.image,
-        watched: eventRequest.watched,
+        uid: event.uid,
+        name: event.name,
+        type: event.type,
+        image: event.image,
         userName: users.fullName,
-        description: eventRequest.description,
-        categoryId: eventRequest.categoryId,
+        description: event.description,
+        categoryId: event.categoryId,
       })
       .from(event)
-      .leftJoin(users, eq(users.uid, eventRequest.userUid));
+      .leftJoin(users, eq(users.uid, event.userUid));
 
     return events;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -86,6 +86,7 @@ export const createRequest = async (userUid: string, dto: CreateRequestDto) => {
       createdRequestUid: newRequest[0].uid,
     };
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
