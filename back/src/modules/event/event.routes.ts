@@ -5,8 +5,8 @@ import { isAdmin } from '@/middleware/role.middleware';
 
 const router = Router();
 
-router.get('/all', isAuthenticated, eventController.getRequests);
-router.get('/requests/all', isAuthenticated, eventController.getEvents);
+router.get('/all', isAuthenticated, eventController.getEvents);
+router.get('/requests/all', isAuthenticated, eventController.getRequests);
 
 router.post('/create/request', isAuthenticated, eventController.createRequest);
 

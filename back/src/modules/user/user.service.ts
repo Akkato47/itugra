@@ -29,6 +29,8 @@ import { and, eq, ilike, or } from 'drizzle-orm';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
 import { skillPool } from '@/db/drizzle/schema/testing/schema';
+import { CreateRoadmapDto } from './dto/roadmap.dto';
+import { GigaChat } from 'gigachat-node';
 
 export const getUserByUID = async (uid: string) => {
   try {
@@ -903,6 +905,29 @@ export const deleteFile = async (userUid: string, uid: string) => {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    throw error;
+  }
+};
+
+export const generateRoadmap = async (dto: CreateRoadmapDto) => {
+  try {
+    const gigachat = new GigaChat(
+      'OTM2NDRlNDgtMmNkYi00YWZhLThiZTktYjE0YTk2YzkzYzY4OjQ5ZGNhMzVkLTg1OTMtNDZlYy05YmIwLTA5OTQ4MzczMGUwOA==',
+      true,
+      true,
+      true
+    );
+
+    await gigachat.createToken();
+
+    await gigachat.completion({
+      model: 'GigaChat',
+      messages: [
+        { role: 'system', content: '' },
+        { role: 'user', content: '' },
+      ],
+    });
+  } catch (error) {
     throw error;
   }
 };

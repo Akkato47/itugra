@@ -242,3 +242,11 @@ export const userExperience = pgTable(
 );
 
 export type ExpInferInsert = typeof userExperience.$inferInsert;
+
+export const userRoadmap = pgTable('user_roadmap', {
+  ...baseSchema,
+  name: varchar('name', { length: 255 }).notNull(),
+  done: boolean('done')
+    .notNull()
+    .$default(() => false),
+});

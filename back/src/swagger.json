@@ -2044,14 +2044,7 @@
             "name": {
               "type": "string"
             },
-            "registrationEnd": {
-              "type": "string",
-              "format": "date"
-            },
-            "end": {
-              "type": "string",
-              "format": "date"
-            },
+
             "fileUrl": {
               "type": "string"
             },
@@ -2069,6 +2062,14 @@
             "type": "string",
             "enum": ["HACKATON", "MEETUP"]
           }
+        },
+        "registrationEnd": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
         }
       }
     },
