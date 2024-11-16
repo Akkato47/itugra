@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import { createAdminLayout } from "@app/layouts/AdminLayout/route";
+import { createAdminLayout } from "@app/layouts/AdminLayout";
 
 import { createLandingRoute } from "@pages/Landing";
 import { createNaVzlyotRoute } from "@pages/NaVzlyot";

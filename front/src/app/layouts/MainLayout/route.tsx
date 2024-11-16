@@ -9,6 +9,8 @@ import { createTeamProfileRoute, createTeamsRoute } from "@pages/TeamProfile";
 import { paths } from "@shared/constants/react-router";
 import { Spinner } from "@shared/ui/spinner";
 
+import { createEventLayout } from "../EventLayout/route";
+
 const MainLayout = lazy(() => import("./ui"));
 
 export const createMainLayout = (): RouteObject => ({
@@ -24,7 +26,8 @@ export const createMainLayout = (): RouteObject => ({
     createProfileRoute(),
     createTeamsRoute(),
     createTeamProfileSettingsRoute(),
-    createTeamProfileRoute()
+    createTeamProfileRoute(),
+    createEventLayout()
     // createNaVzlyotRoute()
   ]
 });

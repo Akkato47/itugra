@@ -4,10 +4,9 @@ import { RequestWidget } from "@widgets/request";
 
 import { Button } from "@shared/ui";
 
-const EditRequestPage = () => {
+const CurrentEventPage = () => {
   const { requestUid } = useParams();
   const { state } = useLocation();
-  console.log(state);
 
   return (
     <div className='w-full space-y-10'>
@@ -20,4 +19,4 @@ const EditRequestPage = () => {
   );
 };
 
-export default EditRequestPage;
+export default CurrentEventPage;

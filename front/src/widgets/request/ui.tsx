@@ -19,7 +19,7 @@ export const RequestWidget = () => (
           <Heading variant='h2' className='text-[#0066B3]'>
             Лидеры региона – 2023
           </Heading>
-          <div className='grid grid-cols-[200px_200px]'>
+          <div className='grid grid-cols-[150px_150px]'>
             <div className='space-y-2'>
               <p>Тип мероприятия:</p>
               <p>Тэги:</p>
@@ -27,7 +27,7 @@ export const RequestWidget = () => (
             </div>
             <div className='space-y-2'>
               <p>Хакатон</p>
-              <div className='flex items-center gap-1'>
+              <div className='flex items-center flex-wrap gap-1'>
                 {Array.from({ length: 2 }).map((_, index) => (
                   <p className='py-1 px-4 text-sm text-white bg-gray-600 rounded-md' key={index}>
                     frfr

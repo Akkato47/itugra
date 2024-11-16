@@ -8,8 +8,11 @@ export const paths = {
 
   // Сайдбар профиля
   PROFILE: "/profile",
-  MY_EVENTS: "/myevents",
-  ALL_EVENTS: "/allevents",
+  EVENTS: "/events",
+  MY_EVENTS: "myevents",
+  CREATE_EVENT: "create-event",
+  EVENT: "event",
+  ALL_EVENTS: "allevents",
   MY_ROADMAP: "/myroadmap",
   SUPPORT_MEASURES: "/supportmeasures",
   TEAMS: "/profile/teams",
