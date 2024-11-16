@@ -1,5 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import { createAdminLayout } from "@app/layouts/AdminLayout/route";
+
 import { createLandingRoute } from "@pages/Landing";
 import { createNaVzlyotRoute } from "@pages/NaVzlyot";
 import { createSignInRoute, createYandexCallbackPageRoute } from "@pages/SignIn";
@@ -14,6 +16,7 @@ const router = createBrowserRouter([
   createYandexCallbackPageRoute(),
   createMainLayout(),
   createSettingsLayout(),
+  createAdminLayout(),
   createNaVzlyotRoute()
 ]);
 

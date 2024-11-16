@@ -15,6 +15,11 @@ export const paths = {
   TEAMS: "/profile/teams",
   NAVZLYOT: "/na-vzlyot",
 
+  // Админ
+  ADMIN: "/admin",
+  ADMIN_REQUESTS: "requests",
+  ADMIN_REQUESTS_HISTORY: "requests-history",
+
   // Настройки
   SETTINGS: "/settings",
   PERSONAL_DATA_SETTINGS: "/settings/personal-data",
