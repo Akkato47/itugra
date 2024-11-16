@@ -26,12 +26,13 @@ import {
   users,
   userSkills,
 } from '@/db/drizzle/schema/user/schema';
-import { and, eq, ilike, or } from 'drizzle-orm';
+import { and, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
 import { skillPool } from '@/db/drizzle/schema/testing/schema';
 import { CreateRoadmapDto } from './dto/roadmap.dto';
 import { GigaChat } from 'gigachat-node';
+import { event } from '@/db/drizzle/schema/event/schema';
 
 export const getUserByUID = async (uid: string) => {
   try {
@@ -1003,6 +1004,21 @@ export const updateCheck = async (checkUid: string) => {
       .set({ done: !data[0].done })
       .where(eq(userRoadmap.uid, checkUid))
       .execute();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRecomendation = async (userUid: string) => {
+  try {
+    const profleInfo = await db
+      .select()
+      .from(userProfleInfo)
+      .where(eq(userProfleInfo.userUid, userUid));
+    const events = await db
+      .select()
+      .from(event)
+      .where(sql`(${profleInfo[0].chosenCategory}) in ${event.categoryId}`);
   } catch (error) {
     throw error;
   }

@@ -56,6 +56,28 @@ export const getRequest = async (requstUid: string) => {
   }
 };
 
+export const getEvent = async (eventUid: string) => {
+  try {
+    const events = await db
+      .select({
+        uid: event.uid,
+        name: event.name,
+        type: event.type,
+        image: event.image,
+        userName: users.fullName,
+        description: event.description,
+        categoryId: event.categoryId,
+      })
+      .from(event)
+      .where(eq(event.uid, eventUid))
+      .leftJoin(users, eq(users.uid, event.userUid));
+
+    return events[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getEvents = async () => {
   try {
     const events = await db

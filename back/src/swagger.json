@@ -1574,6 +1574,30 @@
         }
       }
     },
+    "/event/info/{eventUid}": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eventUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "eventUid "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/event/request/{requestUid}": {
       "get": {
         "tags": ["Event"],

@@ -15,6 +15,19 @@ export async function getRequest(
     next(error);
   }
 }
+export async function getEvent(
+  req: Request<{ eventUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getEvent(req.params.eventUid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function getRequests(
   req: Request,
