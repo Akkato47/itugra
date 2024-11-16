@@ -20,6 +20,7 @@ export const getRequests = async () => {
         image: eventRequest.image,
         watched: eventRequest.watched,
         userName: users.fullName,
+        description: eventRequest.description,
         categoryId: eventRequest.categoryId,
       })
       .from(eventRequest)
@@ -42,6 +43,7 @@ export const getRequest = async (requstUid: string) => {
         image: eventRequest.image,
         watched: eventRequest.watched,
         userName: users.fullName,
+        description: eventRequest.description,
         categoryId: eventRequest.categoryId,
       })
       .from(eventRequest)
