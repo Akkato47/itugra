@@ -3,7 +3,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from './dto/login.dto';
 import * as userService from '../user/user.service';
 import { CustomError } from '@/utils/custom_error';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { TokenDto } from './dto/create-token.dto';
 import { HttpStatus } from '@/utils/enums/http-status';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import {
 } from './types/oauth.interface';
 import { OAuthEnum } from './enums/oauth.enum';
 import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
+import { UpdatePasswordDto } from './dto/update-security.dto';
 
 export const login = async (userData: LoginUserDto) => {
   try {
@@ -167,11 +168,10 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
     if (!tryFindUser) {
       const data = await register({
         oAuthId: userData.data.id,
-        firstName: userData.data.first_name,
-        secondName: userData.data.last_name,
+        fullName: userData.data.first_name + ' ' + userData.data.last_name,
         mail: userData.data.default_email,
         phone: userData.data.default_phone.number,
-        role: RoleEnum.USER,
+        birthDate: userData.data.birthday,
       });
       return data;
     }
@@ -183,6 +183,30 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
     const data = { role: tryFindUser.role, image: tryFindUser.image };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUserPassoword = async (
+  uid: string,
+  updateData: UpdatePasswordDto
+) => {
+  try {
+    const user = await userService.getUserByUID(uid);
+    if (!user) {
+      throw new CustomError(HttpStatus.BAD_REQUEST);
+    }
+    const passwordEquals = await compare(updateData.oldPassword, user.password);
+    if (!passwordEquals) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, 'Неправильный пароль');
+    }
+    const newPassword = await hash(updateData.newPassword, 10);
+    await userService.updatePassword(user, newPassword);
+    return true;
+  } catch (error) {
+    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
+      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     throw error;
   }
 };

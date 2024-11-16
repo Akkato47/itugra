@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import config from '@/config';
-import type { TDecodedToken } from '../types/decodedToken.interface';
+import type { IDecodedToken } from '../types/decodedToken.interface';
 
 type TGenerateOptions = {
   payload: string | object | Buffer;
@@ -43,7 +43,7 @@ function verify({ token, tokenType }: TVerifyOptions) {
     return jwt.verify(token, secret, {
       algorithms: ['HS256'],
       subject: tokenType,
-    }) as TDecodedToken;
+    }) as IDecodedToken;
   } catch (error) {
     if (tokenType === 'access') {
       return null;

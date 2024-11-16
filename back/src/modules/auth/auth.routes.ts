@@ -9,4 +9,10 @@ router.post('/login', authController.login);
 router.post('/logout', isAuthenticated, authController.logout);
 router.post('/oAuth', authController.oAuth);
 
+router.patch(
+  '/update-password',
+  isAuthenticated,
+  authController.updatePassword
+);
+
 export default router;

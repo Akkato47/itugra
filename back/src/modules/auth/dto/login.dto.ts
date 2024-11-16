@@ -1,6 +1,4 @@
-import { SelectUser } from '@/db/drizzle/schema/user/schema';
-
-export class LoginUserDto implements Partial<SelectUser> {
+export class LoginUserDto {
   mail?: string;
   phone?: string;
   password!: string;
