@@ -3,6 +3,5 @@ export interface IRegRequest {
   mail: string;
   phone: string;
   password: string;
-  role: string;
   birthDate: string;
 }

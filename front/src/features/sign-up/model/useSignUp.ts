@@ -24,10 +24,9 @@ interface IUseSignIn {
     any,
     undefined
   >;
-  role: string;
 }
 
-export const useSignUp = ({ regForm, role }: IUseSignIn) => {
+export const useSignUp = ({ regForm }: IUseSignIn) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setUserContextData } = useUser();
@@ -67,8 +66,7 @@ export const useSignUp = ({ regForm, role }: IUseSignIn) => {
         password: data.password,
         mail: data.mail,
         phone: formatedPhone,
-        birthDate: formatedBirthDate,
-        role: role
+        birthDate: formatedBirthDate
       }
     });
   };
