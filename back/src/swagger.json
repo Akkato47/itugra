@@ -125,28 +125,17 @@
         }
       }
     },
-    "/user/find/{query}": {
+    "/user/skill-pool": {
       "get": {
         "tags": ["User"],
-        "summary": "Поиск компании",
-        "description": "Ищет компанию по указанному запросу.",
         "security": [
           {
             "api_key": []
           }
         ],
-        "parameters": [
-          {
-            "name": "query",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Строка запроса для поиска компании."
-          }
-        ],
         "responses": {
           "200": {
-            "description": "Результаты поиска компании."
+            "description": "Список skills успешно получен."
           },
           "401": {
             "description": "Неавторизованный доступ."
@@ -1441,27 +1430,6 @@
         }
       }
     },
-    "/test/skill-pool": {
-      "get": {
-        "tags": ["Testing"],
-        "security": [
-          {
-            "api_key": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Список skills успешно получен."
-          },
-          "401": {
-            "description": "Неавторизованный доступ."
-          },
-          "500": {
-            "description": "Внутренняя ошибка сервера."
-          }
-        }
-      }
-    },
     "/test/generate": {
       "post": {
         "tags": ["Testing"],
@@ -1578,9 +1546,12 @@
     "CreateSkillsDto": {
       "type": "object",
       "properties": {
-        "name": {
+        "skillUid": {
           "type": "string",
-          "description": "Название навыка"
+          "description": "Uid навыка"
+        },
+        "level": {
+          "type": "string"
         }
       },
       "required": ["name"]

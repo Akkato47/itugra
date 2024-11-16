@@ -26,6 +26,20 @@ import { EditFileDto } from './dto/edit-file.dto';
 //     }
 // }
 
+export async function getSkills(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.getSkillsList();
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getUserProfile(
   req: Request<{ tag: string }>,
   res: Response,

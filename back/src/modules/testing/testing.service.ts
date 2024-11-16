@@ -8,19 +8,6 @@ import {
 import { eq } from 'drizzle-orm';
 import { userProfleInfo, userSkills } from '@/db/drizzle/schema/user/schema';
 
-export const getSkillsList = async () => {
-  try {
-    return await db
-      .select({
-        uid: skillPool.uid,
-        name: skillPool.name,
-      })
-      .from(skillPool);
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
   try {
     const profileInfo = await db
@@ -51,7 +38,6 @@ export const generateTest = async (userUid: string, dto: GenerateTestDto) => {
 
     return [...categoryQuestionList, ...skillQuestions];
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

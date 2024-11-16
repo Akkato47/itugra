@@ -459,6 +459,19 @@ export const createExperience = async (
   }
 };
 
+export const getSkillsList = async () => {
+  try {
+    return await db
+      .select({
+        uid: skillPool.uid,
+        name: skillPool.name,
+      })
+      .from(skillPool);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createSkills = async (
   userUid: string,
   data: CreateUserSkillsDto

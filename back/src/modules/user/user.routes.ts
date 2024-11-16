@@ -18,6 +18,7 @@ router.get(
 );
 router.get('/profile/info', isAuthenticated, userController.getUserProfileInfo);
 router.get('/profile/skills', isAuthenticated, userController.getUserSkills);
+router.get('/skill-pool', isAuthenticated, userController.getSkills);
 router.get(
   '/profile/security',
   isAuthenticated,

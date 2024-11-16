@@ -1,5 +1,12 @@
 import { ImageType } from '@/modules/uploads/types/file.interface';
-import { date, jsonb, pgEnum, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  date,
+  jsonb,
+  pgEnum,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
 
