@@ -7,6 +7,28 @@ import {
 } from '@/db/drizzle/schema/event/schema';
 import { eq } from 'drizzle-orm';
 import { EventEnum } from '@/db/drizzle/schema/event/enums/event-types.enum';
+import { users } from '@/db/drizzle/schema/user/schema';
+
+export const getRequests = async () => {
+  try {
+    const requests = await db
+      .select({
+        uid: eventRequest.uid,
+        name: eventRequest.name,
+        type: eventRequest.type,
+        approved: eventRequest.approved,
+        image: eventRequest.image,
+        watched: eventRequest.watched,
+        userName: users.fullName,
+      })
+      .from(eventRequest)
+      .leftJoin(users, eq(users.uid, eventRequest.userUid));
+
+    return requests;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const createRequest = async (userUid: string, dto: CreateRequestDto) => {
   try {
@@ -18,7 +40,6 @@ export const createRequest = async (userUid: string, dto: CreateRequestDto) => {
       createdRequestUid: newRequest[0].uid,
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

@@ -1459,6 +1459,21 @@
         }
       }
     },
+    "/event/all": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/event/create/request": {
       "post": {
         "tags": ["Event"],

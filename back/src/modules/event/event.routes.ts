@@ -5,6 +5,8 @@ import { isAdmin } from '@/middleware/role.middleware';
 
 const router = Router();
 
+router.get('/all', isAuthenticated, eventController.getRequests);
+
 router.post('/create/request', isAuthenticated, eventController.createRequest);
 
 router.post('/make/desicion', isAuthenticated, eventController.makeDecision);
