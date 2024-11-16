@@ -23,6 +23,10 @@
     {
       "name": "Team",
       "description": "Team related endpoints"
+    },
+    {
+      "name": "Testing",
+      "description": "Testing related endpoints"
     }
   ],
   "schemes": ["http"],
@@ -1436,6 +1440,26 @@
           }
         }
       }
+    },
+    "/test/generate": {
+      "post": {
+        "tags": ["Testing"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GenerateTestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Тест успешно создана."
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -1914,6 +1938,20 @@
         }
       },
       "required": ["userTag", "teamUid", "ctrUid"]
+    },
+    "GenerateTestDto": {
+      "type": "object",
+      "properties": {
+        "skillsUid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "category": {
+          "type": "number"
+        }
+      }
     }
   }
 }
