@@ -22,6 +22,7 @@ import {
   userFiles,
   userLocation,
   userProfleInfo,
+  userRoadmap,
   users,
   userSkills,
 } from '@/db/drizzle/schema/user/schema';
@@ -912,21 +913,50 @@ export const deleteFile = async (userUid: string, uid: string) => {
 export const generateRoadmap = async (dto: CreateRoadmapDto) => {
   try {
     const gigachat = new GigaChat(
-      'OTM2NDRlNDgtMmNkYi00YWZhLThiZTktYjE0YTk2YzkzYzY4OjQ5ZGNhMzVkLTg1OTMtNDZlYy05YmIwLTA5OTQ4MzczMGUwOA==',
+      'YzdmYmZkYjMtNzgyNS00MTAzLTkxM2QtOTY0ZTdmZmNlZWZkOjlhNjdiZTJkLTVjNTItNDAzOC05MWRiLTc2NGIzMTUzY2UwZQ==',
       true,
       true,
       true
     );
 
-    await gigachat.createToken();
+    const example = [
+      {
+        name: 'название пункта',
+      },
+      {
+        name: 'название пункта',
+      },
+    ];
+    const prompt =
+      'Вы IT-специалист, который хочет составить персонализированный чеклист навыков и задач (роудмап) для профессионального роста. На основе следующих вопросов и списка интересующих вас навыков, создайте JSON-структуру чеклиста, включающую пункты для изучения, выполнения или освоения. Каждый элемент чеклиста должен быть описан как объект, включающий следующие ключи: - `name` — краткое название пункта чеклиста. Ответ должен строго соответствовать указанному ниже формату. Никакой дополнительной информации, комментариев или текста в ответе быть не должно. Сгенерируйте JSON-объект чеклиста на основе ответов пользователя. Формат результата: ' +
+      'список объектов с name: string' +
+      '. Ограничение: Формат ответа должен быть ТОЛЬКО такой как в примере.' +
+      '. Ограничение: Ответ не должен содержать: Никаких пояснений или текста вне JSON. Никаких дополнительных объектов или свойств, кроме указанных в примере. Никаких символов, не соответствующих стандарту JSON. Вот json вопросов-ответов: ' +
+      JSON.stringify(dto.testResult) +
+      '. Вот json выбранных желаемых навыков(он может быть пустым): ' +
+      JSON.stringify(dto.interestedIn) +
+      ' ПРИНИМАЙ ВО ВНИМАНИЕ И ЖЕЛАЕМЫЕ НАВЫКИ И ОТВЕТЫ НА ВОПРОСЫ. ДЕЛАЙ КОМПЛЕКСНЫЙ АНАЛИЗ, КОТОРЫЙ ПОМОЖЕТ ЧЕЛОВЕКУ ВЫРАСТИ ПРОФЕССИОНАЛЬНО' +
+      ' НЕ воспринимай пример буквально!!!';
 
-    await gigachat.completion({
+    await gigachat.createToken();
+    const response = await gigachat.completion({
       model: 'GigaChat',
-      messages: [
-        { role: 'system', content: '' },
-        { role: 'user', content: '' },
-      ],
+      messages: [{ role: 'user', content: prompt }],
     });
+
+    const data = JSON.parse(
+      response.choices[0].message.content.replace(/```json|```/g, '').trim()
+    );
+    if (!data.hasOwnProperty('checklist')) {
+      throw new CustomError(HttpStatus.I_AM_A_TEAPOT, 'Попробуйте снова');
+    }
+    for (let index = 0; index < data.checklist.length; index++) {
+      const element = data.checklist[index];
+      await db.insert(userRoadmap).values({
+        name: element.name,
+        order: index,
+      });
+    }
   } catch (error) {
     throw error;
   }

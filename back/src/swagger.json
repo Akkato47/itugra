@@ -556,6 +556,40 @@
         }
       }
     },
+    "/user/generate-roadmap": {
+      "post": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "roadmap",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRoadmapDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roadmap experience created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/user/profile-experience": {
       "post": {
         "tags": ["User"],
@@ -2081,6 +2115,39 @@
         },
         "decision": {
           "type": "boolean"
+        }
+      }
+    },
+    "CreateRoadmapDto": {
+      "type": "object",
+      "properties": {
+        "testResult": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "answer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "interestedIn": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }

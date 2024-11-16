@@ -26,6 +26,12 @@ router.get(
 );
 
 router.post(
+  '/generate-roadmap',
+  isAuthenticated,
+  userController.generateRoadmap
+);
+
+router.post(
   '/profile-experience',
   isAuthenticated,
   userController.createUserExperience

@@ -12,6 +12,7 @@ import type {
 } from './dto/create-user.dto';
 import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
+import { CreateRoadmapDto } from './dto/roadmap.dto';
 
 // export async function getCompany(
 //     req: Request<{ query: string }>,
@@ -247,6 +248,20 @@ export async function deleteFile(
 ) {
   try {
     const result = await userService.deleteFile(req.user.uid, req.params.uid);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function generateRoadmap(
+  req: Request<{}, {}, CreateRoadmapDto>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.generateRoadmap(req.body);
+
     return res.status(200).json(result);
   } catch (error) {
     next(error);

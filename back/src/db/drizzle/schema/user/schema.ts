@@ -8,6 +8,7 @@ import {
   unique,
   pgEnum,
   uuid,
+  integer,
 } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
 import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
@@ -246,6 +247,7 @@ export type ExpInferInsert = typeof userExperience.$inferInsert;
 export const userRoadmap = pgTable('user_roadmap', {
   ...baseSchema,
   name: varchar('name', { length: 255 }).notNull(),
+  order: integer('order').notNull(),
   done: boolean('done')
     .notNull()
     .$default(() => false),
