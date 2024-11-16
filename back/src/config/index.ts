@@ -6,7 +6,7 @@ const isProduction = env.NODE_ENV === 'prod';
 export default {
   app: {
     isProduction,
-    port: env.PORT || 8080,
+    port: env.PORT || 8000,
     productionUrl: env.PRODUCTION_URL || `localhost:${env.PORT}`,
   },
   cors: {
