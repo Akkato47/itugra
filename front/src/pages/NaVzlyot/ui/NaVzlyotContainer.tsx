@@ -68,7 +68,7 @@ export const NaVzlyotContainer = () => {
                   Данный раздел доступен только после заполнения навыков в профиле .
                 </AlertDescription>
                 <Link
-                  to={paths.SETTINGS + "/skill"}
+                  to={paths.SETTINGS + "/skills"}
                   className={buttonVariants({ variant: "link" })}
                 >
                   Заполнить навыки
