@@ -5,7 +5,7 @@ import { useState } from "react";
 import { MainProfileInfo } from "@widgets/profile/main-profile-info";
 import { ProfileTabSwitch } from "@widgets/profile/profile-tab-switch";
 
-import { useUser, useUserDataQuery } from "@entities/user";
+import { translateEducationFormat, useUser, useUserDataQuery } from "@entities/user";
 
 import { GraphIcon, SearchIcon } from "@shared/icons";
 import { Heading } from "@shared/ui";
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                                 {career.position}
                               </Heading>
                               <p className='text-[#0066b3] leading-[175%]'>{career.name}</p>
-                              <p className='text-sm leading-[171%] opacity-50'>{`${career.startDate} - ${career.endDate}`}</p>
+                              <p className='text-sm leading-[171%] opacity-50'>{`${career.startDate} - ${career.present ? "По настоящее время" : career.endDate}`}</p>
                             </li>
                           ))}
                         </ul>
@@ -132,7 +132,7 @@ const ProfilePage = () => {
                     {userProfile.userEducation !== null && (
                       <div className='flex items-center justify-center gap-4'>
                         <div className='bg-red-600 flex-shrink-0 size-6 rounded-full' />
-                        <p className='leading-[175%]'>{`Учреждение: ${userProfile.userEducation.university}. Специальность: ${userProfile.userEducation.direction}. Год окончания: ${userProfile.userEducation.endDate.slice(0, 4)}. Форма обучения: ${userProfile.userEducation.format}`}</p>
+                        <p className='leading-[175%]'>{`Учреждение: ${userProfile.userEducation.university}. Специальность: ${userProfile.userEducation.direction}. Год окончания: ${userProfile.userEducation.endDate.slice(0, 4)}. Форма обучения: ${translateEducationFormat(userProfile.userEducation.format)}`}</p>
                       </div>
                     )}
                     {userProfile.userFiles.length !== 0 && (

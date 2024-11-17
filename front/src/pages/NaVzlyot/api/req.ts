@@ -34,3 +34,5 @@ export type TToggleTaskConfig = TRequestConfig<IToggleTask>;
 
 export const patchToggleTask = ({ params, config }: TToggleTaskConfig) =>
   api.patch<PostGenerateTestingResponse>(`/user/roadmap/${params.uid}`, {}, config);
+
+export const getUserRec = ({ config }: TRequestConfig) => api.get<any>("/user/rec", config);

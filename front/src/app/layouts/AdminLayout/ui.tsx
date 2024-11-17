@@ -17,6 +17,7 @@ const AdminLayout = () => {
     isValidUid =
       /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(uid);
   }
+  console.log(user?.image);
 
   return (
     <>
