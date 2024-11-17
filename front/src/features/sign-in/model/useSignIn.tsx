@@ -3,6 +3,7 @@ import type { z } from "zod";
 
 import { useUser } from "@entities/user";
 
+import { paths } from "@shared/constants/react-router";
 import { formatePhone } from "@shared/lib/formatePhone";
 import { useToast } from "@shared/model/use-toast";
 
@@ -19,7 +20,7 @@ export const useSignIn = () => {
     options: {
       onSuccess(data) {
         setUserContextData(data.data);
-        return navigate("/");
+        return navigate(paths.SETTINGS + "/skills");
       },
       onError(error) {
         toast({

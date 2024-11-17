@@ -1,4 +1,4 @@
-import { ChevronDownIcon, GearIcon, Share1Icon } from "@radix-ui/react-icons";
+import { AccessibilityIcon, ChevronDownIcon, GearIcon, Share1Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -6,7 +6,6 @@ import type { IAuthResponse } from "@features/sign-in";
 import { LogoutButton } from "@features/sign-out";
 
 import { paths } from "@shared/constants/react-router";
-import { SupportIcon } from "@shared/icons";
 import { cn } from "@shared/lib/shade-cn";
 import { Avatar } from "@shared/ui";
 import {
@@ -68,12 +67,12 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
             <p className='leading-[143%]'>Настройки</p>
           </Link>
           <Link
-            to={paths.SUPPORT}
+            to={`${paths.ADMIN}/${paths.ADMIN_REQUESTS}`}
             onClick={closeDropDown}
             className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
           >
-            <SupportIcon className='size-5' />
-            <p className='leading-[143%]'>Поддержка</p>
+            <AccessibilityIcon className='size-5' />
+            <p className='leading-[143%]'>Админ панель</p>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

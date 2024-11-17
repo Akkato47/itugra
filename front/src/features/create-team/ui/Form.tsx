@@ -15,13 +15,7 @@ interface ICreateTeamFormProps {
 
 export const CreateTeamForm = ({ children }: ICreateTeamFormProps) => {
   const createTeamForm = useCreateTeamForm();
-  const { mutateAsync } = usePostCreateTeamMutation({
-    options: {
-      onSuccess(data) {
-        console.log(data);
-      }
-    }
-  });
+  const { mutateAsync } = usePostCreateTeamMutation();
 
   const createTeam = async (data: z.infer<typeof createTeamFormSchema>) => {
     await mutateAsync({

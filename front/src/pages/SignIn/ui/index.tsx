@@ -13,7 +13,6 @@ const SignInPage = () => {
   const { setUserContextData } = useUser();
 
   useEffect(() => {
-    console.log(is_auth);
     if (is_auth && is_auth === "false") {
       localStorage.removeItem("IS_AUTH");
       setUserContextData(undefined);

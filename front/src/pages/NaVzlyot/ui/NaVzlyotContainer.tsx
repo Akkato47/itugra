@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import type { NumCategory } from "@pages/NaVzlyot/api/req";
 
+import { useGetUserSkills } from "@entities/user";
+
+import { paths } from "@shared/constants/react-router";
+import { buttonVariants } from "@shared/constants/shade-cn";
 import { Button, Heading } from "@shared/ui";
+import { Alert, AlertDescription, AlertTitle } from "@shared/ui/alert";
 import { Card } from "@shared/ui/card";
 import { Progress } from "@shared/ui/progress";
 import {
@@ -35,6 +41,8 @@ export const NaVzlyotContainer = () => {
     }
   });
 
+  const userSkills = useGetUserSkills({});
+
   const quests = questionsMutation.data?.data;
 
   return (
@@ -53,6 +61,21 @@ export const NaVzlyotContainer = () => {
               для вашего профессионального роста.
             </p>
 
+            {userSkills.data?.data.userSkills.length === 0 && (
+              <Alert variant='destructive'>
+                <AlertTitle>Внимаение!</AlertTitle>
+                <AlertDescription>
+                  Данный раздел доступен только после заполнения навыков в профиле .
+                </AlertDescription>
+                <Link
+                  to={paths.SETTINGS + "/skill"}
+                  className={buttonVariants({ variant: "link" })}
+                >
+                  Заполнить навыки
+                </Link>
+              </Alert>
+            )}
+
             <Select defaultValue={category} onValueChange={(e) => setCategory(e as Category)}>
               <SelectTrigger className='w-[180px] '>
                 <SelectValue placeholder='Выберите категорию' />
@@ -68,7 +91,7 @@ export const NaVzlyotContainer = () => {
             </Select>
 
             <Button
-              disabled={!category}
+              disabled={!category || userSkills.data?.data.userSkills.length === 0}
               onClick={() =>
                 questionsMutation.mutateAsync({
                   params: { category: Number(category) as NumCategory }

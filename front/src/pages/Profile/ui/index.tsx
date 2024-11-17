@@ -23,7 +23,6 @@ const ProfilePage = () => {
   const userProfile = data?.data.profileInfo;
   const fullName = data?.data.fullName.split(" ");
   const currentUserJob = data?.data.profileInfo.userExperience.find((job) => job.present);
-  console.log(userProfile?.userSkills);
 
   return (
     <>

@@ -4,6 +4,7 @@ import type { z } from "zod";
 
 import { useUser } from "@entities/user";
 
+import { paths } from "@shared/constants/react-router";
 import { formateDate } from "@shared/lib/formateDate";
 import { formatePhone } from "@shared/lib/formatePhone";
 import { useToast } from "@shared/model/use-toast";
@@ -35,7 +36,7 @@ export const useSignUp = ({ regForm }: IUseSignIn) => {
     options: {
       onSuccess(data) {
         setUserContextData(data.data);
-        navigate("/");
+        navigate(paths.SETTINGS + "/skills");
       },
       onError(error) {
         toast({
