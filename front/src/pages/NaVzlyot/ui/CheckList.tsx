@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { Link } from "react-router-dom";
 import {
   Bar,
@@ -63,13 +64,19 @@ const numToColor = (num: number) => {
 
 const toPercent = (list: ITask[]) => {
   const doneTasks = list.filter((task) => task.done);
-  const percent = Number((doneTasks.length / list.length).toFixed()) * 100;
+  const percent = Math.round((doneTasks.length / list.length) * 100);
   return percent;
 };
 
 export const CheckList = ({ list }: { list: ITask[] }) => {
   const taskMutation = usePatchToggleTaskMutation();
   const recQuery = useGetUsersRecQuery({});
+
+  // Функция для вычисления угла заполнения
+  const calculateAngle = (list: ITask[]) => {
+    const percent = toPercent(list); // Получаем процент завершенных задач
+    return (percent / 100) * 360; // Преобразуем процент в угол
+  };
 
   return (
     <section className='space-y-5 w-full'>
@@ -89,7 +96,6 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
                 if (nameA > nameB) {
                   return 1;
                 }
-
                 return 0;
               })
               .map((task) => (
@@ -97,8 +103,8 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
                   <Checkbox
                     checked={task.done}
                     id={task.name}
-                    onCheckedChange={() => {
-                      taskMutation.mutateAsync({
+                    onCheckedChange={async () => {
+                      await taskMutation.mutateAsync({
                         params: {
                           uid: task.uid
                         }
@@ -131,8 +137,8 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
                     fill: "#22C55E"
                   }
                 ]}
-                startAngle={0}
-                endAngle={250}
+                startAngle={90}
+                endAngle={90 + calculateAngle(list)} // Используем вычисленный угол
                 innerRadius={80}
                 outerRadius={110}
               >
