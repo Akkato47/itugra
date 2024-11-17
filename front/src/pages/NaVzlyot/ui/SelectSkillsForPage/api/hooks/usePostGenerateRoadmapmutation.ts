@@ -21,7 +21,7 @@ export const usePostGenerateRoadmapmutation = (
         className: "bg-green-600 text-white hover:bg-green-500",
         title: "Чеклист готов!"
       });
-      queryClient.invalidateQueries({ queryKey: ["getUserSkills"] });
+      queryClient.invalidateQueries({ queryKey: ["getRoadmap"] });
     },
     onError(error) {
       toast({
