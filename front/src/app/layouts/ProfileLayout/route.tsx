@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react";
 import type { RouteObject } from "react-router-dom";
 
-import { createNaVzlyotRoute } from "@pages/NaVzlyot";
 import { createProfileRoute } from "@pages/Profile";
 import { createTeamProfileSettingsRoute } from "@pages/Settings";
 import { createTeamProfileRoute, createTeamsRoute } from "@pages/TeamProfile";
@@ -11,7 +10,7 @@ import { Spinner } from "@shared/ui/spinner";
 
 const MainLayout = lazy(() => import("./ui"));
 
-export const createMainLayout = (): RouteObject => ({
+export const createProfileLayout = (): RouteObject => ({
   path: paths.PROFILE,
   element: (
     <Suspense fallback={<Spinner />}>
@@ -24,7 +23,6 @@ export const createMainLayout = (): RouteObject => ({
     createProfileRoute(),
     createTeamsRoute(),
     createTeamProfileSettingsRoute(),
-    createTeamProfileRoute()
-    // createNaVzlyotRoute()
+    createTeamProfileRoute(),
   ]
 });

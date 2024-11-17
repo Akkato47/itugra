@@ -1,5 +1,7 @@
+import { RocketIcon } from "@radix-ui/react-icons";
+
 import { paths } from "@shared/constants/react-router";
-import { ArticleIcon, BallonIcon, SupportIcon, TeamIcon, TimetableIcon } from "@shared/icons";
+import { ArticleIcon, SupportIcon, TeamIcon, TimetableIcon } from "@shared/icons";
 
 export const profileSidebarItems = [
   {
@@ -8,9 +10,9 @@ export const profileSidebarItems = [
     link: paths.MY_EVENTS
   },
   {
-    title: "Мой путь",
-    icon: <BallonIcon fill='#0B1F33' />,
-    link: paths.MY_ROADMAP
+    title: "На взлёт!",
+    icon: <RocketIcon />,
+    link: paths.NAVZLYOT
   },
   {
     title: "Мой профиль",

@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
 export interface Answer {
-  order: number;
-  optionId: string;
+  question: string;
+  answer: string;
 }
 
 export interface AnswersContextProps {
