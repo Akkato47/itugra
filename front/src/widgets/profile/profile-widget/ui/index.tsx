@@ -50,7 +50,7 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup className='px-2 space-y-2'>
           <Link
-            to={paths.SHARE}
+            to='#'
             onClick={closeDropDown}
             className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
           >

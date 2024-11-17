@@ -7,14 +7,9 @@ import {
 } from "@radix-ui/react-icons";
 
 import { paths } from "@shared/constants/react-router";
-import { ArticleIcon, EducationIcon } from "@shared/icons";
+import { EducationIcon } from "@shared/icons";
 
 export const settingsSidebarItems = (userTag: string) => [
-  {
-    title: "Мой профиль",
-    icon: <ArticleIcon opacity={0.9} className='size-5' />,
-    link: `${paths.PROFILE}/${userTag}`
-  },
   {
     title: "Личные данные",
     icon: <InfoCircledIcon className='size-5' />,
@@ -43,6 +38,6 @@ export const settingsSidebarItems = (userTag: string) => [
   {
     title: "Назад",
     icon: <ArrowLeftIcon className='size-5' />,
-    link: -1
+    link: `${paths.PROFILE}/${userTag}`
   }
 ];
