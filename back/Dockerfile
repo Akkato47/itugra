@@ -82,6 +82,7 @@ ENV PORT="${PORT}" \
     YANDEX_BASE_URL="${YANDEX_BASE_URL}" \
     YANDEX_LOGIN_URL="${YANDEX_LOGIN_URL}"
 
+
 EXPOSE 8000
 
 CMD ["sh", "docker-start-db.sh"]
