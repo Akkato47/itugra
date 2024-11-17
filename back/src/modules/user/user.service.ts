@@ -197,10 +197,12 @@ export const getUserProfile = async (tag: string) => {
     const skills = await db
       .select({
         uid: userSkills.uid,
-        name: userSkills.level,
+        level: userSkills.level,
+        name: skillPool.name,
       })
       .from(userSkills)
-      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid));
+      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid))
+      .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid));
 
     const location = await db
       .select({

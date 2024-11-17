@@ -25,7 +25,7 @@
       "description": "Team related endpoints"
     },
     {
-      "name": "Testing",
+      "name": "Test",
       "description": "Testing related endpoints"
     },
     {
@@ -33,7 +33,7 @@
       "description": "Event related endpoints"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["http", "https"],
   "paths": {
     "/auth/register": {
       "post": {
@@ -182,44 +182,6 @@
         "responses": {
           "200": {
             "description": ""
-          },
-          "401": {
-            "description": "Неавторизованный доступ."
-          },
-          "500": {
-            "description": "Внутренняя ошибка сервера."
-          }
-        }
-      }
-    },
-    "/user/find-user/{tag}": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Поиск пользователя по тегу НЕ РАБОТАЕТ!!!!!!!!!!!!",
-        "description": "Ищет пользователя по указанному тегу.",
-        "security": [
-          {
-            "api_key": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "tag",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Тег пользователя для поиска."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Пользователь найден.",
-            "schema": {
-              "$ref": "#/definitions/ApiResponse"
-            }
-          },
-          "404": {
-            "description": "Пользователь не найден."
           },
           "401": {
             "description": "Неавторизованный доступ."
@@ -1542,7 +1504,7 @@
     },
     "/test/generate": {
       "post": {
-        "tags": ["Testing"],
+        "tags": ["Test"],
         "security": [
           {
             "api_key": []
