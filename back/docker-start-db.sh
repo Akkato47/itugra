@@ -1,3 +1,3 @@
 yarn migrate:prod
-yarn seed
+yarn seed:prod
 node /var/www/dist/main.js

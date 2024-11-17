@@ -12,6 +12,7 @@
     "introspect": "drizzle-kit introspect --config=src/db/drizzle/drizzle.config.ts",
     "migrate": "ts-node src/db/drizzle/migrate.ts",
     "seed": "ts-node src/db/drizzle/seed.ts",
+    "seed:prod": "node dist/db/drizzle/seed.js",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix",
     "format": "prettier --write ."
