@@ -11,7 +11,7 @@ import { buttonVariants } from "@shared/constants/shade-cn";
 import { LogoIcon } from "@shared/icons";
 import { Button, CustomImage, Heading } from "@shared/ui";
 
-import cube from "/images/cube.png";
+import InstandCube from "/images/InstandCube.webp";
 import example1 from "/images/example1.png";
 import example2 from "/images/example2.png";
 import iPhoneGigaChat from "/images/iPhoneGigaChat.png";
@@ -52,7 +52,7 @@ const LandingPage = () => {
               Перейти к регистрации
             </Link>
           </div>
-          <CustomImage src={cube} alt='cube' className='w-[552px] h-[550px]' />
+          <CustomImage src={InstandCube} alt='InstandCube' className='w-[420px]' />
         </section>
 
         <section className='text-center space-y-4'>
