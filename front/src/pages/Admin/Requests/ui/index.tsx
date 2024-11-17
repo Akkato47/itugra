@@ -11,9 +11,9 @@ const AdminRequestsPage = () => {
     <section className='w-full'>
       {data && (
         <div className='space-y-6'>
-          {data.data.filter((request) => !request.approved).length > 0 ? (
+          {data.data.filter((request) => !request.watched).length > 0 ? (
             data.data
-              .filter((request) => !request.approved)
+              .filter((request) => !request.watched)
               .map((request) => (
                 <EventCard
                   isNotHistory={true}

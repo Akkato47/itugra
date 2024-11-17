@@ -7,7 +7,7 @@ export const profileSidebarItems = [
   {
     title: "Мои мероприятия",
     icon: <TimetableIcon />,
-    link: paths.MY_EVENTS
+    link: `${paths.PROFILE}/${paths.MY_EVENTS}`
   },
   {
     title: "На взлёт!",

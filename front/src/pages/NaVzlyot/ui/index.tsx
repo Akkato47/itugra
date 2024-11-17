@@ -6,7 +6,7 @@ import { NaVzlyotProviders } from "./NaVzlyotProviders";
 const NaVzlyotPage = () => {
   const roadmapQuery = useGetRoadmapQuery({});
 
-  if (roadmapQuery.data?.data) {
+  if (roadmapQuery.data && roadmapQuery.data.data.length !== 0) {
     return <CheckList list={roadmapQuery.data?.data} />;
   }
 
