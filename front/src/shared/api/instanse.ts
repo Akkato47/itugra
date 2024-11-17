@@ -16,6 +16,7 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       if (window.location.pathname !== "/") {
         window.location.href = paths.SIGNIN;
+        localStorage.setItem("IS_AUTH", "false");
       }
     }
     return Promise.reject(error);
