@@ -1,3 +1,5 @@
+import type { IGetAllEventsResponse } from "@entities/event";
+
 import { api } from "@shared/api";
 
 export type NumCategory = 1 | 2 | 3 | 4;
@@ -34,3 +36,9 @@ export type TToggleTaskConfig = TRequestConfig<IToggleTask>;
 
 export const patchToggleTask = ({ params, config }: TToggleTaskConfig) =>
   api.patch<PostGenerateTestingResponse>(`/user/roadmap/${params.uid}`, {}, config);
+
+interface Event extends IGetAllEventsResponse {
+  categoryId: NumCategory[];
+}
+
+export const getUserRec = ({ config }: TRequestConfig) => api.get<Event[]>("/user/rec", config);

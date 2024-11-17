@@ -16,7 +16,7 @@ export const CreateTeamCard = () => (
         <PlusCircledIcon className='opacity-60 size-36' />
       </Button>
     </DialogTrigger>
-    <DialogContent aria-describedby={undefined} className='flex gap-16 max-w-4xl'>
+    <DialogContent aria-describedby={undefined}>
       <DialogTitle className='text-left'>Создание команды</DialogTitle>
       <CreateTeamForm>
         <DialogClose className={buttonVariants({ variant: "outline" })}>Назад</DialogClose>

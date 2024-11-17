@@ -1,18 +1,53 @@
+import { Link } from "react-router-dom";
+import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+
+import { buttonVariants } from "@shared/constants/shade-cn";
+import { cn } from "@shared/lib/shade-cn";
 import { Checkbox, Heading } from "@shared/ui";
 import { Card } from "@shared/ui/card";
+import type { ChartConfig } from "@shared/ui/chart";
+import { ChartContainer } from "@shared/ui/chart";
 
-import { usePatchToggleTaskMutation } from "../api/hooks";
+import { useGetUsersRecQuery, usePatchToggleTaskMutation } from "../api/hooks";
 import type { ITask } from "../api/req";
+
+const chartConfig = {
+  safari: {
+    label: "Safari",
+    color: "hsl(var(--chart-2))"
+  }
+} satisfies ChartConfig;
+
+const numToCategory = (num: number) => {
+  if (num === 1) return "Backend";
+  if (num === 2) return "Frontend";
+  if (num === 3) return "UI/UX";
+  if (num === 4) return "System Analyst";
+};
+
+const numToColor = (num: number) => {
+  if (num === 1) return "bg-[#4C1D95]";
+  if (num === 2) return "bg-[#1D4C95]";
+  if (num === 3) return "bg-[#22C55E]";
+  if (num === 4) return "bg-[#475569]";
+};
+
+const toPercent = (list: ITask[]) => {
+  const doneTasks = list.filter((task) => task.done);
+  const percent = Number((doneTasks.length / list.length).toFixed()) * 100;
+  return percent;
+};
 
 export const CheckList = ({ list }: { list: ITask[] }) => {
   const taskMutation = usePatchToggleTaskMutation();
+  const recQuery = useGetUsersRecQuery({});
 
   return (
-    <section>
+    <section className='space-y-5'>
       <Heading tag='h1' className='col-span-3 '>
         Твой чек-лист успеха
       </Heading>
-      <div className='lg:flex-row flex flex-col gap-6 mt-5 '>
+      <div className='xl:flex-row flex flex-col gap-6  '>
         <Card>
           <ul>
             {list
@@ -54,15 +89,86 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
         <div className='flex flex-col gap-6'>
           <Card className='px-6 py-5 text-center '>
             <p>Ваш прогресс</p>
-            <div>
-              {Number((list.filter((task) => task.done).length / list.length).toFixed(2)) * 100} %
-            </div>
+
+            <ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-[250px]'>
+              <RadialBarChart
+                data={[
+                  {
+                    browser: "safari",
+                    value: toPercent(list),
+                    fill: "#22C55E"
+                  }
+                ]}
+                startAngle={0}
+                endAngle={250}
+                innerRadius={80}
+                outerRadius={110}
+              >
+                <PolarGrid
+                  gridType='circle'
+                  radialLines={false}
+                  stroke='none'
+                  className='first:fill-muted last:fill-background'
+                  polarRadius={[86, 74]}
+                />
+                <RadialBar dataKey='value' background cornerRadius={10} />
+                <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor='middle'
+                            dominantBaseline='middle'
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className='fill-foreground text-4xl font-bold'
+                            >
+                              {toPercent(list)} %
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </PolarRadiusAxis>
+              </RadialBarChart>
+            </ChartContainer>
           </Card>
+
           <Card className='px-6 py-5 text-center '>
             <p>Активность</p>
             <div>?</div>
           </Card>
         </div>
+      </div>
+
+      <div className='grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3'>
+        {recQuery.data?.data.map((event) => (
+          <Card
+            className='p-6 text-center min-h-[300px] justify-between flex flex-col'
+            key={event.uid}
+          >
+            <div
+              className={cn(
+                "px-2 py-1 bg-slate-300 rounded-md text-white flex items-start w-fit",
+                numToColor(event.categoryId[0])
+              )}
+            >
+              {numToCategory(event.categoryId[0])}
+            </div>
+            <h4 className='font-bold'>{event.name}</h4>
+            <p className='text-slate-600 text-left'>{event.description}</p>
+            <p className='text-xs text-left'>Регистрация до 21.12.2024</p>
+            <Link className={buttonVariants()} to={`/profile/event/${event.uid}`}>
+              Подробнее
+            </Link>
+          </Card>
+        ))}
       </div>
     </section>
   );

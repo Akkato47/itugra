@@ -42,7 +42,7 @@ export const NaVzlyotContainer = () => {
       <div className='flex w-full max-w-lg flex-col items-center justify-center gap-5 '>
         {stage === 0 && (
           <Card className='flex flex-col gap-5 px-4 py-10 text-center'>
-            <Heading tag='h2'>На взлёт!</Heading>
+            <Heading tag='h1'>На взлёт!</Heading>
             <p>
               Этот опрос предназначен для оценки ваших навыков и знаний в выбранной области. Вопросы
               охватывают ключевые аспекты работы в вашей профессии, и помогут выявить ваши сильные

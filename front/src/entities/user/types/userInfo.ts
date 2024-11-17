@@ -54,11 +54,17 @@ export interface IUserLocation {
   region: string;
 }
 
+export enum EEducationFormat {
+  FULL = "FULL",
+  PART = "PART",
+  DIST = "DIST"
+}
+
 export interface IUserEducation {
   createdAt: string | null;
   direction: string;
   endDate: string;
-  format: string;
+  format: EEducationFormat;
   startDate: string;
   university: string;
   updatedAt: string | null;

@@ -4,3 +4,4 @@ export * from "./types/shortInfo";
 export * from "./types/userInfo";
 export * from "./types/userInTeam";
 export * from "./dto";
+export * from "./lib/translateEducationFormat";

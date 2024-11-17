@@ -4,7 +4,7 @@ import { queryClient } from "@shared/constants/tan-stack-query";
 import { toast } from "@shared/model/use-toast";
 
 import type { TPostGenerateTestingConfig, TToggleTaskConfig } from "./req";
-import { patchToggleTask } from "./req";
+import { getUserRec, patchToggleTask } from "./req";
 import { getRoadmap, postGenerateTesting } from "./req";
 
 export const usePostGenerateTestingMutation = (
@@ -55,4 +55,11 @@ export const usePatchToggleTaskMutation = (
       queryClient.invalidateQueries({ queryKey: ["getRoadmap"] });
     },
     ...settings?.options
+  });
+
+export const useGetUsersRecQuery = ({ config, options }: QuerySettings<typeof getUserRec>) =>
+  useQuery({
+    queryKey: ["getUserRec"],
+    queryFn: () => getUserRec({ config }),
+    ...options
   });
