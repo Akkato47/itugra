@@ -2,28 +2,95 @@ import { useState } from "react";
 
 import { LoadingIcon } from "@shared/icons";
 import { cn } from "@shared/lib/shade-cn";
-import { Button, Label } from "@shared/ui";
+import { Button, Input, Label } from "@shared/ui";
 import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card";
 import { RadioGroup, RadioGroupItem } from "@shared/ui/radio-group";
 
+import type { Quest } from "../api/req";
 import { useAnswers } from "../model/answers";
 import { useStage } from "../model/stage";
 
 interface QuestCardProps {
-  question: QuestionWithOptions;
+  question: Quest;
 }
 
-export const QuestCard = ({ question }: QuestCardProps) => {
+export const QuestCardSelect = ({ question }: QuestCardProps) => {
   const { answers, setAnswers } = useAnswers();
-  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(
-    answers.find((answer) => answer.order === question.order)?.optionId
+    answers.find((answer) => answer.question === question.questionBody)?.answer
   );
 
   function onValueChange(val: string) {
     setValue(val);
-    const oldAnswers = answers.filter((answer) => answer.order !== question.order);
-    const newAnswers = [...oldAnswers, { order: question.order, optionId: val }];
+    const oldAnswers = answers.filter((answer) => answer.question !== question.questionBody);
+    const newAnswers = [...oldAnswers, { answer: val, question: question.questionBody }];
+    setAnswers(newAnswers);
+  }
+
+  const { stage, setStage } = useStage();
+
+  function onClickBackBtn() {
+    setStage(stage - 1);
+  }
+
+  function onClickNextBtn() {
+    setStage(stage + 1);
+  }
+
+  return (
+    <>
+      <Card className='w-full'>
+        <CardHeader>
+          <CardTitle className='text-foreground'>{question.questionBody}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup asChild defaultValue={value} onValueChange={(val) => onValueChange(val)}>
+            <ul className='flex list-none flex-col space-y-1'>
+              {question &&
+                question.answers.map((option) => (
+                  <li
+                    key={option.body}
+                    className={cn(
+                      "flex items-center space-x-2 rounded-lg bg-background p-4 ",
+                      value === option.body && "outline outline-2 outline-offset-2 outline-primary"
+                    )}
+                  >
+                    <RadioGroupItem value={option.body} id={option.body} />
+                    <Label htmlFor={option.body}>{option.body}</Label>
+                  </li>
+                ))}
+            </ul>
+          </RadioGroup>
+        </CardContent>
+      </Card>
+      <div className='grid w-full grid-cols-2 gap-5'>
+        <Button
+          className='w-full'
+          variant='outline'
+          disabled={stage === 1}
+          onClick={onClickBackBtn}
+        >
+          Назад
+        </Button>
+        <Button className='w-full' disabled={Boolean(!value)} onClick={onClickNextBtn}>
+          Далее
+        </Button>
+      </div>
+    </>
+  );
+};
+
+export const QuestCardInput = ({ question }: QuestCardProps) => {
+  const { answers, setAnswers } = useAnswers();
+  const [loading, setLoading] = useState(false);
+  const [value, setValue] = useState(
+    answers.find((answer) => answer.question === question.questionBody)?.answer ?? ""
+  );
+
+  function onValueChange(val: string) {
+    setValue(val);
+    const oldAnswers = answers.filter((answer) => answer.question !== question.questionBody);
+    const newAnswers = [...oldAnswers, { answer: val, question: question.questionBody }];
     setAnswers(newAnswers);
   }
 
@@ -34,7 +101,7 @@ export const QuestCard = ({ question }: QuestCardProps) => {
   }
 
   async function onClickNextBtn() {
-    if (stage === 5) {
+    if (stage === length) {
       setLoading(true);
     } else {
       setStage(stage + 1);
@@ -45,26 +112,10 @@ export const QuestCard = ({ question }: QuestCardProps) => {
     <>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle className='text-foreground'>{question.body}</CardTitle>
+          <CardTitle className='text-foreground'>{question.questionBody}</CardTitle>
         </CardHeader>
         <CardContent>
-          <RadioGroup asChild defaultValue={value} onValueChange={(val) => onValueChange(val)}>
-            <ul className='flex list-none flex-col space-y-1'>
-              {question &&
-                question.options.map((option) => (
-                  <li
-                    key={option.id}
-                    className={cn(
-                      "flex items-center space-x-2 rounded-lg bg-background p-4 ",
-                      value === option.id && "outline outline-2 outline-offset-2 outline-primary"
-                    )}
-                  >
-                    <RadioGroupItem value={option.id} id={option.id} />
-                    <Label htmlFor={option.id}>{option.label}</Label>
-                  </li>
-                ))}
-            </ul>
-          </RadioGroup>
+          <Input className='w-full' value={value} onChange={(e) => onValueChange(e.target.value)} />
         </CardContent>
       </Card>
       <div className='grid w-full grid-cols-2 gap-5'>

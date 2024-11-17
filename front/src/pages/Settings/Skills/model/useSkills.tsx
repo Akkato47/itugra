@@ -13,10 +13,11 @@ export const useSkills = () => {
       uid: skillUid
     });
 
-  const addSkill = async (skillName: string, clearSearchValue?: () => void) => {
+  const addSkill = async (skillUid: string, clearSearchValue?: () => void) => {
     await addSkillMutation.mutateAsync({
       params: {
-        name: skillName
+        skillUid,
+        level: "null"
       }
     });
 
