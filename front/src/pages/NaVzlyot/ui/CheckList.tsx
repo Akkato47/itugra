@@ -1,5 +1,14 @@
 import { Link } from "react-router-dom";
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Label,
+  PolarGrid,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart
+} from "recharts";
 
 import { buttonVariants } from "@shared/constants/shade-cn";
 import { cn } from "@shared/lib/shade-cn";
@@ -15,6 +24,26 @@ const chartConfig = {
   safari: {
     label: "Safari",
     color: "hsl(var(--chart-2))"
+  }
+} satisfies ChartConfig;
+
+const fakeChartData = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 }
+];
+
+const fakeChartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb"
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa"
   }
 } satisfies ChartConfig;
 
@@ -43,12 +72,12 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
   const recQuery = useGetUsersRecQuery({});
 
   return (
-    <section className='space-y-5'>
+    <section className='space-y-5 w-full'>
       <Heading tag='h1' className='col-span-3 '>
         Твой чек-лист успеха
       </Heading>
       <div className='xl:flex-row flex flex-col gap-6  '>
-        <Card>
+        <Card className='w-full'>
           <ul>
             {list
               .sort((a, b) => {
@@ -86,11 +115,14 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
               ))}
           </ul>
         </Card>
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col gap-6 w-full'>
           <Card className='px-6 py-5 text-center '>
             <p>Ваш прогресс</p>
 
-            <ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-[250px]'>
+            <ChartContainer
+              config={chartConfig}
+              className='mx-auto aspect-square max-h-[250px] w-full'
+            >
               <RadialBarChart
                 data={[
                   {
@@ -142,7 +174,13 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
 
           <Card className='px-6 py-5 text-center '>
             <p>Активность</p>
-            <div>?</div>
+            <ChartContainer config={fakeChartConfig} className='min-h-[200px] w-full'>
+              <BarChart accessibilityLayer data={fakeChartData}>
+                <CartesianGrid vertical={false} />
+                <Bar dataKey='desktop' fill='var(--color-desktop)' radius={4} />
+                <Bar dataKey='mobile' fill='var(--color-mobile)' radius={4} />
+              </BarChart>
+            </ChartContainer>
           </Card>
         </div>
       </div>

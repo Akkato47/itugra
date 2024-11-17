@@ -7,7 +7,7 @@ import { useGetUserSkills } from "@entities/user";
 
 import { paths } from "@shared/constants/react-router";
 import { buttonVariants } from "@shared/constants/shade-cn";
-import { Button, Heading } from "@shared/ui";
+import { Button, Heading, Label } from "@shared/ui";
 import { Alert, AlertDescription, AlertTitle } from "@shared/ui/alert";
 import { Card } from "@shared/ui/card";
 import { Progress } from "@shared/ui/progress";
@@ -49,12 +49,13 @@ export const NaVzlyotContainer = () => {
     <main className='container flex h-s-minus-navbar flex-col items-center justify-center'>
       <div className='flex w-full max-w-lg flex-col items-center justify-center gap-5 '>
         {stage === 0 && (
-          <Card className='flex flex-col gap-5 px-4 py-10 text-center'>
+          <Card className='flex flex-col gap-5 px-4 py-10 text-center w-full'>
             <Heading tag='h1'>На взлёт!</Heading>
-            <p>
+            <p className='text-justify '>
               Этот опрос предназначен для оценки ваших навыков и знаний в выбранной области. Вопросы
               охватывают ключевые аспекты работы в вашей профессии, и помогут выявить ваши сильные
               стороны, а также области для дальнейшего развития.
+              <br />
               <br />
               Пройдите тест честно и не торопитесь, чтобы продемонстрировать ваш реальный уровень
               знаний. По окончании вы получите рекомендации и информацию, которая может быть полезна
@@ -76,6 +77,7 @@ export const NaVzlyotContainer = () => {
               </Alert>
             )}
 
+            <Label className='text-left'>Выберите категорию в котой бы вы хотели развиваться</Label>
             <Select defaultValue={category} onValueChange={(e) => setCategory(e as Category)}>
               <SelectTrigger className='w-[180px] '>
                 <SelectValue placeholder='Выберите категорию' />
