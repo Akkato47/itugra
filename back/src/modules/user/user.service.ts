@@ -190,6 +190,7 @@ export const getUserProfile = async (tag: string) => {
         direction: userEducation.direction,
         startDate: userEducation.startDate,
         endDate: userEducation.endDate,
+        format: userEducation.format,
       })
       .from(userEducation)
       .where(eq(userEducation.profileInfoUid, profileInfo[0].uid));
