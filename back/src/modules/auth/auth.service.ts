@@ -3,7 +3,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from './dto/login.dto';
 import * as userService from '../user/user.service';
 import { CustomError } from '@/utils/custom_error';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { TokenDto } from './dto/create-token.dto';
 import { HttpStatus } from '@/utils/enums/http-status';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import {
   IOAuthTokenResponse,
 } from './types/oauth.interface';
 import { OAuthEnum } from './enums/oauth.enum';
-import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
+import { UpdatePasswordDto } from './dto/update-security.dto';
 
 export const login = async (userData: LoginUserDto) => {
   try {
@@ -23,7 +23,16 @@ export const login = async (userData: LoginUserDto) => {
       uid: user.uid,
       oAuthId: user.oAuthId ? user.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image };
+    const data = {
+      role: user.role,
+      image: user.image,
+      tag: user.tag,
+      shortInfo: {
+        fullName: user.fullName,
+        mail: user.mail,
+        phone: user.phone,
+      },
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -41,7 +50,16 @@ export const register = async (userData: CreateUserDto) => {
       uid: user.uid,
       oAuthId: userData.oAuthId ? userData.oAuthId : '',
     };
-    const data = { role: user.role, image: user.image };
+    const data = {
+      role: user.role,
+      image: user.image,
+      tag: user.tag,
+      shortInfo: {
+        fullName: user.fullName,
+        mail: user.mail,
+        phone: user.phone,
+      },
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -167,11 +185,10 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
     if (!tryFindUser) {
       const data = await register({
         oAuthId: userData.data.id,
-        firstName: userData.data.first_name,
-        secondName: userData.data.last_name,
+        fullName: userData.data.first_name + ' ' + userData.data.last_name,
         mail: userData.data.default_email,
         phone: userData.data.default_phone.number,
-        role: RoleEnum.USER,
+        birthDate: '2024-01-01',
       });
       return data;
     }
@@ -180,9 +197,42 @@ export const oAuth = async (code: string, type: OAuthEnum) => {
       uid: tryFindUser.uid,
       oAuthId: userData.data.id,
     };
-    const data = { role: tryFindUser.role, image: tryFindUser.image };
+    const data = {
+      role: tryFindUser.role,
+      image: tryFindUser.image,
+      tag: tryFindUser.tag,
+      shortInfo: {
+        fullName: tryFindUser.fullName,
+        mail: tryFindUser.mail,
+        phone: tryFindUser.phone,
+      },
+    };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUserPassoword = async (
+  uid: string,
+  updateData: UpdatePasswordDto
+) => {
+  try {
+    const user = await userService.getUserByUID(uid);
+    if (!user) {
+      throw new CustomError(HttpStatus.BAD_REQUEST);
+    }
+    const passwordEquals = await compare(updateData.oldPassword, user.password);
+    if (!passwordEquals) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, 'Неправильный пароль');
+    }
+    const newPassword = await hash(updateData.newPassword, 10);
+    await userService.updatePassword(user, newPassword);
+    return true;
+  } catch (error) {
+    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
+      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     throw error;
   }
 };

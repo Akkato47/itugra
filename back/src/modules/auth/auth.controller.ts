@@ -3,6 +3,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import * as authService from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { OAuthEnum } from './enums/oauth.enum';
+import { UpdatePasswordDto } from './dto/update-security.dto';
 
 export async function register(
   req: Request<{}, {}, CreateUserDto>,
@@ -94,6 +95,19 @@ export async function oAuth(
     });
 
     return res.send(data.data).status(200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updatePassword(
+  req: Request<{}, {}, UpdatePasswordDto>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    await authService.updateUserPassoword(req.user.uid, req.body);
+    return res.status(200).json({ message: 'ok' });
   } catch (error) {
     next(error);
   }

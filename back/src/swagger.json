@@ -15,9 +15,25 @@
     {
       "name": "User",
       "description": "User related endpoints"
+    },
+    {
+      "name": "Uploads",
+      "description": "Uploads related endpoints"
+    },
+    {
+      "name": "Team",
+      "description": "Team related endpoints"
+    },
+    {
+      "name": "Testing",
+      "description": "Testing related endpoints"
+    },
+    {
+      "name": "Event",
+      "description": "Event related endpoints"
     }
   ],
-  "schemes": ["http", "https"],
+  "schemes": ["http"],
   "paths": {
     "/auth/register": {
       "post": {
@@ -91,7 +107,130 @@
         }
       }
     },
-    "/user/profile": {
+    "/auth/update-password": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user password",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User login data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePasswordDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          }
+        }
+      }
+    },
+    "/user/skill-pool": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список skills успешно получен."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/roadmap": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/rec": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/find-user/{tag}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Поиск пользователя по тегу НЕ РАБОТАЕТ!!!!!!!!!!!!",
+        "description": "Ищет пользователя по указанному тегу.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Тег пользователя для поиска."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Пользователь найден.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "Пользователь не найден."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile/all/{tag}": {
       "get": {
         "tags": ["User"],
         "summary": "Get user profile",
@@ -101,15 +240,1455 @@
             "api_key": []
           }
         ],
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Тег пользователя для поиска."
+          }
+        ],
         "responses": {
           "200": {
-            "description": "User profile retrieved successfully"
+            "description": "User profile retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fullName": {
+                  "type": "string",
+                  "description": "Full name of the user"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Tag associated with the user"
+                },
+                "mail": {
+                  "type": "string",
+                  "description": "Email address of the user"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Phone number of the user"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Role of the user (e.g., org, user)"
+                },
+                "birthDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Birth date of the user"
+                },
+                "image": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string",
+                      "description": "Unique identifier of the image"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the image file"
+                    },
+                    "fileUrl": {
+                      "type": "string",
+                      "description": "URL to access the image file"
+                    }
+                  }
+                },
+                "via": {
+                  "type": "string",
+                  "description": "Method of user registration"
+                },
+                "profileInfo": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string",
+                      "description": "Unique identifier of the profile information"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The date and time when the profile info was created"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The date and time when the profile info was last updated"
+                    },
+                    "isSearchingJob": {
+                      "type": "boolean",
+                      "description": "Indicates if the user is searching for a job"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status of user"
+                    },
+                    "about": {
+                      "type": "string",
+                      "description": "Users about"
+                    },
+                    "userEducation": {
+                      "type": "object",
+                      "properties": {
+                        "uid": {
+                          "type": "string",
+                          "description": "Unique identifier of the education record"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The date and time when the education record was created"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The date and time when the education record was last updated"
+                        },
+                        "university": {
+                          "type": "string",
+                          "description": "Name of the university"
+                        },
+                        "direction": {
+                          "type": "string",
+                          "description": "Direction of study"
+                        },
+                        "startDate": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Start date of the education"
+                        },
+                        "endDate": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "End date of the education"
+                        }
+                      }
+                    },
+                    "userLocation": {
+                      "type": "object",
+                      "properties": {
+                        "uid": {
+                          "type": "string",
+                          "description": "Unique identifier of the location"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The date and time when the location record was created"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The date and time when the location record was last updated"
+                        },
+                        "country": {
+                          "type": "string",
+                          "description": "Country of the user"
+                        },
+                        "region": {
+                          "type": "string",
+                          "description": "Region of the user"
+                        },
+                        "city": {
+                          "type": "string",
+                          "description": "City of the user"
+                        }
+                      }
+                    },
+                    "userExperience": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uid": {
+                            "type": "string",
+                            "description": "Unique identifier of the experience"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date and time when the experience record was created"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date and time when the experience record was last updated"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the company or organization"
+                          },
+                          "position": {
+                            "type": "string",
+                            "description": "Position held by the user"
+                          },
+                          "startDate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Start date of the experience"
+                          },
+                          "endDate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "End date of the experience"
+                          }
+                        }
+                      }
+                    },
+                    "userSkills": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uid": {
+                            "type": "string",
+                            "description": "Unique identifier of the skill"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date and time when the skill record was created"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date and time when the skill record was last updated"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the skill"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/profile/experience": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/education": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/info": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/skills": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/security": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/generate-roadmap": {
+      "post": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "roadmap",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRoadmapDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roadmap experience created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/profile-experience": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create user experience",
+        "description": "Creates a new experience entry for the authenticated user.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "experience",
+            "description": "User experience data to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateExperienceDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User experience created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/profile-skills": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create user skills",
+        "description": "Creates a new skill entry for the authenticated user.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "skills",
+            "description": "User skills data to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSkillsDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User skills created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/profile-file": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create user file",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "file",
+            "description": "User file data to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddFileDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User file created successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/friend-add/{tag}": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Добавить друга по тегу НЕ РАБОТАЕТ!!!!!!!!!!!!",
+        "description": "Добавляет пользователя в список друзей по тегу.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Тег пользователя, которого нужно добавить в друзья."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Друг успешно добавлен.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "Пользователь не найден."
+          },
+          "409": {
+            "description": "Друг уже в списке друзей."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/roadmap/{checkUid}": {
+      "patch": {
+        "tags": ["User"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "checkUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Тег пользователя для поиска."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Обновить профиль пользователя",
+        "description": "Обновляет информацию профиля авторизованного пользователя.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "Данные профиля пользователя для обновления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Профиль пользователя успешно обновлен."
+          },
+          "400": {
+            "description": "Неверный запрос."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-expe": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Обновить опыт пользователя",
+        "description": "Обновляет информацию об опыте работы пользователя.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "experience",
+            "description": "Данные опыта работы пользователя для обновления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserExperienceDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Опыт пользователя успешно обновлен."
+          },
+          "400": {
+            "description": "Неверный запрос."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-edu": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Обновить образование пользователя",
+        "description": "Обновляет информацию об образовании пользователя.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "education",
+            "description": "Данные образования пользователя для обновления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserEducationDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Образование пользователя успешно обновлено."
+          },
+          "400": {
+            "description": "Неверный запрос."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-doc": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Обновить файл пользователя",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "file",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fileUid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Образование пользователя успешно обновлено."
+          },
+          "400": {
+            "description": "Неверный запрос."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-experience/{uid}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Удалить experience пользователя",
+        "description": "Удаляет запись experience пользователя по указанному uid.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор записи experience, которую необходимо удалить."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запись experience успешно удалена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-skill/{uid}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Удалить skill пользователя",
+        "description": "Удаляет запись skill пользователя по указанному uid.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор записи skill, которую необходимо удалить."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запись skill успешно удалена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/friend-delete/{friendListUid}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Удалить друга НЕ РАБОТАЕТ!!!!!!!!!!!!",
+        "description": "Удаляет пользователя из списка друзей по указанному UID.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "friendListUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "UID друга, которого нужно удалить из списка."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Друг успешно удален."
+          },
+          "404": {
+            "description": "Друг не найден."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/user/profile-file/{uid}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Удалить файл",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Файл успешно добавлен."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/uploads/file": {
+      "post": {
+        "tags": ["Uploads"],
+        "summary": "Upload a file",
+        "description": "Uploads a file to the server.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "file",
+            "description": "File to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully"
+          },
+          "415": {
+            "description": "Такой формат не поддерживается"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/invite/create": {
+      "post": {
+        "tags": ["Team"],
+        "summary": "Create an invite for a user",
+        "description": "Generates an invite token for the specified user and team.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "invite",
+            "description": "Invite creation data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateInviteUserDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite token generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "inviteToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/invite/accept/{inviteCode}": {
+      "post": {
+        "tags": ["Team"],
+        "summary": "Accept an invite",
+        "description": "Accepts an invite using the provided invite code.",
+        "parameters": [
+          {
+            "name": "inviteCode",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The invite code to accept."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite accepted successfully"
+          },
+          "400": {
+            "description": "Invite code is invalid or has expired"
+          },
+          "404": {
+            "description": "User not found or invite does not exist"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/list": {
+      "get": {
+        "tags": ["Team"],
+        "summary": "Получить список команд",
+        "description": "Возвращает список команд для авторизованного пользователя.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список команд успешно получен."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/data/{teamUid}": {
+      "get": {
+        "tags": ["Team"],
+        "summary": "Получить данные команды",
+        "description": "Возвращает данные команды по уникальному идентификатору.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Уникальный идентификатор команды"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Данные команды успешно получены."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/create": {
+      "post": {
+        "tags": ["Team"],
+        "summary": "Создать новую команду",
+        "description": "Создает новую команду для авторизованного пользователя.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "team",
+            "description": "Данные команды для создания",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateTeamDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Команда успешно создана."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/create-role": {
+      "post": {
+        "tags": ["Team"],
+        "summary": "Создать новую роль",
+        "description": "Создает новую роль",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "team",
+            "description": "Данные роли для создания",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRoleDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Команда успешно создана."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/update": {
+      "put": {
+        "tags": ["Team"],
+        "summary": "Обновить данные команды",
+        "description": "Обновляет информацию о команде.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "team",
+            "description": "Данные команды для обновления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateTeamDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Данные команды успешно обновлены."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/update-role": {
+      "put": {
+        "tags": ["Team"],
+        "summary": "Обновить роль команды",
+        "description": "Обновляет информацию о роли команды.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "role",
+            "description": "Данные роли команды для обновления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateRoleDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Роль команды успешно обновлена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/update-user-role": {
+      "put": {
+        "tags": ["Team"],
+        "summary": "Обновить роль пользователя в команде",
+        "description": "Обновляет роль пользователя в команде.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "userRole",
+            "description": "Данные для обновления роли пользователя",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserRoleDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Роль пользователя успешно обновлена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/delete": {
+      "delete": {
+        "tags": ["Team"],
+        "summary": "Удалить команду",
+        "description": "Удаляет команду по уникальному идентификатору.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "team",
+            "description": "Данные команды для удаления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteTeamDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Команда успешно удалена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/delete-user": {
+      "delete": {
+        "tags": ["Team"],
+        "summary": "Удалить пользователя из команды",
+        "description": "Удаляет пользователя из команды по уникальному идентификатору.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "Данные пользователя для удаления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteUserTeamDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Пользователь успешно удален из команды."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/team/delete-role": {
+      "delete": {
+        "tags": ["Team"],
+        "summary": "Удалить роль команды",
+        "description": "Удаляет роль команды по уникальному идентификатору.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "role",
+            "description": "Данные роли команды для удаления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteRoleDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Роль команды успешно удалена."
+          },
+          "401": {
+            "description": "Неавторизованный доступ."
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера."
+          }
+        }
+      }
+    },
+    "/test/generate": {
+      "post": {
+        "tags": ["Testing"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GenerateTestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Тест успешно создана."
+          }
+        }
+      }
+    },
+    "/event/all": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/event/requests/all": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/event/info/{eventUid}": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eventUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "eventUid "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/event/request/{requestUid}": {
+      "get": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "requestUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "requestUid "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/event/create/request": {
+      "post": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event успешно создана."
+          }
+        }
+      }
+    },
+    "/event/make/desicion": {
+      "post": {
+        "tags": ["Event"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MakeDecisions"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event успешно создана."
           }
         }
       }
@@ -145,13 +1724,21 @@
         }
       }
     },
+    "UpdatePasswordDto": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
     "CreateUserDto": {
       "type": "object",
       "properties": {
-        "firstName": {
-          "type": "string"
-        },
-        "secondName": {
+        "fullName": {
           "type": "string"
         },
         "mail": {
@@ -160,15 +1747,52 @@
         "phone": {
           "type": "string"
         },
-        "role": {
+        "birthDate": {
           "type": "string",
-          "enum": ["org", "user"]
+          "format": "date"
         },
         "password": {
           "type": "string"
         }
       },
-      "required": ["fullName", "mail", "role", "birthDate", "password"]
+      "required": ["fullName", "mail", "role", "birthDate", "password", "via"]
+    },
+    "CreateExperienceDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Название компании или организации"
+        },
+        "position": {
+          "type": "string",
+          "description": "Должность пользователя"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата начала работы"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата окончания работы"
+        }
+      },
+      "required": ["name", "position", "startDate", "endDate"]
+    },
+    "CreateSkillsDto": {
+      "type": "object",
+      "properties": {
+        "skillUid": {
+          "type": "string",
+          "description": "Uid навыка"
+        },
+        "level": {
+          "type": "string"
+        }
+      },
+      "required": ["name"]
     },
     "LoginUserDto": {
       "type": "object",
@@ -184,6 +1808,477 @@
         }
       },
       "required": ["password"]
+    },
+    "UpdateUserDto": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "Полное имя пользователя (необязательное)"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата рождения пользователя (необязательное)"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Тэг пользователя (необязательное)"
+        },
+        "image": {
+          "type": "object",
+          "description": "Изображение пользователя",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "fileUrl": {
+              "type": "string"
+            },
+            "thumbnailUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "backgroundImage": {
+          "type": "object",
+          "description": "Фоновое изображение пользователя",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "fileUrl": {
+              "type": "string"
+            },
+            "thumbnailUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "profileInfo": {
+          "type": "object",
+          "properties": {
+            "isSearchingJob": {
+              "type": "boolean",
+              "description": "Ищет ли пользователь работу (необязательное)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Статус пользователя (необязательное)"
+            },
+            "about": {
+              "type": "string",
+              "description": "Информация `Обо мне`"
+            }
+          }
+        },
+        "profileLoc": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "description": "Страна пользователя"
+            },
+            "region": {
+              "type": "string",
+              "description": "Регион пользователя"
+            },
+            "city": {
+              "type": "string",
+              "description": "Город пользователя"
+            }
+          }
+        }
+      }
+    },
+    "UpdateUserExperienceDto": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Идентификатор опыта"
+        },
+        "name": {
+          "type": "string",
+          "description": "Название компании или организации"
+        },
+        "position": {
+          "type": "string",
+          "description": "Должность пользователя"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата начала работы"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата окончания работы"
+        },
+        "present": {
+          "type": "boolean",
+          "description": "Работа по настоящее время"
+        }
+      },
+      "required": ["uid"]
+    },
+    "UpdateUserEducationDto": {
+      "type": "object",
+      "properties": {
+        "university": {
+          "type": "string",
+          "description": "Название учебного заведения"
+        },
+        "direction": {
+          "type": "string",
+          "description": "Направление обучения"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["FULL", "PART", "DIST"],
+          "description": "Формат образования"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата начала обучения"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата окончания обучения"
+        }
+      },
+      "required": ["university", "direction", "format", "startDate", "endDate"]
+    },
+    "AddFileDto": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": ["DIP", "PORTFOLIO", "RESUME"]
+        },
+        "file": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "fileUrl": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "CreateTeamDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Название команды"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["TEMP", "PERMANENT", "BANNED"],
+          "description": "Тип команды"
+        }
+      },
+      "required": ["name", "type"]
+    },
+    "UpdateTeamDto": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        },
+        "name": {
+          "type": "string",
+          "description": "Название команды"
+        },
+        "image": {
+          "type": "object",
+          "description": "Информация об изображении команды",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "fileUrl": {
+              "type": "string"
+            },
+            "thumbnailUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "about": {
+          "type": "string",
+          "description": "Описание команды"
+        }
+      },
+      "required": ["uid", "image"]
+    },
+    "CreateRoleDto": {
+      "type": "object",
+      "properties": {
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        },
+        "name": {
+          "type": "string",
+          "description": "Название роли"
+        },
+        "color": {
+          "type": "string",
+          "description": "Цвет роли"
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ALL",
+              "EDIT",
+              "POST",
+              "INVITE",
+              "DELTE",
+              "EVENTREG",
+              "NOTHING"
+            ]
+          },
+          "description": "Список способностей роли"
+        }
+      },
+      "required": ["uid"]
+    },
+    "UpdateRoleDto": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Уникальный идентификатор роли"
+        },
+        "name": {
+          "type": "string",
+          "description": "Название роли"
+        },
+        "color": {
+          "type": "string",
+          "description": "Цвет роли"
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ALL",
+              "EDIT",
+              "POST",
+              "INVITE",
+              "DELTE",
+              "EVENTREG",
+              "NOTHING"
+            ]
+          },
+          "description": "Список способностей роли"
+        }
+      },
+      "required": ["uid"]
+    },
+    "UpdateUserRoleDto": {
+      "type": "object",
+      "properties": {
+        "userUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор пользователя"
+        },
+        "ctrUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор роли"
+        },
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        }
+      },
+      "required": ["userUid", "roleUid", "teamUid"]
+    },
+    "DeleteTeamDto": {
+      "type": "object",
+      "properties": {
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды для удаления"
+        }
+      },
+      "required": ["teamUid"]
+    },
+    "DeleteUserTeamDto": {
+      "type": "object",
+      "properties": {
+        "userUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор пользователя"
+        },
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        }
+      },
+      "required": ["userUid", "teamUid"]
+    },
+    "DeleteRoleDto": {
+      "type": "object",
+      "properties": {
+        "ctrUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор роли для удаления"
+        },
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        }
+      },
+      "required": ["roleUid"]
+    },
+    "CreateInviteUserDto": {
+      "type": "object",
+      "properties": {
+        "userTag": {
+          "type": "string",
+          "description": "Тег пользователя для приглашения"
+        },
+        "teamUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор команды"
+        },
+        "ctrUid": {
+          "type": "string",
+          "description": "Уникальный идентификатор контроллера"
+        }
+      },
+      "required": ["userTag", "teamUid", "ctrUid"]
+    },
+    "GenerateTestDto": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "number"
+        }
+      }
+    },
+    "CreateRequestDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "image": {
+          "type": "object",
+          "description": "Информация об изображении команды",
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+
+            "fileUrl": {
+              "type": "string"
+            },
+            "thumbnailUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "items": {
+            "type": "string",
+            "enum": ["HACKATON", "MEETUP"]
+          }
+        },
+        "registrationEnd": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "categoryId": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "MakeDecisions": {
+      "type": "object",
+      "properties": {
+        "requestUid": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateRoadmapDto": {
+      "type": "object",
+      "properties": {
+        "testResult": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "answer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "interestedIn": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "chosenCategory": {
+          "type": "number"
+        }
+      }
     }
   }
 }

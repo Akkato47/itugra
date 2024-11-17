@@ -7,6 +7,7 @@ declare global {
         uid: string;
         oAuthId?: string;
         role: string;
+        tag: string;
         iat: number;
         exp: number;
         subject: string;

@@ -1,22 +1,23 @@
-import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
-import { InsertUser } from '@/db/drizzle/schema/user/schema';
+import type { ExpInferInsert } from '@/db/drizzle/schema/user/schema';
 
-export class CreateUserDto implements InsertUser {
-  firstName: string;
-  secondName: string;
+export class CreateUserDto {
+  fullName!: string;
   mail!: string;
-  phone!: string | null;
-  role!: RoleEnum;
+  phone!: string;
+  birthDate!: string;
   password?: string;
-  oAuthId?: string | null;
+  oAuthId?: string;
 }
 
-export class UpdateUserDto implements Partial<InsertUser> {
-  firstName?: string;
-  secondName?: string;
-  mail?: string;
-  phone?: string | null;
-  role?: RoleEnum;
-  birthDate?: string;
-  password?: string;
+export class CreateExperienceDto implements Partial<ExpInferInsert> {
+  name!: string;
+  position!: string;
+  startDate!: string;
+  endDate!: string | null;
+  present: boolean;
+}
+
+export class CreateUserSkillsDto {
+  skillUid: string;
+  level: string;
 }
