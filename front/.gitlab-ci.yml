@@ -2,6 +2,10 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
+  # Define default environment names
+  DEV_ENVIRONMENT_NAME: "development"
+  STAGE_ENVIRONMENT_NAME: "stage"
+  PROD_ENVIRONMENT_NAME: "production"
 
 services:
   - name: docker:dind
@@ -11,11 +15,23 @@ stages:
   - build
   - deploy
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      variables:
+        ENVIRONMENT_NAME: $PROD_ENVIRONMENT_NAME
+        HOST: "igniz.ru"
+    - if: $CI_COMMIT_BRANCH == "stage"
+      variables:
+        ENVIRONMENT_NAME: $STAGE_ENVIRONMENT_NAME
+        HOST: "igniz.ru"
+
 build:
-  image: docker:24.0  # Используем конкретную версию вместо :stable
+  image: docker:24.0
   stage: build
   environment:
     name: $ENVIRONMENT_NAME
+    url: https://$HOST
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "stage"
   script:
@@ -30,6 +46,7 @@ deploy:
   stage: deploy
   environment:
     name: $ENVIRONMENT_NAME
+    url: https://$HOST
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
