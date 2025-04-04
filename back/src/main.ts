@@ -27,6 +27,7 @@ export const init = (async () => {
 
   app.use(cors(config.cors));
   app.use(express.json());
+  // @ts-ignore
   app.use(cookieParser());
   app.use(morgan('dev', { stream: new LoggerStream() }));
   app.use('/api', router);
