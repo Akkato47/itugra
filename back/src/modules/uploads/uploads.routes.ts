@@ -11,6 +11,7 @@ const router = Router();
 
 router.post(
   '/file',
+  // @ts-ignore
   uploadMiddleware.single('file'),
   isAuthenticated,
   uploadController.uploadFile
