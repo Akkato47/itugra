@@ -922,6 +922,7 @@ export const generateRoadmap = async (
   try {
     const gigachat = new GigaChat(
       'YzdmYmZkYjMtNzgyNS00MTAzLTkxM2QtOTY0ZTdmZmNlZWZkOjlhNjdiZTJkLTVjNTItNDAzOC05MWRiLTc2NGIzMTUzY2UwZQ==',
+      // @ts-ignore
       true,
       true,
       true
