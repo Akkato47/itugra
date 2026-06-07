@@ -22,6 +22,7 @@ export const usePostGenerateRoadmapmutation = (
         title: "Чеклист готов!"
       });
       queryClient.invalidateQueries({ queryKey: ["getUserSkills"] });
+      queryClient.invalidateQueries({ queryKey: ["getRoadmap"] });
     },
     onError(error) {
       toast({

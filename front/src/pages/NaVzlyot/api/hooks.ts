@@ -4,7 +4,7 @@ import { queryClient } from "@shared/constants/tan-stack-query";
 import { toast } from "@shared/model/use-toast";
 
 import type { TPostGenerateTestingConfig, TToggleTaskConfig } from "./req";
-import { patchToggleTask } from "./req";
+import { deleteRoadmap, patchToggleTask } from "./req";
 import { getRoadmap, postGenerateTesting } from "./req";
 
 export const usePostGenerateTestingMutation = (
@@ -39,6 +39,25 @@ export const useGetRoadmapQuery = ({ config, options }: QuerySettings<typeof get
     queryKey: ["getRoadmap"],
     queryFn: () => getRoadmap({ config }),
     ...options
+  });
+
+export const useDeleteRoadmapMutation = (
+  settings?: MutationSettings<typeof deleteRoadmap>
+) =>
+  useMutation({
+    mutationKey: ["deleteRoadmap"],
+    mutationFn: () => deleteRoadmap({ config: settings?.config }),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["getRoadmap"] });
+    },
+    onError(error) {
+      toast({
+        className: "bg-red-800 text-white hover:bg-red-700",
+        title: "Не удалось сбросить тест",
+        description: `В ходе отправки запроса произошла ошибка: ${error.response.data.message}`
+      });
+    },
+    ...settings?.options
   });
 
 export const usePatchToggleTaskMutation = (

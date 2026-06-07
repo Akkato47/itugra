@@ -27,6 +27,7 @@ export const profileSidebarItems = [
   {
     title: "Меры поддержки",
     icon: <SupportIcon />,
-    link: paths.SUPPORT_MEASURES
+    link: paths.SUPPORT_MEASURES,
+    disabled: true
   }
 ];

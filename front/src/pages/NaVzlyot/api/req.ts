@@ -27,6 +27,9 @@ export interface ITask {
 
 export const getRoadmap = ({ config }: TRequestConfig) => api.get<ITask[]>("/user/roadmap", config);
 
+export const deleteRoadmap = ({ config }: TRequestConfig) =>
+  api.delete<boolean>("/user/roadmap", config);
+
 interface IToggleTask {
   uid: string;
 }

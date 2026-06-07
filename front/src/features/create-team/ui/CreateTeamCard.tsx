@@ -1,4 +1,5 @@
 import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 import { buttonVariants } from "@shared/constants/shade-cn";
 import { Button } from "@shared/ui";
@@ -6,21 +7,25 @@ import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "
 
 import { CreateTeamForm } from "./Form";
 
-export const CreateTeamCard = () => (
-  <Dialog>
-    <DialogTrigger asChild>
-      <Button
-        variant='ghost'
-        className='border-2 border-dashed w-full max-w-[264px] h-[352px] border-slate-300 rounded-lg'
-      >
-        <PlusCircledIcon className='opacity-60 size-36' />
-      </Button>
-    </DialogTrigger>
-    <DialogContent aria-describedby={undefined} className='flex gap-16 max-w-4xl'>
-      <DialogTitle className='text-left'>Создание команды</DialogTitle>
-      <CreateTeamForm>
-        <DialogClose className={buttonVariants({ variant: "outline" })}>Назад</DialogClose>
-      </CreateTeamForm>
-    </DialogContent>
-  </Dialog>
-);
+export const CreateTeamCard = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant='ghost'
+          className='border-2 border-dashed w-full max-w-[264px] h-[352px] border-slate-300 rounded-lg'
+        >
+          <PlusCircledIcon className='opacity-60 size-36' />
+        </Button>
+      </DialogTrigger>
+      <DialogContent aria-describedby={undefined} className='flex gap-16 max-w-4xl'>
+        <DialogTitle className='text-left'>Создание команды</DialogTitle>
+        <CreateTeamForm onSuccess={() => setOpen(false)}>
+          <DialogClose className={buttonVariants({ variant: "outline" })}>Назад</DialogClose>
+        </CreateTeamForm>
+      </DialogContent>
+    </Dialog>
+  );
+};

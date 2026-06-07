@@ -1,17 +1,27 @@
-import { Checkbox, Heading } from "@shared/ui";
+import { Button, Checkbox, Heading } from "@shared/ui";
 import { Card } from "@shared/ui/card";
 
-import { usePatchToggleTaskMutation } from "../api/hooks";
+import { useDeleteRoadmapMutation, usePatchToggleTaskMutation } from "../api/hooks";
 import type { ITask } from "../api/req";
 
 export const CheckList = ({ list }: { list: ITask[] }) => {
   const taskMutation = usePatchToggleTaskMutation();
+  const deleteRoadmapMutation = useDeleteRoadmapMutation();
 
   return (
     <section>
-      <Heading tag='h1' className='col-span-3 '>
-        Твой чек-лист успеха
-      </Heading>
+      <div className='flex flex-wrap items-center justify-between gap-4'>
+        <Heading tag='h1' className='col-span-3 '>
+          Твой чек-лист успеха
+        </Heading>
+        <Button
+          variant='outline'
+          disabled={deleteRoadmapMutation.isPending}
+          onClick={() => deleteRoadmapMutation.mutate()}
+        >
+          Пройти тест заново
+        </Button>
+      </div>
       <div className='lg:flex-row flex flex-col gap-6 mt-5 '>
         <Card>
           <ul>

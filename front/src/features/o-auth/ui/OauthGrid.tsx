@@ -10,7 +10,11 @@ export const OauthGrid = () => (
       Через социальные сети
     </Heading>
     <div className='grid grid-cols-2 grid-rows-3 grid-flow-row gap-6 w-[360px]'>
-      <button className='flex items-center justify-center bg-[#0077FE] col-span-2 rounded-lg'>
+      <button
+        disabled
+        title='Скоро'
+        className='flex items-center justify-center bg-slate-200 col-span-2 rounded-lg opacity-50 grayscale cursor-not-allowed'
+      >
         <VkIcon />
       </button>
       <Link
@@ -19,10 +23,18 @@ export const OauthGrid = () => (
       >
         <YandexIcon />
       </Link>
-      <button className='flex items-center justify-center bg-white rounded-lg'>
+      <button
+        disabled
+        title='Скоро'
+        className='flex items-center justify-center bg-slate-200 rounded-lg opacity-50 grayscale cursor-not-allowed'
+      >
         <GosUslugiIcon />
       </button>
-      <button className='flex items-center justify-center bg-[#24A1DE] col-span-2 rounded-lg'>
+      <button
+        disabled
+        title='Скоро'
+        className='flex items-center justify-center bg-slate-200 col-span-2 rounded-lg opacity-50 grayscale cursor-not-allowed'
+      >
         <div className='py-9'>
           <TelegramIcon />
         </div>
