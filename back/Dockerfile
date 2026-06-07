@@ -92,3 +92,7 @@ ENV APPNAME="${APPNAME}" \
   YANDEX_LOGIN_URL="${YANDEX_LOGIN_URL}" 
 
 EXPOSE ${PORT}
+
+# Запуск: миграции -> сиды -> старт сервера.
+# Нужен, чтобы голый образ (docker run без compose-команды) не падал в node REPL.
+CMD ["sh", "-c", "node dist/db/drizzle/migrate.js && node dist/db/drizzle/seed.js && node dist/main.js"]
