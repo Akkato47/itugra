@@ -1,7 +1,7 @@
 import { RocketIcon } from "@radix-ui/react-icons";
 
 import { paths } from "@shared/constants/react-router";
-import { ArticleIcon, TeamIcon, TimetableIcon } from "@shared/icons";
+import { ArticleIcon, SupportIcon, TeamIcon, TimetableIcon } from "@shared/icons";
 
 export const profileSidebarItems = [
   {
@@ -23,10 +23,11 @@ export const profileSidebarItems = [
     title: "Моя команда",
     icon: <TeamIcon />,
     link: paths.TEAMS
+  },
+  {
+    title: "Меры поддержки",
+    icon: <SupportIcon />,
+    link: paths.SUPPORT_MEASURES,
+    disabled: true
   }
-  // {
-  //   title: "Меры поддержки",
-  //   icon: <SupportIcon />,
-  //   link: paths.SUPPORT_MEASURES
-  // }
 ];

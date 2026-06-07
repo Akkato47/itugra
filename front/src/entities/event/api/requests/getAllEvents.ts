@@ -2,7 +2,7 @@ import type { ETypeEventEnum } from "@entities/event/types";
 
 import { api } from "@shared/api";
 
-export interface IGetAllEventsResponse {
+interface IGetAllEventsResponse {
   uid: string;
   createdAt: string;
   updatedAt: string;

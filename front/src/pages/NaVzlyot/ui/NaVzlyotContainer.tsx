@@ -1,14 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import type { NumCategory } from "@pages/NaVzlyot/api/req";
 
-import { useGetUserSkills } from "@entities/user";
-
-import { paths } from "@shared/constants/react-router";
-import { buttonVariants } from "@shared/constants/shade-cn";
-import { Button, Heading, Label } from "@shared/ui";
-import { Alert, AlertDescription, AlertTitle } from "@shared/ui/alert";
+import { Button, Heading } from "@shared/ui";
 import { Card } from "@shared/ui/card";
 import { Progress } from "@shared/ui/progress";
 import {
@@ -41,43 +35,24 @@ export const NaVzlyotContainer = () => {
     }
   });
 
-  const userSkills = useGetUserSkills({});
-
   const quests = questionsMutation.data?.data;
 
   return (
     <main className='container flex h-s-minus-navbar flex-col items-center justify-center'>
       <div className='flex w-full max-w-lg flex-col items-center justify-center gap-5 '>
         {stage === 0 && (
-          <Card className='flex flex-col gap-5 px-4 py-10 text-center w-full'>
-            <Heading tag='h1'>На взлёт!</Heading>
-            <p className='text-justify '>
+          <Card className='flex flex-col gap-5 px-4 py-10 text-center'>
+            <Heading tag='h2'>На взлёт!</Heading>
+            <p>
               Этот опрос предназначен для оценки ваших навыков и знаний в выбранной области. Вопросы
               охватывают ключевые аспекты работы в вашей профессии, и помогут выявить ваши сильные
               стороны, а также области для дальнейшего развития.
-              <br />
               <br />
               Пройдите тест честно и не торопитесь, чтобы продемонстрировать ваш реальный уровень
               знаний. По окончании вы получите рекомендации и информацию, которая может быть полезна
               для вашего профессионального роста.
             </p>
 
-            {userSkills.data?.data.userSkills.length === 0 && (
-              <Alert variant='destructive'>
-                <AlertTitle>Внимаение!</AlertTitle>
-                <AlertDescription>
-                  Данный раздел доступен только после заполнения навыков в профиле .
-                </AlertDescription>
-                <Link
-                  to={paths.SETTINGS + "/skills"}
-                  className={buttonVariants({ variant: "link" })}
-                >
-                  Заполнить навыки
-                </Link>
-              </Alert>
-            )}
-
-            <Label className='text-left'>Выберите категорию в котой бы вы хотели развиваться</Label>
             <Select defaultValue={category} onValueChange={(e) => setCategory(e as Category)}>
               <SelectTrigger className='w-[180px] '>
                 <SelectValue placeholder='Выберите категорию' />
@@ -93,7 +68,7 @@ export const NaVzlyotContainer = () => {
             </Select>
 
             <Button
-              disabled={!category || userSkills.data?.data.userSkills.length === 0}
+              disabled={!category}
               onClick={() =>
                 questionsMutation.mutateAsync({
                   params: { category: Number(category) as NumCategory }

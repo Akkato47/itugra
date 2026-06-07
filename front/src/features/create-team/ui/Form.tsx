@@ -11,11 +11,12 @@ import { useCreateTeamForm } from "../model/useCreateTeamForm";
 
 interface ICreateTeamFormProps {
   children: React.ReactNode;
+  onSuccess?: () => void;
 }
 
-export const CreateTeamForm = ({ children }: ICreateTeamFormProps) => {
+export const CreateTeamForm = ({ children, onSuccess }: ICreateTeamFormProps) => {
   const createTeamForm = useCreateTeamForm();
-  const { mutateAsync } = usePostCreateTeamMutation();
+  const { mutateAsync, isPending } = usePostCreateTeamMutation();
 
   const createTeam = async (data: z.infer<typeof createTeamFormSchema>) => {
     await mutateAsync({
@@ -24,6 +25,8 @@ export const CreateTeamForm = ({ children }: ICreateTeamFormProps) => {
         type: ETeamType.PERMANENT
       }
     });
+    createTeamForm.reset();
+    onSuccess?.();
   };
 
   return (
@@ -52,7 +55,9 @@ export const CreateTeamForm = ({ children }: ICreateTeamFormProps) => {
         />
         <div className='flex items-center gap-4 justify-end mt-4'>
           {children}
-          <Button disabled={!createTeamForm.formState.dirtyFields.name}>Создать команду</Button>
+          <Button disabled={!createTeamForm.formState.dirtyFields.name || isPending}>
+            {isPending ? "Создание..." : "Создать команду"}
+          </Button>
         </div>
       </form>
     </Form>

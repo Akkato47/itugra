@@ -20,9 +20,22 @@ export const MainLayoutNavbar = () => {
 
   return (
     <nav className='space-y-4'>
-      {items.map((item) => (
+      {items.map((item) => {
+        const isDisabled = "disabled" in item && Boolean(item.disabled);
+
+        return (
         <Fragment key={item.link}>
-          {typeof item.link === "string" && (
+          {typeof item.link === "string" && isDisabled && (
+            <div
+              title='Скоро'
+              aria-disabled='true'
+              className='flex items-center gap-3 shadow-sidebarItemShadow border border-slate-200 rounded-lg py-3 px-5 bg-slate-50 opacity-50 cursor-not-allowed select-none'
+            >
+              {item.icon}
+              <p className='text-sm text-slate-400 leading-[171%]'>{item.title}</p>
+            </div>
+          )}
+          {typeof item.link === "string" && !isDisabled && (
             <NavLink
               to={item.link === paths.PROFILE ? `${item.link}/${user?.tag}` : item.link}
               className={({ isActive }) =>
@@ -46,7 +59,8 @@ export const MainLayoutNavbar = () => {
             </Button>
           )}
         </Fragment>
-      ))}
+        );
+      })}
     </nav>
   );
 };
