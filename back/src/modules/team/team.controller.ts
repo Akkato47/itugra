@@ -162,6 +162,22 @@ export async function deleteUserTeam(
     }
 }
 
+export async function leaveTeam(
+    req: Request<{ teamUid: string }>,
+    res: Response,
+    next: NextFunction,
+) {
+    try {
+        const result = await teamService.deleteUserTeam({
+            userUid: req.user.uid,
+            teamUid: req.params.teamUid,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export async function deleteRole(
     req: Request<{}, {}, DeleteRoleDto>,
     res: Response,

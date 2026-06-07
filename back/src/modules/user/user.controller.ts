@@ -308,3 +308,17 @@ export async function updateRoadmap(
     next(error);
   }
 }
+
+export async function deleteRoadmap(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await userService.deleteRoadmap(req.user.uid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}

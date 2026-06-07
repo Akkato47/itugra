@@ -79,23 +79,16 @@ export const acceptInvite = async (inviteCode: string) => {
 
 export const getTeamList = async (userUid: string) => {
   try {
-    const utrs = await db
-      .select()
+    const teams = await db
+      .select({
+        uid: team.uid,
+        name: team.name,
+        image: team.image,
+        type: team.type,
+      })
       .from(userTeamRole)
-      .where(eq(userTeamRole.userUid, userUid));
-    const teams: Partial<TeamInferSelect>[] = [];
-    for (const utr of utrs) {
-      const teamItem = await db
-        .select({
-          uid: team.uid,
-          name: team.name,
-          image: team.image,
-          type: team.type,
-        })
-        .from(team)
-        .where(eq(team.uid, utr.teamUid));
-      teams.push(teamItem[0]);
-    }
+      .where(eq(userTeamRole.userUid, userUid))
+      .innerJoin(team, eq(team.uid, userTeamRole.teamUid));
     return teams;
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -117,46 +110,32 @@ export const getTeamData = async (tag: string, teamUid: string) => {
       })
       .from(team)
       .where(eq(team.uid, teamUid));
-    const userList = [];
-    const utrs = await db
-      .select()
+    const members = await db
+      .select({
+        uid: users.uid,
+        fullName: users.fullName,
+        tag: users.tag,
+        roleName: customTeamRole.name,
+        color: customTeamRole.color,
+        abilities: customTeamRole.abilities,
+      })
       .from(userTeamRole)
-      .where(eq(userTeamRole.teamUid, teamData[0].uid));
-    for (const utr of utrs) {
-      const user = await db
-        .select({
-          uid: users.uid,
-          fullName: users.fullName,
-          tag: users.tag,
-        })
-        .from(users)
-        .where(eq(users.uid, utr.userUid));
-      if (user[0].tag === tag) {
-        const ctr = await db
-          .select()
-          .from(customTeamRole)
-          .where(eq(customTeamRole.uid, utr.ctrUid));
-        const userItem = {
-          ...user[0],
-          role: ctr[0].name,
-          color: ctr[0].color,
-          myAbilities: [...ctr[0].abilities],
-        };
-        userList.push(userItem);
-      } else {
-        const ctr = await db
-          .select()
-          .from(customTeamRole)
-          .where(eq(customTeamRole.uid, utr.ctrUid));
-        const userItem = {
-          ...user[0],
-          role: ctr[0].name,
-          color: ctr[0].color,
-          abilities: ctr[0].abilities,
-        };
-        userList.push(userItem);
-      }
-    }
+      .where(eq(userTeamRole.teamUid, teamData[0].uid))
+      .innerJoin(users, eq(users.uid, userTeamRole.userUid))
+      .innerJoin(customTeamRole, eq(customTeamRole.uid, userTeamRole.ctrUid));
+
+    const userList = members.map((member) => {
+      const base = {
+        uid: member.uid,
+        fullName: member.fullName,
+        tag: member.tag,
+        role: member.roleName,
+        color: member.color,
+      };
+      return member.tag === tag
+        ? { ...base, myAbilities: [...member.abilities] }
+        : { ...base, abilities: member.abilities };
+    });
 
     const roles = await db
       .select({
