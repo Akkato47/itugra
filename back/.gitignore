@@ -2,7 +2,7 @@ node_modules/
 dist/
 
 # Lock files
-yarn.lock
+# yarn.lock is intentionally committed so Docker builds use pinned versions
 pnpm-lock.yaml
 package-lock.json
 
