@@ -45,6 +45,8 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
+# tsc может упираться в дефолтный лимит heap V8 на слабых раннерах — поднимаем явно
+ENV NODE_OPTIONS=--max-old-space-size=4096
 RUN yarn build
 
 FROM node:20.11-alpine AS production
