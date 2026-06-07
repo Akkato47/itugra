@@ -18,7 +18,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2"
+          cpus: "1"
           memory: 1024M
 
   redis:
@@ -35,7 +35,7 @@ services:
     healthcheck:
       # redis поднят с requirepass — ping без авторизации вернёт NOAUTH,
       # поэтому авторизуемся (env REDIS_PASSWORD доступен внутри контейнера).
-      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      test: ["CMD-SHELL", 'redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG']
       interval: 5s
       timeout: 3s
       retries: 5
@@ -102,5 +102,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "3"
+          cpus: "1"
           memory: 2048M
