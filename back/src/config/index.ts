@@ -67,4 +67,8 @@ export default {
     tokenUrl: env.YANDEX_BASE_URL,
     loginUrl: env.YANDEX_LOGIN_URL,
   },
+  gigachat: {
+    credentials: env.GIGACHAT_CREDENTIALS,
+    model: env.GIGACHAT_MODEL || 'GigaChat-2',
+  },
 } as const;

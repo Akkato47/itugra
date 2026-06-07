@@ -8,6 +8,7 @@ import {
 import { eq } from 'drizzle-orm';
 import { EventEnum } from '@/db/drizzle/schema/event/enums/event-types.enum';
 import { users } from '@/db/drizzle/schema/user/schema';
+import { logger } from '@/lib/loger';
 
 export const getRequests = async () => {
   try {
@@ -28,7 +29,7 @@ export const getRequests = async () => {
 
     return requests;
   } catch (error) {
-    console.log(error);
+    logger.error(`event.service error: ${error?.message ?? error}`);
     throw error;
   }
 };
@@ -109,7 +110,7 @@ export const createRequest = async (userUid: string, dto: CreateRequestDto) => {
       createdRequestUid: newRequest[0].uid,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(`event.service error: ${error?.message ?? error}`);
     throw error;
   }
 };

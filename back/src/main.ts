@@ -41,17 +41,15 @@ export const init = (async () => {
       const statusCode = err.statusCode || 500;
       const message = err.message || 'Internal Server Error.';
       logger.error(message);
-      _next();
       return res.status(statusCode).json({ success: false, message });
     }
   );
 
-  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    logger.error(err.stack);
-    next();
-    res.status(500).send('Something broke!');
-  });
-  redisClient.connect();
+  try {
+    await redisClient.connect();
+  } catch (error) {
+    logger.error(`Redis connection failed: ${error}`);
+  }
 
   DI.server = app.listen(port, () => logger.info(`listening in port:${port}`));
 })();

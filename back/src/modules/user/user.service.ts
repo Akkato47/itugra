@@ -31,7 +31,9 @@ import type { AddFileDto } from './dto/add-file.dto';
 import { EditFileDto } from './dto/edit-file.dto';
 import { skillPool } from '@/db/drizzle/schema/testing/schema';
 import { CreateRoadmapDto } from './dto/roadmap.dto';
-import { GigaChat } from 'gigachat-node';
+import { createGigaChatClient, extractJson } from '@/lib/gigachat';
+import config from '@/config';
+import { logger } from '@/lib/loger';
 import { event } from '@/db/drizzle/schema/event/schema';
 import { StatusEnum } from '@/db/drizzle/schema/event/enums/status.enum';
 
@@ -171,58 +173,67 @@ export const getUserProfile = async (tag: string) => {
       .from(userProfleInfo)
       .where(eq(userProfleInfo.userUid, user[0].uid));
 
-    const experience = await db
-      .select({
-        uid: userExperience.uid,
-        name: userExperience.name,
-        position: userExperience.position,
-        startDate: userExperience.startDate,
-        endDate: userExperience.endDate,
-        present: userExperience.present,
-      })
-      .from(userExperience)
-      .where(eq(userExperience.profileInfoUid, profileInfo[0].uid));
+    if (profileInfo.length === 0) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, 'Профиль не найден');
+    }
 
-    const education = await db
-      .select({
-        uid: userEducation.uid,
-        university: userEducation.university,
-        direction: userEducation.direction,
-        startDate: userEducation.startDate,
-        endDate: userEducation.endDate,
-        format: userEducation.format,
-      })
-      .from(userEducation)
-      .where(eq(userEducation.profileInfoUid, profileInfo[0].uid));
+    const profileInfoUid = profileInfo[0].uid;
 
-    const skills = await db
-      .select({
-        uid: userSkills.uid,
-        level: userSkills.level,
-        name: skillPool.name,
-      })
-      .from(userSkills)
-      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid))
-      .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid));
+    // Дочерние запросы независимы друг от друга — выполняем их параллельно.
+    const [experience, education, skills, location, files] = await Promise.all([
+      db
+        .select({
+          uid: userExperience.uid,
+          name: userExperience.name,
+          position: userExperience.position,
+          startDate: userExperience.startDate,
+          endDate: userExperience.endDate,
+          present: userExperience.present,
+        })
+        .from(userExperience)
+        .where(eq(userExperience.profileInfoUid, profileInfoUid)),
 
-    const location = await db
-      .select({
-        uid: userLocation.uid,
-        country: userLocation.country,
-        region: userLocation.region,
-        city: userLocation.city,
-      })
-      .from(userLocation)
-      .where(eq(userLocation.profileInfoUid, profileInfo[0].uid));
+      db
+        .select({
+          uid: userEducation.uid,
+          university: userEducation.university,
+          direction: userEducation.direction,
+          startDate: userEducation.startDate,
+          endDate: userEducation.endDate,
+          format: userEducation.format,
+        })
+        .from(userEducation)
+        .where(eq(userEducation.profileInfoUid, profileInfoUid)),
 
-    const files = await db
-      .select({
-        uid: userFiles.uid,
-        file: userFiles.file,
-        category: userFiles.category,
-      })
-      .from(userFiles)
-      .where(eq(userFiles.profileInfoUid, profileInfo[0].uid));
+      db
+        .select({
+          uid: userSkills.uid,
+          level: userSkills.level,
+          name: skillPool.name,
+        })
+        .from(userSkills)
+        .where(eq(userSkills.profileInfoUid, profileInfoUid))
+        .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid)),
+
+      db
+        .select({
+          uid: userLocation.uid,
+          country: userLocation.country,
+          region: userLocation.region,
+          city: userLocation.city,
+        })
+        .from(userLocation)
+        .where(eq(userLocation.profileInfoUid, profileInfoUid)),
+
+      db
+        .select({
+          uid: userFiles.uid,
+          file: userFiles.file,
+          category: userFiles.category,
+        })
+        .from(userFiles)
+        .where(eq(userFiles.profileInfoUid, profileInfoUid)),
+    ]);
 
     const response = {
       ...user[0],
@@ -238,7 +249,7 @@ export const getUserProfile = async (tag: string) => {
 
     return response;
   } catch (error) {
-    console.log(error);
+    logger.error(`getUserProfile failed: ${error?.message ?? error}`);
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -290,33 +301,22 @@ export const getUserProfileInfo = async (userUid: string) => {
 
 export const getUserSkills = async (userUid: string) => {
   try {
-    const user = await db
-      .select({
-        uid: users.uid,
-      })
-      .from(users)
-      .where(eq(users.uid, userUid));
-    if (user.length === 0) {
-      throw new CustomError(HttpStatus.BAD_REQUEST, 'Пользователь не найден');
-    }
-    const profileInfo = await db
-      .select({
-        uid: userProfleInfo.uid,
-      })
-      .from(userProfleInfo)
-      .where(eq(userProfleInfo.userUid, user[0].uid));
     const skills = await db
-      .select()
+      .select({
+        uid: userSkills.uid,
+        name: skillPool.name,
+        level: userSkills.level,
+      })
       .from(userSkills)
-      .where(eq(userSkills.profileInfoUid, profileInfo[0].uid))
-      .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid));
+      .innerJoin(
+        userProfleInfo,
+        eq(userProfleInfo.uid, userSkills.profileInfoUid)
+      )
+      .leftJoin(skillPool, eq(skillPool.uid, userSkills.skillUid))
+      .where(eq(userProfleInfo.userUid, userUid));
 
     const response = {
-      userSkills: skills.map((skill) => ({
-        uid: skill.user_skills.uid,
-        name: skill.skill_pool.name,
-        level: skill.user_skills.level,
-      })),
+      userSkills: skills,
     };
     return response;
   } catch (error) {
@@ -329,29 +329,27 @@ export const getUserSkills = async (userUid: string) => {
 
 export const getUserEducation = async (userUid: string) => {
   try {
-    const user = await db
-      .select({
-        uid: users.uid,
-      })
-      .from(users)
-      .where(eq(users.uid, userUid));
-    if (user.length === 0) {
-      throw new CustomError(HttpStatus.BAD_REQUEST, 'Пользователь не найден');
-    }
     const profileInfo = await db
       .select({
         uid: userProfleInfo.uid,
       })
       .from(userProfleInfo)
-      .where(eq(userProfleInfo.userUid, user[0].uid));
-    const education = await db
-      .select()
-      .from(userEducation)
-      .where(eq(userEducation.profileInfoUid, profileInfo[0].uid));
-    const files = await db
-      .select()
-      .from(userFiles)
-      .where(eq(userFiles.profileInfoUid, profileInfo[0].uid));
+      .where(eq(userProfleInfo.userUid, userUid));
+
+    if (profileInfo.length === 0) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, 'Профиль не найден');
+    }
+
+    const [education, files] = await Promise.all([
+      db
+        .select()
+        .from(userEducation)
+        .where(eq(userEducation.profileInfoUid, profileInfo[0].uid)),
+      db
+        .select()
+        .from(userFiles)
+        .where(eq(userFiles.profileInfoUid, profileInfo[0].uid)),
+    ]);
 
     const response = {
       userEducation: education[0]
@@ -381,22 +379,6 @@ export const getUserEducation = async (userUid: string) => {
 
 export const getUserExperience = async (userUid: string) => {
   try {
-    const user = await db
-      .select({
-        uid: users.uid,
-      })
-      .from(users)
-      .where(eq(users.uid, userUid));
-    if (user.length === 0) {
-      throw new CustomError(HttpStatus.BAD_REQUEST, 'Пользователь не найден');
-    }
-    const profileInfo = await db
-      .select({
-        uid: userProfleInfo.uid,
-      })
-      .from(userProfleInfo)
-      .where(eq(userProfleInfo.userUid, user[0].uid));
-
     const experience = await db
       .select({
         uid: userExperience.uid,
@@ -407,7 +389,11 @@ export const getUserExperience = async (userUid: string) => {
         present: userExperience.present,
       })
       .from(userExperience)
-      .where(eq(userExperience.profileInfoUid, profileInfo[0].uid));
+      .innerJoin(
+        userProfleInfo,
+        eq(userProfleInfo.uid, userExperience.profileInfoUid)
+      )
+      .where(eq(userProfleInfo.userUid, userUid));
     const response = {
       userExperience: experience,
     };
@@ -506,11 +492,10 @@ export const updateUserProfile = async (
   data: UpdateUserProfileInfoDto
 ) => {
   try {
-    const user = await db.select().from(users).where(eq(users.uid, userUid))[0];
     await db
       .update(userProfleInfo)
       .set(data)
-      .where(eq(userProfleInfo.userUid, user.uid));
+      .where(eq(userProfleInfo.userUid, userUid));
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -920,36 +905,57 @@ export const generateRoadmap = async (
   dto: CreateRoadmapDto
 ) => {
   try {
-    const gigachat = new GigaChat(
-      'YzdmYmZkYjMtNzgyNS00MTAzLTkxM2QtOTY0ZTdmZmNlZWZkOjlhNjdiZTJkLTVjNTItNDAzOC05MWRiLTc2NGIzMTUzY2UwZQ==',
-      true,
-      true,
-      true
-    );
+    const gigachat = createGigaChatClient();
 
-    const prompt =
-      'Вы IT-специалист, который хочет составить персонализированный чеклист навыков и задач (роудмап) для профессионального роста. На основе следующих вопросов и списка интересующих вас навыков, создайте JSON-структуру чеклиста, включающую пункты для изучения, выполнения или освоения. Каждый элемент чеклиста должен быть описан как объект, включающий следующие ключи: - `name` — краткое название пункта чеклиста. Ответ должен строго соответствовать указанному ниже формату. Никакой дополнительной информации, комментариев или текста в ответе быть не должно. Сгенерируйте JSON-объект чеклиста на основе ответов пользователя. Формат результата: ' +
-      'список объектов с name: string' +
-      '. Ограничение: Формат ответа должен быть ТОЛЬКО такой как в примере.' +
-      '. Ограничение: Ответ не должен содержать: Никаких пояснений или текста вне JSON. Никаких дополнительных объектов или свойств, кроме указанных в примере. Никаких символов, не соответствующих стандарту JSON. Вот json вопросов-ответов: ' +
-      JSON.stringify(dto.testResult) +
-      '. Вот json выбранных желаемых навыков(он может быть пустым): ' +
-      JSON.stringify(dto.interestedIn) +
-      ' ПРИНИМАЙ ВО ВНИМАНИЕ И ЖЕЛАЕМЫЕ НАВЫКИ И ОТВЕТЫ НА ВОПРОСЫ. ДЕЛАЙ КОМПЛЕКСНЫЙ АНАЛИЗ, КОТОРЫЙ ПОМОЖЕТ ЧЕЛОВЕКУ ВЫРАСТИ ПРОФЕССИОНАЛЬНО' +
-      ' НЕ воспринимай пример буквально!!!';
+    const systemPrompt = [
+      'Ты — опытный карьерный консультант для IT-специалистов.',
+      'Твоя задача — составить персональный роудмап профессионального роста:',
+      'упорядоченный чеклист конкретных пунктов для изучения и освоения.',
+      'Анализируй в комплексе и ответы на вопросы, и желаемые навыки пользователя.',
+      '',
+      'Формат ответа — СТРОГО валидный JSON-массив объектов вида:',
+      '[{"name": "краткое название пункта"}]',
+      '',
+      'Жёсткие требования к ответу:',
+      '- Верни ТОЛЬКО JSON-массив. Без markdown, без ```json, без пояснений и текста до или после.',
+      '- Каждый объект содержит единственное строковое поле "name".',
+      '- От 8 до 15 пунктов, упорядоченных от базовых к продвинутым.',
+      '- Все названия на русском языке.',
+    ].join('\n');
+
+    const userPrompt = [
+      'Ответы пользователя на вопросы (JSON):',
+      JSON.stringify(dto.testResult),
+      '',
+      'Желаемые навыки (JSON, может быть пустым):',
+      JSON.stringify(dto.interestedIn),
+    ].join('\n');
 
     await gigachat.createToken();
     const response = await gigachat.completion({
-      model: 'GigaChat',
-      messages: [{ role: 'user', content: prompt }],
+      model: config.gigachat.model,
+      temperature: 0.3,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
     });
 
-    const data = JSON.parse(
-      response.choices[0].message.content.replace(/```json|```/g, '').trim()
+    const data = extractJson<Array<{ name?: string }>>(
+      response.choices[0]?.message?.content
     );
-    if (!data.hasOwnProperty('checklist')) {
-      throw new CustomError(HttpStatus.I_AM_A_TEAPOT, 'Попробуйте снова');
+
+    const items = (Array.isArray(data) ? data : [])
+      .map((item) => item?.name?.trim())
+      .filter((name): name is string => Boolean(name));
+
+    if (items.length === 0) {
+      throw new CustomError(
+        HttpStatus.BAD_GATEWAY,
+        'Модель вернула пустой роудмап, попробуйте ещё раз'
+      );
     }
+
     const profileInfo = await db
       .select()
       .from(userProfleInfo)
@@ -957,19 +963,21 @@ export const generateRoadmap = async (
     await db
       .delete(userRoadmap)
       .where(eq(userRoadmap.profileInfoUid, profileInfo[0].uid));
-    for (let index = 0; index < data.checklist.length; index++) {
-      const element = data.checklist[index];
-      await db.insert(userRoadmap).values({
+
+    await db.insert(userRoadmap).values(
+      items.map((name, index) => ({
         profileInfoUid: profileInfo[0].uid,
-        name: element.name,
+        name,
         order: index,
-      });
-    }
+      }))
+    );
+
     await db
       .update(userProfleInfo)
       .set({ chosenCategory: dto.chosenCategory })
       .where(eq(userProfleInfo.userUid, userUid));
   } catch (error) {
+    logger.error(`generateRoadmap failed: ${error?.message ?? error}`);
     throw error;
   }
 };
@@ -993,6 +1001,28 @@ export const getRoadmap = async (userUid: string) => {
 
     return roadmap;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteRoadmap = async (userUid: string) => {
+  try {
+    const profileInfo = await db
+      .select({ uid: userProfleInfo.uid })
+      .from(userProfleInfo)
+      .where(eq(userProfleInfo.userUid, userUid));
+
+    if (!profileInfo[0]) {
+      return true;
+    }
+
+    await db
+      .delete(userRoadmap)
+      .where(eq(userRoadmap.profileInfoUid, profileInfo[0].uid));
+
+    return true;
+  } catch (error) {
+    logger.error(`deleteRoadmap failed: ${error?.message ?? error}`);
     throw error;
   }
 };

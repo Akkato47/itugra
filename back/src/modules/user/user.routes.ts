@@ -61,6 +61,7 @@ router.patch(
 );
 router.patch('/profile-doc', isAuthenticated, userController.editFile);
 
+router.delete('/roadmap', isAuthenticated, userController.deleteRoadmap);
 router.delete(
   '/profile-experience/:uid',
   isAuthenticated,

@@ -33,6 +33,8 @@ const envSchema = z.object({
   YANDEX_CLIENT_SECRET: z.string().nullable(),
   YANDEX_BASE_URL: z.string().nullable(),
   YANDEX_LOGIN_URL: z.string().nullable(),
+  GIGACHAT_CREDENTIALS: z.string().optional(),
+  GIGACHAT_MODEL: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);
