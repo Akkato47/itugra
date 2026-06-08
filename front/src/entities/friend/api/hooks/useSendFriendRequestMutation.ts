@@ -29,6 +29,9 @@ export const useSendFriendRequestMutation = (
     },
     onError(...args) {
       const [error] = args;
+      queryClient.invalidateQueries({ queryKey: ["getFriendshipStatus"] });
+      queryClient.invalidateQueries({ queryKey: ["getFriendRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["getFriends"] });
       toast({
         className: "bg-red-800 text-white hover:bg-red-700",
         title: "Не удалось отправить заявку",

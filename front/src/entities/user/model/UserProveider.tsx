@@ -27,7 +27,11 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
       .then(({ data }) => {
         setUser((prev) => (prev && prev.tag !== data.tag ? { ...prev, tag: data.tag } : prev));
       })
-      .catch(() => undefined);
+      .catch((error) => {
+        if (error?.response?.status === 401) {
+          setUser(undefined);
+        }
+      });
   }, []);
 
   const setUserContextData = (userData: TUserContextData | undefined) => {

@@ -1,15 +1,18 @@
 import { Link, Outlet } from "react-router-dom";
 
 import { MainSidebar } from "@widgets/main-sidebar";
+import { NotificationsBell } from "@widgets/notifications-bell";
 import { ProfileWidget } from "@widgets/profile/profile-widget";
 
+import { useFriendshipSocket } from "@entities/friend";
 import { useUser } from "@entities/user";
 
-import { BellIcon, LogoIcon } from "@shared/icons";
-import { Button } from "@shared/ui";
+import { LogoIcon } from "@shared/icons";
 
 const MainLayout = () => {
   const { user } = useUser();
+
+  useFriendshipSocket();
 
   return (
     <>
@@ -19,12 +22,7 @@ const MainLayout = () => {
             <LogoIcon />
           </Link>
           <div className='flex items-center gap-8 relative'>
-            <Button variant='ghost' size='icon' className='relative'>
-              <BellIcon />
-              <span className='absolute -top-1 -right-4 text-center py-[1px] px-[5px] rounded-xl bg-red-500 text-xs text-white'>
-                99+
-              </span>
-            </Button>
+            <NotificationsBell />
             {user && <ProfileWidget user={user} />}
           </div>
         </div>

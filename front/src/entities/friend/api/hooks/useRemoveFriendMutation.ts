@@ -28,6 +28,8 @@ export const useRemoveFriendMutation = (
     },
     onError(...args) {
       const [error] = args;
+      queryClient.invalidateQueries({ queryKey: ["getFriendshipStatus"] });
+      queryClient.invalidateQueries({ queryKey: ["getFriends"] });
       toast({
         className: "bg-red-800 text-white hover:bg-red-700",
         title: "Не удалось удалить из друзей",

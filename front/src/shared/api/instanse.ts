@@ -13,10 +13,13 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
-      if (window.location.pathname !== "/") {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("user");
+      localStorage.setItem("IS_AUTH", "false");
+
+      const { pathname } = window.location;
+      if (pathname !== "/" && pathname !== paths.SIGNIN) {
         window.location.href = paths.SIGNIN;
-        localStorage.setItem("IS_AUTH", "false");
       }
     }
     return Promise.reject(error);

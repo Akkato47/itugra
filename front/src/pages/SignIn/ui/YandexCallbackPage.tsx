@@ -17,7 +17,7 @@ const YandexCallbackPage = () => {
     options: {
       onSuccess(data) {
         setUserContextData(data.data);
-        return navigate(paths.SETTINGS + "/skills");
+        return navigate(`${paths.PROFILE}/${data.data.tag}`);
       }
     }
   });

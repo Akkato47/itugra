@@ -28,6 +28,8 @@ export const useDeclineFriendRequestMutation = (
     },
     onError(...args) {
       const [error] = args;
+      queryClient.invalidateQueries({ queryKey: ["getFriendshipStatus"] });
+      queryClient.invalidateQueries({ queryKey: ["getFriendRequests"] });
       toast({
         className: "bg-red-800 text-white hover:bg-red-700",
         title: "Не удалось отклонить заявку",

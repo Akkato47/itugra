@@ -79,7 +79,7 @@ export const MainProfileInfo = ({
             className='absolute -top-[100px] -left-4'
           />
           <div className='flex items-center'>
-            <div className='w-[160px]' />
+            <div className='w-[200px] shrink-0' />
             <div className='flex flex-col'>
               <div className='grid grid-cols-2 gap-4'>
                 {isEdit ? (
