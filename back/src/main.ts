@@ -6,12 +6,13 @@ import express from 'express';
 import config from './config';
 import { logger, LoggerStream } from './lib/loger';
 import { CustomError } from './utils/custom_error';
-import redisClient from './db/redis';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 import type http from 'http';
 import morgan from 'morgan';
+import { initSocket } from './realtime/socket';
+import { startNotificationWorker } from './queue/notification.worker';
 
 export const app = express();
 const port = config.app.port;
@@ -46,11 +47,8 @@ export const init = (async () => {
     }
   );
 
-  try {
-    await redisClient.connect();
-  } catch (error) {
-    logger.error(`Redis connection failed: ${error}`);
-  }
-
   DI.server = app.listen(port, () => logger.info(`listening in port:${port}`));
+
+  initSocket(DI.server);
+  startNotificationWorker();
 })();

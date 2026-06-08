@@ -33,17 +33,17 @@ export const createTokenAsync = async (tokenDto: TokenDto) => {
 const storeToken = async (data: IStoreToken) => {
   const key = `${data.userUid}:${data.token}`;
   const expiration = 24 * 60 * 60;
-  await redisClient.SET(key, 'true', { EX: expiration });
+  await redisClient.set(key, 'true', 'EX', expiration);
 };
 
 export const storeOAuthToken = async (data: IStoreOAuthToken) => {
   const key = `${data.oAuthId}:${data.token}`;
   const expiration = 24 * 60 * 60;
-  await redisClient.SET(key, data.type, { EX: expiration });
+  await redisClient.set(key, data.type, 'EX', expiration);
 };
 
 export const getToken = async (token: string) => {
-  const res = await redisClient.KEYS(`*:${token}`);
+  const res = await redisClient.keys(`*:${token}`);
   if (res.length != 1) {
     return null;
   }
@@ -51,7 +51,7 @@ export const getToken = async (token: string) => {
 };
 
 export const getTokenOAuthId = async (oAuthId: string) => {
-  const res = await redisClient.KEYS(`${oAuthId}:*`);
+  const res = await redisClient.keys(`${oAuthId}:*`);
   if (res.length != 1) {
     return null;
   }
@@ -60,7 +60,7 @@ export const getTokenOAuthId = async (oAuthId: string) => {
 };
 
 export const removeToken = async (key: string): Promise<boolean> => {
-  const res = await redisClient.DEL([key]);
+  const res = await redisClient.del(key);
   if (!res) {
     return false;
   }
@@ -68,7 +68,7 @@ export const removeToken = async (key: string): Promise<boolean> => {
 };
 
 export const removeAllTokensByUid = async (uid: string) => {
-  const keys = await redisClient.KEYS(`${uid}:*`);
+  const keys = await redisClient.keys(`${uid}:*`);
 
   if (keys.length === 0) {
     return true;
@@ -76,14 +76,14 @@ export const removeAllTokensByUid = async (uid: string) => {
 
   const multi = redisClient.multi();
   keys.forEach((key) => {
-    multi.DEL(key);
+    multi.del(key);
   });
 
   await multi.exec();
 };
 
 export const removeAllTokensByOAuthId = async (oAuthId: string) => {
-  const keys = await redisClient.KEYS(`${oAuthId}:*`);
+  const keys = await redisClient.keys(`${oAuthId}:*`);
 
   if (keys.length === 0) {
     return true;
@@ -91,7 +91,7 @@ export const removeAllTokensByOAuthId = async (oAuthId: string) => {
 
   const multi = redisClient.multi();
   keys.forEach((key) => {
-    multi.DEL(key);
+    multi.del(key);
   });
 
   await multi.exec();

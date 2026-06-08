@@ -6,6 +6,7 @@ import uploadRouter from './uploads/uploads.routes';
 import teamRouter from './team/team.routes';
 import testRouter from './testing/testing.routes';
 import eventRouter from './event/event.routes';
+import notificationRouter from './notification/notification.routes';
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use('/uploads', uploadRouter);
 router.use('/team', teamRouter);
 router.use('/test', testRouter);
 router.use('/event', eventRouter);
+router.use('/notification', notificationRouter);
 
 export default router;

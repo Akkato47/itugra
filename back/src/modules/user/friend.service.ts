@@ -3,9 +3,14 @@ import { and, eq, inArray, or } from 'drizzle-orm';
 import { db } from '@/db/drizzle/connect';
 import { userFriends, users } from '@/db/drizzle/schema/user/schema';
 import { FriendStatus } from '@/db/drizzle/schema/user/enums/friend-status.enum';
+import { NotificationType } from '@/db/drizzle/schema/notification/enums/notification-type.enum';
 import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';
+import { enqueueNotification } from '@/queue/notification.queue';
+import type { NotificationJobData } from '@/queue/notification.queue';
+import { emitToUser } from '@/realtime/socket';
+import { removeByRequestUid } from '@/modules/notification/notification.service';
 
 export type FriendshipStatus =
   | 'SELF'
@@ -33,6 +38,32 @@ const getUserByTagOrThrow = async (tag: string) => {
   }
 
   return found[0];
+};
+
+const getActor = async (uid: string) => {
+  const rows = await db
+    .select({
+      uid: users.uid,
+      fullName: users.fullName,
+      tag: users.tag,
+      image: users.image,
+    })
+    .from(users)
+    .where(eq(users.uid, uid));
+
+  return rows[0];
+};
+
+const notify = async (job: NotificationJobData) => {
+  try {
+    await enqueueNotification(job);
+  } catch (error) {
+    logger.error(`enqueue notification failed: ${error?.message ?? error}`);
+  }
+};
+
+const emitFriendshipUpdate = (uid: string) => {
+  emitToUser(uid, 'friendship:update', { at: Date.now() });
 };
 
 const findRelation = async (firstUid: string, secondUid: string) => {
@@ -83,6 +114,22 @@ export const sendFriendRequest = async (
           .where(eq(userFriends.uid, relation.uid))
           .returning();
 
+        const actor = await getActor(requesterUid);
+        await notify({
+          userUid: relation.requesterUid,
+          type: NotificationType.FRIEND_ACCEPT,
+          title: 'Заявка принята',
+          message: `${actor.fullName} принял вашу заявку в друзья`,
+          payload: {
+            actorUid: actor.uid,
+            actorTag: actor.tag,
+            actorName: actor.fullName,
+            actorImage: actor.image?.fileUrl ?? null,
+          },
+        });
+        emitFriendshipUpdate(relation.requesterUid);
+        await removeByRequestUid(relation.uid);
+
         return accepted[0];
       }
 
@@ -97,6 +144,22 @@ export const sendFriendRequest = async (
         status: FriendStatus.PENDING,
       })
       .returning();
+
+    const actor = await getActor(requesterUid);
+    await notify({
+      userUid: addressee.uid,
+      type: NotificationType.FRIEND_REQUEST,
+      title: 'Новая заявка в друзья',
+      message: `${actor.fullName} хочет добавить вас в друзья`,
+      payload: {
+        actorUid: actor.uid,
+        actorTag: actor.tag,
+        actorName: actor.fullName,
+        actorImage: actor.image?.fileUrl ?? null,
+        requestUid: created[0].uid,
+      },
+    });
+    emitFriendshipUpdate(addressee.uid);
 
     return created[0];
   } catch (error) {
@@ -128,6 +191,22 @@ export const acceptFriendRequest = async (
     if (accepted.length === 0) {
       throw new CustomError(HttpStatus.NOT_FOUND, 'Заявка не найдена');
     }
+
+    const actor = await getActor(userUid);
+    await notify({
+      userUid: accepted[0].requesterUid,
+      type: NotificationType.FRIEND_ACCEPT,
+      title: 'Заявка принята',
+      message: `${actor.fullName} принял вашу заявку в друзья`,
+      payload: {
+        actorUid: actor.uid,
+        actorTag: actor.tag,
+        actorName: actor.fullName,
+        actorImage: actor.image?.fileUrl ?? null,
+      },
+    });
+    emitFriendshipUpdate(accepted[0].requesterUid);
+    await removeByRequestUid(accepted[0].uid);
 
     return accepted[0];
   } catch (error) {
@@ -161,6 +240,13 @@ export const declineFriendRequest = async (
     if (deleted.length === 0) {
       throw new CustomError(HttpStatus.NOT_FOUND, 'Заявка не найдена');
     }
+
+    const counterpartyUid =
+      deleted[0].requesterUid === userUid
+        ? deleted[0].addresseeUid
+        : deleted[0].requesterUid;
+    emitFriendshipUpdate(counterpartyUid);
+    await removeByRequestUid(deleted[0].uid);
 
     return { success: true };
   } catch (error) {
@@ -198,6 +284,8 @@ export const removeFriend = async (userUid: string, friendTag: string) => {
     if (deleted.length === 0) {
       throw new CustomError(HttpStatus.NOT_FOUND, 'Пользователь не в друзьях');
     }
+
+    emitFriendshipUpdate(friend.uid);
 
     return { success: true };
   } catch (error) {

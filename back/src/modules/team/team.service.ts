@@ -40,7 +40,7 @@ export const createInvite = async (dto: CreateInviteUserDto) => {
       tokenType: 'access',
     });
     const expiration = 24 * 60 * 60;
-    await redisClient.SET(dto.userTag, inviteToken, { EX: expiration });
+    await redisClient.set(dto.userTag, inviteToken, 'EX', expiration);
     return inviteToken;
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -68,7 +68,7 @@ export const acceptInvite = async (inviteCode: string) => {
       teamUid: payload.teamUid,
       userUid: user.uid,
     });
-    await redisClient.DEL(payload.userTag);
+    await redisClient.del(payload.userTag);
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);

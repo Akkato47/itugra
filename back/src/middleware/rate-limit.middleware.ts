@@ -30,13 +30,13 @@ export const rateLimiter =
       const identifier = req.user?.uid ?? req.ip ?? 'unknown';
       const key = `ratelimit:${keyPrefix}:${identifier}`;
 
-      const current = await redisClient.INCR(key);
+      const current = await redisClient.incr(key);
       if (current === 1) {
-        await redisClient.EXPIRE(key, windowSeconds);
+        await redisClient.expire(key, windowSeconds);
       }
 
       if (current > limit) {
-        const ttl = await redisClient.TTL(key);
+        const ttl = await redisClient.ttl(key);
         return next(
           new CustomError(
             HttpStatus.TOO_MANY_REQUESTS,

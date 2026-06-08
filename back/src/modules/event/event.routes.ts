@@ -6,12 +6,12 @@ import { isAdmin } from '@/middleware/role.middleware';
 const router = Router();
 
 router.get('/all', isAuthenticated, eventController.getEvents);
-router.get('/requests/all', isAuthenticated, eventController.getRequests);
-router.get('/request/:requestUid', isAuthenticated, eventController.getRequest);
+router.get('/requests/all', isAuthenticated, isAdmin, eventController.getRequests);
+router.get('/request/:requestUid', isAuthenticated, isAdmin, eventController.getRequest);
 router.get('/info/:eventUid', isAuthenticated, eventController.getEvent);
 
 router.post('/create/request', isAuthenticated, eventController.createRequest);
 
-router.post('/make/desicion', isAuthenticated, eventController.makeDecision);
+router.post('/make/desicion', isAuthenticated, isAdmin, eventController.makeDecision);
 
 export default router;

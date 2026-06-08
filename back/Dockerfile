@@ -45,7 +45,6 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-# tsc может упираться в дефолтный лимит heap V8 на слабых раннерах — поднимаем явно
 ENV NODE_OPTIONS=--max-old-space-size=4096
 RUN yarn build
 
@@ -93,6 +92,4 @@ ENV APPNAME="${APPNAME}" \
 
 EXPOSE ${PORT}
 
-# Запуск: миграции -> сиды -> старт сервера.
-# Нужен, чтобы голый образ (docker run без compose-команды) не падал в node REPL.
 CMD ["sh", "-c", "node dist/db/drizzle/migrate.js && node dist/db/drizzle/seed.js && node dist/main.js"]
