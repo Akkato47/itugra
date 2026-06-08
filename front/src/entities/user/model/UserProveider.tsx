@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { api } from "@shared/api";
+
 import { UserContext } from "./UserContext";
 import type { IUserProviderProps, TUserContextData } from "./types";
 
@@ -16,6 +18,17 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
       localStorage.removeItem("user");
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("user")) return;
+
+    api
+      .get<{ tag: string }>("/user/profile/info")
+      .then(({ data }) => {
+        setUser((prev) => (prev && prev.tag !== data.tag ? { ...prev, tag: data.tag } : prev));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const setUserContextData = (userData: TUserContextData | undefined) => {
     setUser(userData);

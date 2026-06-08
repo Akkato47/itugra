@@ -3,6 +3,8 @@ import { ChevronDownIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { type ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { FriendActionButton } from "@features/friendship";
+
 import { useUser } from "@entities/user";
 
 import { paths } from "@shared/constants/react-router";
@@ -98,7 +100,7 @@ export const MainProfileInfo = ({
                         Редактировать
                       </Link>
                     ) : (
-                      <Button variant='outline'>Добавить в друзья</Button>
+                      tag && <FriendActionButton tag={tag} />
                     )}
                     <DropdownMenu onOpenChange={(value) => setIsOpen(value)}>
                       <DropdownMenuTrigger asChild>

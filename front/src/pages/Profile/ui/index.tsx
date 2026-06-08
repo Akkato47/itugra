@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { FileIcon, PersonIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { MainProfileInfo } from "@widgets/profile/main-profile-info";
+import { ProfileFriends } from "@widgets/profile/profile-friends";
 import { ProfileTabSwitch } from "@widgets/profile/profile-tab-switch";
 
+import { useFriendsQuery } from "@entities/friend";
 import { translateEducationFormat, useUser, useUserDataQuery } from "@entities/user";
 
 import { GraphIcon, SearchIcon } from "@shared/icons";
@@ -14,8 +16,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@s
 import { fileCategories } from "../constants/fileCategories.constant";
 
 const ProfilePage = () => {
+  const { id: tag } = useParams<{ id: string }>();
   const { user } = useUser();
-  const { data, isSuccess } = useUserDataQuery({ tag: user!.tag });
+  const { data, isSuccess } = useUserDataQuery({
+    tag: tag ?? "",
+    options: { enabled: Boolean(tag) }
+  });
+  const { data: friendsData } = useFriendsQuery({
+    tag: tag ?? "",
+    options: { enabled: Boolean(tag) }
+  });
   const [selectedSection, setSelectedSection] = useState<"records" | "career" | "friends">(
     "career"
   );
@@ -81,7 +91,12 @@ const ProfilePage = () => {
           <ProfileTabSwitch
             setSelectedSection={setSelectedSection}
             selectedSection={selectedSection}
+            friendsCount={friendsData?.data.length ?? 0}
           />
+
+          {selectedSection === "friends" && tag && (
+            <ProfileFriends tag={tag} isOwner={user?.tag === tag} />
+          )}
 
           {selectedSection === "career" && (
             <>

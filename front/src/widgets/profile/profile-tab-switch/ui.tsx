@@ -5,11 +5,13 @@ import { Button } from "@shared/ui";
 interface IProfileTabSwitchProps {
   setSelectedSection: React.Dispatch<React.SetStateAction<"records" | "career" | "friends">>;
   selectedSection: "records" | "career" | "friends";
+  friendsCount?: number;
 }
 
 export const ProfileTabSwitch = ({
   selectedSection,
-  setSelectedSection
+  setSelectedSection,
+  friendsCount = 0
 }: IProfileTabSwitchProps) => (
   <nav className='w-full max-w-[840px] flex items-center rounded-lg border border-slate-300 py-5 pl-10'>
     <Button
@@ -33,7 +35,7 @@ export const ProfileTabSwitch = ({
         <FriendsIcon />
         <p className='leading-[150%]'>Друзья</p>
       </Button>
-      <p className='leading-[150%]'>60 чел.</p>
+      <p className='leading-[150%]'>{friendsCount} чел.</p>
     </div>
   </nav>
 );
