@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as userController from './user.controller';
+import * as friendController from './friend.controller';
 import { isAuthenticated } from '@/middleware/auth.middleware';
 const router = Router();
 
@@ -8,6 +9,34 @@ const router = Router();
 router.get('/roadmap', isAuthenticated, userController.getRoadmap);
 router.get('/rec', isAuthenticated, userController.getRecomendateEvents);
 router.get('/profile/all/:tag', isAuthenticated, userController.getUserProfile);
+
+router.get('/friends/:tag', isAuthenticated, friendController.getFriends);
+router.get(
+  '/friend/requests',
+  isAuthenticated,
+  friendController.getFriendRequests
+);
+router.get(
+  '/friend/status/:tag',
+  isAuthenticated,
+  friendController.getFriendshipStatus
+);
+router.post(
+  '/friend/request/:tag',
+  isAuthenticated,
+  friendController.sendFriendRequest
+);
+router.post(
+  '/friend/accept/:requestUid',
+  isAuthenticated,
+  friendController.acceptFriendRequest
+);
+router.post(
+  '/friend/decline/:requestUid',
+  isAuthenticated,
+  friendController.declineFriendRequest
+);
+router.delete('/friend/:tag', isAuthenticated, friendController.removeFriend);
 router.get(
   '/profile/experience',
   isAuthenticated,
@@ -45,7 +74,6 @@ router.post(
   userController.createUserSkills
 );
 router.post('/profile-file', isAuthenticated, userController.addFile);
-// router.post("/friend-add/:tag", isAuthenticated, userController.addFriend);
 
 router.patch(
   '/roadmap/:checkUid',
@@ -73,10 +101,5 @@ router.delete(
   userController.deleteUserSkill
 );
 router.delete('/profile-file/:uid', isAuthenticated, userController.deleteFile);
-// router.delete(
-//     "/friend-delete/:friendListUid",
-//     isAuthenticated,
-//     userController.deleteFriend,
-// );
 
 export default router;

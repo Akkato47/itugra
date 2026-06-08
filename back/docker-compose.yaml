@@ -33,8 +33,6 @@ services:
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     healthcheck:
-      # redis поднят с requirepass — ping без авторизации вернёт NOAUTH,
-      # поэтому авторизуемся (env REDIS_PASSWORD доступен внутри контейнера).
       test: ["CMD-SHELL", 'redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG']
       interval: 5s
       timeout: 3s
@@ -46,8 +44,6 @@ services:
           memory: 524M
 
   express-app:
-    # На сервере подставляется готовый образ из CI ($TAG_COMMIT) через API_IMAGE.
-    # Локально (без API_IMAGE) собирается из Dockerfile и тегается digital-api:latest.
     image: ${API_IMAGE:-digital-api:latest}
     build:
       context: .

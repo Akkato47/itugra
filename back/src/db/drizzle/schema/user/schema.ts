@@ -15,6 +15,7 @@ import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
 import { Via } from '@/db/drizzle/schema/user/enums/via.enum';
 import { EduFormat } from '@/db/drizzle/schema/user/enums/education-format.enum';
 import type { FilesCategory } from '@/db/drizzle/schema/user/enums/files-category.enum';
+import { FriendStatus } from '@/db/drizzle/schema/user/enums/friend-status.enum';
 import { generateCode } from '@/lib/generate_code';
 import type {
   FileType,
@@ -26,6 +27,10 @@ export const roleEnum = pgEnum('role_enum', ['USER', 'ORG', 'ADMIN', 'SU']);
 export const viaEnum = pgEnum('via_enum', ['BASE', 'VK', 'YA', 'GOS', 'TG']);
 export const fileEnum = pgEnum('file_enum', ['DIP', 'PORTFOLIO', 'RESUME']);
 export const eduEnum = pgEnum('edu_enum', ['FULL', 'PART', 'DIST']);
+export const friendStatusEnum = pgEnum('friend_status_enum', [
+  'PENDING',
+  'ACCEPTED',
+]);
 
 export const users = pgTable(
   'users',
@@ -256,3 +261,44 @@ export const userRoadmap = pgTable('user_roadmap', {
     .references(() => userProfleInfo.uid)
     .notNull(),
 });
+
+export const userFriends = pgTable(
+  'user_friends',
+  {
+    ...baseSchema,
+    requesterUid: uuid('requester_uid')
+      .notNull()
+      .references(() => users.uid),
+    addresseeUid: uuid('addressee_uid')
+      .notNull()
+      .references(() => users.uid),
+    status: friendStatusEnum('status')
+      .$type<FriendStatus>()
+      .$default(() => FriendStatus.PENDING)
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userFriendsRequesterForeign: foreignKey({
+        columns: [table.requesterUid],
+        foreignColumns: [users.uid],
+        name: 'user_friends_requester_uid_foreign',
+      })
+        .onUpdate('cascade')
+        .onDelete('cascade'),
+      userFriendsAddresseeForeign: foreignKey({
+        columns: [table.addresseeUid],
+        foreignColumns: [users.uid],
+        name: 'user_friends_addressee_uid_foreign',
+      })
+        .onUpdate('cascade')
+        .onDelete('cascade'),
+      userFriendsUnique: unique('user_friends_unique').on(
+        table.requesterUid,
+        table.addresseeUid
+      ),
+    };
+  }
+);
+
+export type FriendInferSelect = typeof userFriends.$inferSelect;
