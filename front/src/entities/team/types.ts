@@ -32,3 +32,15 @@ export interface ITeam {
   uid: string;
   userList: IUserInTeam[];
 }
+
+export interface ITeamInvite {
+  inviteUid: string;
+  createdAt: string;
+  teamUid: string;
+  teamName: string;
+  teamImage: IImage | null;
+  roleName: string;
+  roleColor: string;
+  inviterTag: string;
+  inviterName: string;
+}

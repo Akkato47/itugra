@@ -2,6 +2,8 @@
 import { GearIcon } from "@radix-ui/react-icons";
 import { Link, useParams } from "react-router-dom";
 
+import { InviteToTeam } from "@features/invite-to-team";
+
 import { useGetTeamQuery } from "@entities/team";
 
 import { buttonVariants } from "@shared/constants/shade-cn";
@@ -29,6 +31,7 @@ const TeamProfilePage = () => {
                 <Link to='settings' className={buttonVariants({ variant: "ghost", size: "icon" })}>
                   <GearIcon className='size-9' />
                 </Link>
+                <InviteToTeam teamUid={data.data.uid} roles={data.data.roles} />
               </div>
               <p className='leading-[175%]'>{data.data.about || ""}</p>
             </div>
