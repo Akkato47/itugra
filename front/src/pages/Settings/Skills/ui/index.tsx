@@ -2,6 +2,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
 import { cn } from "@shared/lib/shade-cn";
+import { useDebounce } from "@shared/lib/useDebounce";
 import { Button, Heading, SearchInput } from "@shared/ui";
 
 import { useGetSkillPoolQuery } from "../api/hooks/useGetSkillPoolQuery";
@@ -9,6 +10,7 @@ import { useSkills } from "../model/useSkills";
 
 const SkillsSettingsPage = () => {
   const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue.trim());
 
   const { addSkill, deleteSkill, data } = useSkills();
 
@@ -20,7 +22,7 @@ const SkillsSettingsPage = () => {
     if (e.key === "Enter") addSkill(searchValue, () => setSearchValue(""));
   };
 
-  const skills = useGetSkillPoolQuery({});
+  const skills = useGetSkillPoolQuery({ search: debouncedSearch });
 
   return (
     <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-slate-300'>
@@ -60,13 +62,17 @@ const SkillsSettingsPage = () => {
             <div className='p-6 pt-3 space-y-4'>
               <p className='font-medium text-left leading-[150%]'>Рекомендуемые навыки</p>
               <ul className='flex flex-wrap items-center gap-2'>
-                {skills.data?.data.map((skill) => (
-                  <li key={skill.uid}>
-                    <Button onClick={() => addSkill(skill.uid)} variant='secondary'>
-                      {skill.name}
-                    </Button>
-                  </li>
-                ))}
+                {skills.data?.data
+                  .filter(
+                    (skill) => !data?.data.userSkills.some((owned) => owned.name === skill.name)
+                  )
+                  .map((skill) => (
+                    <li key={skill.uid}>
+                      <Button onClick={() => addSkill(skill.uid)} variant='secondary'>
+                        {skill.name}
+                      </Button>
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>

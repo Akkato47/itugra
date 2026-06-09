@@ -65,7 +65,10 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
           <Card className='px-6 py-5 text-center '>
             <p>Ваш прогресс</p>
             <div>
-              {Number((list.filter((task) => task.done).length / list.length).toFixed(2)) * 100} %
+              {list.length
+                ? Math.round((list.filter((task) => task.done).length / list.length) * 100)
+                : 0}{" "}
+              %
             </div>
           </Card>
           <Card className='px-6 py-5 text-center '>

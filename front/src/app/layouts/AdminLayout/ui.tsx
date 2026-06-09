@@ -1,11 +1,13 @@
 import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
 
+import { NotificationsBell } from "@widgets/notifications-bell";
+
 import { useUser } from "@entities/user";
 
 import { paths } from "@shared/constants/react-router";
 import { buttonVariants } from "@shared/constants/shade-cn";
-import { BellIcon, LogoIcon } from "@shared/icons";
-import { Avatar, Button } from "@shared/ui";
+import { LogoIcon } from "@shared/icons";
+import { Avatar } from "@shared/ui";
 
 const AdminLayout = () => {
   const { user } = useUser();
@@ -26,12 +28,7 @@ const AdminLayout = () => {
             <LogoIcon />
           </Link>
           <div className='flex items-center gap-8 relative'>
-            <Button variant='ghost' size='icon' className='relative'>
-              <BellIcon />
-              <span className='absolute -top-1 -right-4 text-center py-[1px] px-[5px] rounded-xl bg-red-500 text-xs text-white'>
-                99+
-              </span>
-            </Button>
+            <NotificationsBell />
             {user && (
               <Avatar
                 src={user.image ? user.image.fileUrl : "/images/user.webp"}

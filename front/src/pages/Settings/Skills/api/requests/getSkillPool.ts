@@ -5,5 +5,5 @@ interface GetSkillPoolResponse {
   name: string;
 }
 
-export const getSkillPool = ({ config }: TRequestConfig) =>
-  api.get<GetSkillPoolResponse[]>("/user/skill-pool", config);
+export const getSkillPool = ({ config, search }: TRequestConfig & { search?: string }) =>
+  api.get<GetSkillPoolResponse[]>("/user/skill-pool", { ...config, params: { search } });

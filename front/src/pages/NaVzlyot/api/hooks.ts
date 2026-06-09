@@ -17,18 +17,11 @@ export const usePostGenerateTestingMutation = (
         ...params,
         ...(params?.config && { config: params.config })
       }),
-    onSuccess() {
-      toast({
-        className: "bg-green-600 text-white hover:bg-green-500",
-        title: "Навык добавлен!"
-      });
-      queryClient.invalidateQueries({ queryKey: ["getUserSkills"] });
-    },
     onError(error) {
       toast({
         className: "bg-red-800 text-white hover:bg-red-700",
-        title: "мяу",
-        description: `В ходе отправки запроса произошла ошибка: ${error.response.data.message}`
+        title: "Не удалось сгенерировать тест",
+        description: error.response?.data?.message ?? "Попробуйте ещё раз позже"
       });
     },
     ...settings?.options

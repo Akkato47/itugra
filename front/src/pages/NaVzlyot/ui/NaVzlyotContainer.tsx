@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type { NumCategory } from "@pages/NaVzlyot/api/req";
 
+import { LoaderIcon } from "@shared/icons/LoaderIcon";
 import { Button, Heading } from "@shared/ui";
 import { Card } from "@shared/ui/card";
 import { Progress } from "@shared/ui/progress";
@@ -68,21 +69,24 @@ export const NaVzlyotContainer = () => {
             </Select>
 
             <Button
-              disabled={!category}
+              disabled={!category || questionsMutation.isPending}
               onClick={() =>
                 questionsMutation.mutateAsync({
                   params: { category: Number(category) as NumCategory }
                 })
               }
             >
-              Начать тестирование
+              {questionsMutation.isPending && <LoaderIcon className='mr-2 size-4 animate-spin' />}
+              {questionsMutation.isPending ? "Генерируем вопросы..." : "Начать тестирование"}
             </Button>
           </Card>
         )}
 
         {stage !== 0 && stage !== Number(quests?.length) + 1 && quests && (
           <>
-            <Progress value={Number((answers.length / quests.length).toFixed(2)) * 100} />
+            <Progress
+              value={quests.length ? Math.round((answers.length / quests.length) * 100) : 0}
+            />
             <span className='text-base font-semibold'>
               {stage} из {quests.length}
             </span>

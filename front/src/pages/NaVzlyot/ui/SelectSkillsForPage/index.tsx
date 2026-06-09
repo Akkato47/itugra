@@ -5,6 +5,7 @@ import { useAnswers } from "@pages/NaVzlyot/model/answers";
 
 import { LoaderIcon } from "@shared/icons/LoaderIcon";
 import { cn } from "@shared/lib/shade-cn";
+import { useDebounce } from "@shared/lib/useDebounce";
 import { Button, SearchInput } from "@shared/ui";
 
 import { useGetSkillPoolQuery } from "./api/hooks/useGetSkillPoolQuery";
@@ -13,6 +14,7 @@ import type { ISkill } from "./api/requests/getSkillPool";
 
 export const SelectSkillsForPage = ({ chosenCategory }: { chosenCategory: number }) => {
   const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue.trim());
   const [selectedSkills, setSelectedSkills] = useState<ISkill[]>([]);
 
   const writeSearchValue = (value: string) => {
@@ -20,7 +22,9 @@ export const SelectSkillsForPage = ({ chosenCategory }: { chosenCategory: number
   };
 
   const addSkill = (skill: ISkill) => {
-    setSelectedSkills((prev) => [...prev, skill]);
+    setSelectedSkills((prev) =>
+      prev.some((item) => item.uid === skill.uid) ? prev : [...prev, skill]
+    );
     setSearchValue("");
   };
 
@@ -35,7 +39,7 @@ export const SelectSkillsForPage = ({ chosenCategory }: { chosenCategory: number
     }
   };
 
-  const skillsPoolQuery = useGetSkillPoolQuery({});
+  const skillsPoolQuery = useGetSkillPoolQuery({ search: debouncedSearch });
 
   const { answers } = useAnswers();
 
