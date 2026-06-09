@@ -2,4 +2,5 @@ export enum NotificationType {
   FRIEND_REQUEST = 'FRIEND_REQUEST',
   FRIEND_ACCEPT = 'FRIEND_ACCEPT',
   SYSTEM = 'SYSTEM',
+  TEAM_INVITE = 'TEAM_INVITE'
 }

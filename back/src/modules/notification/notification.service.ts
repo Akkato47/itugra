@@ -8,11 +8,11 @@ import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';
 import { emitToUser } from '@/realtime/socket';
 
-export const removeByRequestUid = async (requestUid: string) => {
+const removeByPayloadKey = async (key: string, value: string) => {
   try {
     const deleted = await db
       .delete(notifications)
-      .where(sql`${notifications.payload} ->> 'requestUid' = ${requestUid}`)
+      .where(sql`${notifications.payload} ->> ${key} = ${value}`)
       .returning({ uid: notifications.uid, userUid: notifications.userUid });
 
     deleted.forEach((notification) => {
@@ -23,10 +23,16 @@ export const removeByRequestUid = async (requestUid: string) => {
 
     return deleted;
   } catch (error) {
-    logger.error(`removeByRequestUid failed: ${error?.message ?? error}`);
+    logger.error(`removeByPayloadKey(${key}) failed: ${error?.message ?? error}`);
     return [];
   }
 };
+
+export const removeByRequestUid = (requestUid: string) =>
+  removeByPayloadKey('requestUid', requestUid);
+
+export const removeByInviteUid = (inviteUid: string) =>
+  removeByPayloadKey('inviteUid', inviteUid);
 
 export const createNotification = async (data: NotificationInferInsert) => {
   try {

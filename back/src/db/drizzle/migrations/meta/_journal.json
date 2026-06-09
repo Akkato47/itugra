@@ -36,6 +36,20 @@
       "when": 1781005433072,
       "tag": "0004_famous_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781037193941,
+      "tag": "0005_easy_quicksilver",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781037616933,
+      "tag": "0006_thankful_deathstrike",
+      "breakpoints": true
     }
   ]
 }

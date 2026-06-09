@@ -14,11 +14,17 @@ const createTeamRateLimiter = rateLimiter({
 router.get("/list", isAuthenticated, teamController.getTeamList);
 router.get("/data/:teamUid", isAuthenticated, teamController.getTeamData);
 
+router.get("/invite/list", isAuthenticated, teamController.getInvites);
 router.post("/invite/create", isAuthenticated, teamController.createInvite);
 router.post(
-    "/invite/accept/:inviteCode",
+    "/invite/accept/:inviteUid",
     isAuthenticated,
     teamController.acceptInvite,
+);
+router.post(
+    "/invite/decline/:inviteUid",
+    isAuthenticated,
+    teamController.declineInvite,
 );
 router.post(
     "/create",

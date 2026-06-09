@@ -4,6 +4,7 @@ import {
   pgEnum,
   pgTable,
   text,
+  unique,
   uuid,
   varchar,
   jsonb,
@@ -95,3 +96,35 @@ export const userTeamRole = pgTable(
     };
   }
 );
+
+export const teamInvites = pgTable(
+  'team_invites',
+  {
+    ...baseSchema,
+    teamUid: uuid('team_uid')
+      .notNull()
+      .references(() => team.uid, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    ctrUid: uuid('ctr_uid')
+      .notNull()
+      .references(() => customTeamRole.uid, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      }),
+    inviterUid: uuid('inviter_uid')
+      .notNull()
+      .references(() => users.uid, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    inviteeUid: uuid('invitee_uid')
+      .notNull()
+      .references(() => users.uid, { onDelete: 'cascade', onUpdate: 'cascade' }),
+  },
+  (table) => {
+    return {
+      teamInvitesUnique: unique('team_invites_team_invitee_unique').on(
+        table.teamUid,
+        table.inviteeUid
+      ),
+    };
+  }
+);
+
+export type TeamInviteInferSelect = typeof teamInvites.$inferSelect;

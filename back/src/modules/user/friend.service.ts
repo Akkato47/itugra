@@ -7,8 +7,7 @@ import { NotificationType } from '@/db/drizzle/schema/notification/enums/notific
 import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';
-import { enqueueNotification } from '@/queue/notification.queue';
-import type { NotificationJobData } from '@/queue/notification.queue';
+import { notifyUser } from '@/lib/notify';
 import { emitToUser } from '@/realtime/socket';
 import { removeByRequestUid } from '@/modules/notification/notification.service';
 
@@ -52,14 +51,6 @@ const getActor = async (uid: string) => {
     .where(eq(users.uid, uid));
 
   return rows[0];
-};
-
-const notify = async (job: NotificationJobData) => {
-  try {
-    await enqueueNotification(job);
-  } catch (error) {
-    logger.error(`enqueue notification failed: ${error?.message ?? error}`);
-  }
 };
 
 const emitFriendshipUpdate = (uid: string) => {
@@ -115,7 +106,7 @@ export const sendFriendRequest = async (
           .returning();
 
         const actor = await getActor(requesterUid);
-        await notify({
+        await notifyUser({
           userUid: relation.requesterUid,
           type: NotificationType.FRIEND_ACCEPT,
           title: 'Заявка принята',
@@ -146,7 +137,7 @@ export const sendFriendRequest = async (
       .returning();
 
     const actor = await getActor(requesterUid);
-    await notify({
+    await notifyUser({
       userUid: addressee.uid,
       type: NotificationType.FRIEND_REQUEST,
       title: 'Новая заявка в друзья',
@@ -190,7 +181,7 @@ export const acceptFriendRequest = async (
     }
 
     const actor = await getActor(userUid);
-    await notify({
+    await notifyUser({
       userUid: accepted[0].requesterUid,
       type: NotificationType.FRIEND_ACCEPT,
       title: 'Заявка принята',

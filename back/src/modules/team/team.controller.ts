@@ -35,7 +35,7 @@ export async function createInvite(
     next: NextFunction,
 ) {
     try {
-        const result = await teamService.createInvite(req.body);
+        const result = await teamService.createInvite(req.user.uid, req.body);
         return res.status(200).json({ inviteToken: result });
     } catch (error) {
         next(error);
@@ -43,13 +43,45 @@ export async function createInvite(
 }
 
 export async function acceptInvite(
-    req: Request<{ inviteCode: string }>,
+    req: Request<{ inviteUid: string }>,
     res: Response,
     next: NextFunction,
 ) {
     try {
-        const result = await teamService.acceptInvite(req.params.inviteCode);
-        return res.status(200).json(result).status(200);
+        const result = await teamService.acceptInvite(
+            req.user.uid,
+            req.params.inviteUid,
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function declineInvite(
+    req: Request<{ inviteUid: string }>,
+    res: Response,
+    next: NextFunction,
+) {
+    try {
+        const result = await teamService.declineInvite(
+            req.user.uid,
+            req.params.inviteUid,
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function getInvites(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    try {
+        const result = await teamService.getIncomingInvites(req.user.uid);
+        return res.status(200).json(result);
     } catch (error) {
         next(error);
     }

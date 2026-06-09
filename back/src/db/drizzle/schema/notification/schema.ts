@@ -17,6 +17,7 @@ export const notificationTypeEnum = pgEnum('notification_type_enum', [
   'FRIEND_REQUEST',
   'FRIEND_ACCEPT',
   'SYSTEM',
+  'TEAM_INVITE',
 ]);
 
 export const notifications = pgTable('notifications', {

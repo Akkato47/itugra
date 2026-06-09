@@ -10,6 +10,7 @@ import type { TeamInferSelect } from '@/db/drizzle/schema/team/schema';
 import {
   customTeamRole,
   team,
+  teamInvites,
   userTeamRole,
 } from '@/db/drizzle/schema/team/schema';
 import { and, eq, ne } from 'drizzle-orm';
@@ -25,48 +26,213 @@ import {
   DeleteTeamDto,
   DeleteUserTeamDto,
 } from './dto/delete-team.dto';
-import redisClient from '@/db/redis';
-import { getUserByTag } from '../user/user.service';
-import token from '../auth/lib/token';
-import {
-  IDecodedInviteToken,
-  IDecodedToken,
-} from '../auth/types/decodedToken.interface';
+import { logger } from '@/lib/loger';
+import { notifyUser } from '@/lib/notify';
+import { emitToUser } from '@/realtime/socket';
+import { removeByInviteUid } from '@/modules/notification/notification.service';
+import { NotificationType } from '@/db/drizzle/schema/notification/enums/notification-type.enum';
 
-export const createInvite = async (dto: CreateInviteUserDto) => {
+const emitInviteUpdate = (uid: string) => {
+  emitToUser(uid, 'invite:update', { at: Date.now() });
+};
+
+const getMemberAbilities = async (userUid: string, teamUid: string) => {
+  const rows = await db
+    .select({ abilities: customTeamRole.abilities })
+    .from(userTeamRole)
+    .innerJoin(customTeamRole, eq(customTeamRole.uid, userTeamRole.ctrUid))
+    .where(
+      and(
+        eq(userTeamRole.userUid, userUid),
+        eq(userTeamRole.teamUid, teamUid)
+      )
+    );
+
+  return rows[0]?.abilities ?? null;
+};
+
+
+export const createInvite = async (
+  inviterUid: string,
+  dto: CreateInviteUserDto
+) => {
   try {
-    const inviteToken = token.generate({
-      payload: dto,
-      tokenType: 'access',
+    const teamData = await db
+      .select()
+      .from(team)
+      .where(eq(team.uid, dto.teamUid));
+    const ctr = await db
+      .select()
+      .from(customTeamRole)
+      .where(eq(customTeamRole.uid, dto.ctrUid));
+    const addressee = await db
+      .select({ uid: users.uid })
+      .from(users)
+      .where(eq(users.tag, dto.userTag));
+
+    if (teamData.length === 0 || ctr.length === 0) {
+      throw new CustomError(HttpStatus.NOT_FOUND, 'Команда или роль не найдена');
+    }
+    if (addressee.length === 0) {
+      throw new CustomError(
+        HttpStatus.NOT_FOUND,
+        'Приглашаемый пользователь не найден'
+      );
+    }
+    if (ctr[0].teamUid !== dto.teamUid) {
+      throw new CustomError(
+        HttpStatus.BAD_REQUEST,
+        'Роль не принадлежит этой команде'
+      );
+    }
+
+    const inviterAbilities = await getMemberAbilities(inviterUid, dto.teamUid);
+    if (!inviterAbilities) {
+      throw new CustomError(HttpStatus.FORBIDDEN, 'Вы не состоите в этой команде');
+    }
+    if (
+      !inviterAbilities.includes(Abilities.ALL) &&
+      !inviterAbilities.includes(Abilities.INVITE)
+    ) {
+      throw new CustomError(
+        HttpStatus.FORBIDDEN,
+        'Недостаточно прав для приглашения в команду'
+      );
+    }
+
+    const inviteeUid = addressee[0].uid;
+
+    if (await getMemberAbilities(inviteeUid, dto.teamUid)) {
+      throw new CustomError(HttpStatus.CONFLICT, 'Пользователь уже в команде');
+    }
+
+    const existing = await db
+      .select()
+      .from(teamInvites)
+      .where(
+        and(
+          eq(teamInvites.teamUid, dto.teamUid),
+          eq(teamInvites.inviteeUid, inviteeUid)
+        )
+      );
+
+    let invite = existing[0];
+    if (!invite) {
+      const created = await db
+        .insert(teamInvites)
+        .values({
+          teamUid: dto.teamUid,
+          ctrUid: dto.ctrUid,
+          inviterUid,
+          inviteeUid,
+        })
+        .returning();
+      invite = created[0];
+    }
+
+    await notifyUser({
+      userUid: inviteeUid,
+      type: NotificationType.TEAM_INVITE,
+      title: 'Новое приглашение в команду',
+      message: `Команда "${teamData[0].name}" приглашает вас на роль: ${ctr[0].name}`,
+      payload: {
+        inviteUid: invite.uid,
+        teamUid: dto.teamUid,
+        teamName: teamData[0].name,
+        roleName: ctr[0].name,
+        actorUid: inviterUid,
+      },
     });
-    const expiration = 24 * 60 * 60;
-    await redisClient.set(dto.userTag, inviteToken, 'EX', expiration);
-    return inviteToken;
+    emitInviteUpdate(inviteeUid);
+
+    return invite;
   } catch (error) {
+    logger.error(`createInvite failed: ${error?.message ?? error}`);
     throw error;
   }
 };
 
-export const acceptInvite = async (inviteCode: string) => {
+export const acceptInvite = async (userUid: string, inviteUid: string) => {
   try {
-    const payload: IDecodedInviteToken = token.verify({
-      token: inviteCode,
-      tokenType: 'access',
-    });
-    const user = await getUserByTag(payload.userTag);
-    if (!user) {
-      throw new CustomError(
-        HttpStatus.BAD_REQUEST,
-        'Приглашенный пользователь не найден или удалён.'
+    const invites = await db
+      .select()
+      .from(teamInvites)
+      .where(
+        and(
+          eq(teamInvites.uid, inviteUid),
+          eq(teamInvites.inviteeUid, userUid)
+        )
       );
+
+    const invite = invites[0];
+    if (!invite) {
+      throw new CustomError(HttpStatus.NOT_FOUND, 'Приглашение не найдено');
     }
+
     await db.insert(userTeamRole).values({
-      ctrUid: payload.ctrUid,
-      teamUid: payload.teamUid,
-      userUid: user.uid,
+      ctrUid: invite.ctrUid,
+      teamUid: invite.teamUid,
+      userUid,
     });
-    await redisClient.del(payload.userTag);
+
+    await db.delete(teamInvites).where(eq(teamInvites.uid, inviteUid));
+    await removeByInviteUid(inviteUid);
+    emitInviteUpdate(userUid);
+
+    return { success: true };
   } catch (error) {
+    logger.error(`acceptInvite failed: ${error?.message ?? error}`);
+    throw error;
+  }
+};
+
+export const declineInvite = async (userUid: string, inviteUid: string) => {
+  try {
+    const deleted = await db
+      .delete(teamInvites)
+      .where(
+        and(
+          eq(teamInvites.uid, inviteUid),
+          eq(teamInvites.inviteeUid, userUid)
+        )
+      )
+      .returning();
+
+    if (deleted.length === 0) {
+      throw new CustomError(HttpStatus.NOT_FOUND, 'Приглашение не найдено');
+    }
+
+    await removeByInviteUid(inviteUid);
+    emitInviteUpdate(userUid);
+
+    return { success: true };
+  } catch (error) {
+    logger.error(`declineInvite failed: ${error?.message ?? error}`);
+    throw error;
+  }
+};
+
+export const getIncomingInvites = async (userUid: string) => {
+  try {
+    return await db
+      .select({
+        inviteUid: teamInvites.uid,
+        createdAt: teamInvites.createdAt,
+        teamUid: team.uid,
+        teamName: team.name,
+        teamImage: team.image,
+        roleName: customTeamRole.name,
+        roleColor: customTeamRole.color,
+        inviterTag: users.tag,
+        inviterName: users.fullName,
+      })
+      .from(teamInvites)
+      .where(eq(teamInvites.inviteeUid, userUid))
+      .innerJoin(team, eq(team.uid, teamInvites.teamUid))
+      .innerJoin(customTeamRole, eq(customTeamRole.uid, teamInvites.ctrUid))
+      .innerJoin(users, eq(users.uid, teamInvites.inviterUid));
+  } catch (error) {
+    logger.error(`getIncomingInvites failed: ${error?.message ?? error}`);
     throw error;
   }
 };
