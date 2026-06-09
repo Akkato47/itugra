@@ -35,9 +35,6 @@ export const login = async (userData: LoginUserDto) => {
     };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -62,9 +59,6 @@ export const register = async (userData: CreateUserDto) => {
     };
     return { ...(await jwtService.createTokenAsync(payload)), data };
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -96,9 +90,6 @@ export const logout = async (uid: string, oAuthId?: string) => {
     }
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -118,9 +109,6 @@ export const refresh = async (refreshToken: string) => {
     await jwtService.removeToken(result[0]);
     return tokens;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -140,9 +128,6 @@ const validateUser = async (userData: LoginUserDto) => {
     }
     throw new CustomError(HttpStatus.BAD_REQUEST);
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -230,9 +215,6 @@ export const updateUserPassoword = async (
     await userService.updatePassword(user, newPassword);
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };

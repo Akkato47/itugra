@@ -42,11 +42,11 @@ export async function isAuthenticated(
     });
 
     res.cookie('starter-access-token', refreshedTokens.token, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 5 * 60 * 1000),
       httpOnly: true,
     });
     res.cookie('starter-refresh-token', refreshedTokens.refresh, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
       httpOnly: true,
     });
 

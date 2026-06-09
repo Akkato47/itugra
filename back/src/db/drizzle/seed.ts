@@ -150,6 +150,56 @@ const seed = async () => {
   if ((await db.select().from(categoryQuestions)).length === 0) {
     await db.insert(categoryQuestions).values(categoryQuestionPoolData);
   }
+
+  const extraSkills = [
+    'TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'C#', 'C', 'C++', 'PHP', 'Ruby',
+    'Kotlin', 'Swift', 'Dart', 'Scala', 'Elixir', 'Erlang', 'Haskell', 'Clojure', 'Groovy',
+    'Objective-C', 'Perl', 'Lua', 'R', 'MATLAB', 'Solidity', 'Assembly', 'F#', 'Visual Basic',
+    'HTML', 'CSS', 'Sass', 'Less', 'Tailwind CSS', 'Bootstrap', 'Material UI', 'styled-components',
+    'React', 'Vue', 'Angular', 'Svelte', 'SolidJS', 'Preact', 'Qwik', 'Next.js', 'Nuxt', 'Remix',
+    'Astro', 'Gatsby', 'Redux', 'MobX', 'Zustand', 'TanStack Query', 'RxJS', 'Vite', 'Webpack', 'Babel',
+    'React Native', 'Flutter', 'SwiftUI', 'Jetpack Compose', 'Ionic', 'Expo',
+    'Node.js', 'Express', 'NestJS', 'Fastify', 'Koa', 'Deno', 'Bun',
+    'Django', 'Flask', 'FastAPI', 'Spring Boot', 'Spring', 'Laravel', 'Symfony', 'Ruby on Rails',
+    '.NET', 'ASP.NET', 'Gin', 'Fiber', 'Actix', 'Phoenix',
+    'PostgreSQL', 'MySQL', 'MariaDB', 'SQLite', 'Oracle', 'SQL Server', 'MongoDB', 'Redis',
+    'ClickHouse', 'Elasticsearch', 'Cassandra', 'DynamoDB', 'Neo4j', 'CockroachDB', 'Supabase',
+    'Prisma', 'Drizzle ORM', 'TypeORM', 'Sequelize', 'Hibernate', 'SQLAlchemy', 'Drizzle Kit',
+    'Docker', 'Kubernetes', 'CI/CD', 'GitLab CI', 'GitHub Actions', 'Jenkins', 'ArgoCD',
+    'Terraform', 'Ansible', 'Helm', 'Pulumi', 'Vagrant', 'Prometheus', 'Grafana', 'ELK Stack',
+    'AWS', 'Yandex Cloud', 'GCP', 'Azure', 'DigitalOcean', 'Cloudflare', 'Vercel', 'Netlify',
+    'Linux', 'Bash', 'PowerShell', 'Nginx', 'Apache', 'HAProxy', 'systemd',
+    'gRPC', 'GraphQL', 'REST API', 'WebSocket', 'Server-Sent Events', 'OpenAPI', 'Protocol Buffers',
+    'Kafka', 'RabbitMQ', 'BullMQ', 'NATS', 'Apache Spark', 'Airflow',
+    'Микросервисы', 'Системный дизайн', 'Проектирование БД', 'Кэширование', 'Очереди сообщений',
+    'Event-Driven архитектура', 'DDD', 'Чистая архитектура', 'SOLID', 'Паттерны проектирования',
+    'Git', 'TDD', 'BDD', 'Юнит-тестирование', 'Интеграционное тестирование', 'E2E-тестирование',
+    'Jest', 'Vitest', 'Cypress', 'Playwright', 'Selenium', 'Postman', 'Code Review',
+    'Тест-кейсы', 'Тест-планы', 'Нагрузочное тестирование', 'Ручное тестирование', 'Автотесты',
+    'Agile', 'Scrum', 'Kanban', 'Waterfall', 'Jira', 'Confluence', 'Notion',
+    'Тайм-менеджмент', 'Коммуникация', 'Командная работа', 'Наставничество', 'Английский язык',
+    'Публичные выступления', 'Критическое мышление', 'Решение проблем', 'Лидерство', 'Переговоры',
+    'Figma', 'Sketch', 'Adobe XD', 'Photoshop', 'Illustrator', 'Прототипирование',
+    'UX-исследования', 'UX-копирайтинг', 'Дизайн-системы', 'Доступность (a11y)', 'Адаптивная вёрстка',
+    'Юзабилити-тестирование', 'Wireframing', 'Брендинг', 'Типографика', 'Анимация интерфейсов',
+    'SQL', 'Аналитика данных', 'Визуализация данных', 'Power BI', 'Tableau', 'Excel',
+    'Machine Learning', 'Deep Learning', 'Data Science', 'NLP', 'Computer Vision',
+    'PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'NumPy', 'LLM', 'Prompt Engineering',
+    'SEO', 'Контент-маркетинг', 'A/B-тестирование', 'Продуктовая аналитика', 'Юнит-экономика',
+    'Безопасность веб-приложений', 'OWASP', 'Криптография', 'Пентестинг', 'OAuth 2.0', 'JWT',
+    'Сетевые протоколы', 'TCP/IP', 'HTTP', 'DNS', 'Управление продуктом', 'Управление командой',
+    'Бизнес-анализ', 'Работа с требованиями', 'Декомпозиция задач', 'Оценка задач', 'Документация',
+  ];
+
+  const existingSkills = await db.select({ name: skillPool.name }).from(skillPool);
+  const existingNames = new Set(existingSkills.map((row) => row.name));
+  const skillsToAdd = extraSkills
+    .filter((name) => !existingNames.has(name))
+    .map((name) => ({ uid: v4(), name }));
+
+  if (skillsToAdd.length !== 0) {
+    await db.insert(skillPool).values(skillsToAdd);
+  }
 };
 
 seed();

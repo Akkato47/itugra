@@ -95,6 +95,10 @@ export const userSkills = pgTable(
         foreignColumns: [userProfleInfo.uid],
         name: 'user_skills_profile_info_uid_foreign',
       }).onUpdate('cascade'),
+      userSkillsProfileSkillUnique: unique('user_skills_profile_skill_unique').on(
+        table.profileInfoUid,
+        table.skillUid
+      ),
     };
   }
 );

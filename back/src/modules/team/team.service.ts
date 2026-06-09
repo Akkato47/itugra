@@ -43,9 +43,6 @@ export const createInvite = async (dto: CreateInviteUserDto) => {
     await redisClient.set(dto.userTag, inviteToken, 'EX', expiration);
     return inviteToken;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -70,9 +67,6 @@ export const acceptInvite = async (inviteCode: string) => {
     });
     await redisClient.del(payload.userTag);
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -91,9 +85,6 @@ export const getTeamList = async (userUid: string) => {
       .innerJoin(team, eq(team.uid, userTeamRole.teamUid));
     return teams;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -153,9 +144,6 @@ export const getTeamData = async (tag: string, teamUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -183,9 +171,6 @@ const generateCTRDefault = async (team: TeamInferSelect) => {
     const response = { owner, participant };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -204,9 +189,6 @@ export const createTeam = async (
       userUid: user[0].uid,
     });
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -218,9 +200,6 @@ export const createRole = async (dto: CreateRoleDto) => {
       .values({ ...dto })
       .execute();
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -230,9 +209,6 @@ export const updateTeamData = async (dto: UpdateTeamDto) => {
     const { uid, ...rest } = dto;
     await db.update(team).set(rest).where(eq(team.uid, uid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -245,9 +221,6 @@ export const updateRoleData = async (dto: UpdateRoleDto) => {
       .set(rest)
       .where(eq(customTeamRole.uid, uid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -265,9 +238,6 @@ export const updateUserRole = async (dto: UpdateUserRoleDto) => {
         )
       );
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -276,9 +246,6 @@ export const deleteTeam = async (dto: DeleteTeamDto) => {
   try {
     await db.delete(team).where(eq(team.uid, dto.teamUid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -294,9 +261,6 @@ export const deleteUserTeam = async (dto: DeleteUserTeamDto) => {
         )
       );
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -336,9 +300,6 @@ export const deleteRole = async (dto: DeleteRoleDto) => {
 
     await db.delete(customTeamRole).where(eq(customTeamRole.uid, dto.ctrUid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };

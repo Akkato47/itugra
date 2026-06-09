@@ -42,9 +42,6 @@ export const getUserByUID = async (uid: string) => {
     const user = await db.select().from(users).where(eq(users.uid, uid));
     return user[0];
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -54,9 +51,6 @@ export const getUserByOAuthId = async (id: string) => {
     const user = await db.select().from(users).where(eq(users.oAuthId, id));
     return user[0];
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -66,9 +60,6 @@ export const getUserByTag = async (tag: string) => {
     const user = await db.select().from(users).where(eq(users.tag, tag));
     return user[0];
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -105,9 +96,6 @@ export const getUserByLoginData = async (loginData: LoginUserDto) => {
       ErrorMessage.ERROR_VALIDATION
     );
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -136,9 +124,6 @@ export const createUser = async (createUserDto: CreateUserDto) => {
 
     return user[0];
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -250,9 +235,6 @@ export const getUserProfile = async (tag: string) => {
     return response;
   } catch (error) {
     logger.error(`getUserProfile failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -292,9 +274,6 @@ export const getUserProfileInfo = async (userUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -320,9 +299,6 @@ export const getUserSkills = async (userUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -370,9 +346,6 @@ export const getUserEducation = async (userUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -399,9 +372,6 @@ export const getUserExperience = async (userUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -425,9 +395,6 @@ export const getUserSecurity = async (userUid: string) => {
     };
     return response;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -446,21 +413,25 @@ export const createExperience = async (
       .values({ ...data, profileInfoUid: profileInfo[0].uid })
       .execute();
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
 
-export const getSkillsList = async () => {
+export const getSkillsList = async (search?: string) => {
   try {
+    if (!search) {
+      return [];
+    }
+
     return await db
       .select({
         uid: skillPool.uid,
         name: skillPool.name,
       })
-      .from(skillPool);
+      .from(skillPool)
+      .where(ilike(skillPool.name, `%${search}%`))
+      .orderBy(skillPool.name)
+      .limit(50);
   } catch (error) {
     throw error;
   }
@@ -475,13 +446,29 @@ export const createSkills = async (
       .select()
       .from(userProfleInfo)
       .where(eq(userProfleInfo.userUid, userUid));
+    const profileInfoUid = profileInfo[0].uid;
+
+    const existing = await db
+      .select({ uid: userSkills.uid })
+      .from(userSkills)
+      .where(
+        and(
+          eq(userSkills.profileInfoUid, profileInfoUid),
+          eq(userSkills.skillUid, data.skillUid)
+        )
+      );
+
+    if (existing.length !== 0) {
+      return;
+    }
+
     await db
       .insert(userSkills)
-      .values({ ...data, profileInfoUid: profileInfo[0].uid })
+      .values({ ...data, profileInfoUid })
       .execute();
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
+    if (error?.code === '23505') {
+      return;
     }
     throw error;
   }
@@ -497,9 +484,6 @@ export const updateUserProfile = async (
       .set(data)
       .where(eq(userProfleInfo.userUid, userUid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -559,9 +543,6 @@ export const updateUser = async (userUid: string, data: UpdateUserDto) => {
       };
     }
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -574,9 +555,6 @@ export const updateUserExp = async (data: UpdateUserExperienceDto) => {
       .set(rest)
       .where(eq(userExperience.uid, uid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -617,9 +595,6 @@ export const updateUserEducation = async (
       .set(data)
       .where(eq(userEducation.profileInfoUid, profileInfo[0].uid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -634,9 +609,6 @@ export const updatePassword = async (
       .set({ password: newPassword })
       .where(eq(users.uid, user.uid));
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -677,9 +649,6 @@ export const deleteExperience = async (uid: string, itemUid: string) => {
     await db.delete(userExperience).where(eq(userExperience.uid, itemUid));
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -720,9 +689,6 @@ export const deleteSkill = async (uid: string, itemUid: string) => {
     await db.delete(userSkills).where(eq(userSkills.uid, itemUid));
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -782,9 +748,6 @@ export const findUserTag = async (searchQuery: string) => {
     const res = await query;
     return res;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -811,9 +774,6 @@ export const addFile = async (userUid: string, addDto: AddFileDto) => {
       .values({ ...addDto, profileInfoUid: profileInfo[0].uid });
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -859,9 +819,6 @@ export const editFile = async (userUid: string, data: EditFileDto) => {
         )
       );
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -893,9 +850,6 @@ export const deleteFile = async (userUid: string, uid: string) => {
       );
     return true;
   } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };

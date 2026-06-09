@@ -15,7 +15,7 @@ const logFormat = format.combine(
   ),
   format.colorize({ all: true })
 );
-
+// TODO: сделать адаптивный логгер
 export const logger = createLogger({
   level: 'info',
   format: logFormat,

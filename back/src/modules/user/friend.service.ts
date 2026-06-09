@@ -164,9 +164,6 @@ export const sendFriendRequest = async (
     return created[0];
   } catch (error) {
     logger.error(`sendFriendRequest failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -211,9 +208,6 @@ export const acceptFriendRequest = async (
     return accepted[0];
   } catch (error) {
     logger.error(`acceptFriendRequest failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -251,9 +245,6 @@ export const declineFriendRequest = async (
     return { success: true };
   } catch (error) {
     logger.error(`declineFriendRequest failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -290,9 +281,6 @@ export const removeFriend = async (userUid: string, friendTag: string) => {
     return { success: true };
   } catch (error) {
     logger.error(`removeFriend failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -333,9 +321,6 @@ export const getFriends = async (tag: string) => {
       .where(inArray(users.uid, friendUids));
   } catch (error) {
     logger.error(`getFriends failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -375,9 +360,6 @@ export const getFriendRequests = async (userUid: string) => {
     return { incoming, outgoing };
   } catch (error) {
     logger.error(`getFriendRequests failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -409,9 +391,6 @@ export const getFriendshipStatus = async (
     };
   } catch (error) {
     logger.error(`getFriendshipStatus failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };

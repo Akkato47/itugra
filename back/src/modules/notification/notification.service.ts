@@ -34,9 +34,6 @@ export const createNotification = async (data: NotificationInferInsert) => {
     return created[0];
   } catch (error) {
     logger.error(`createNotification failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -51,9 +48,6 @@ export const getNotifications = async (userUid: string) => {
       .limit(10);
   } catch (error) {
     logger.error(`getNotifications failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -73,9 +67,6 @@ export const getUnreadCount = async (userUid: string) => {
     return { count: Number(result[0]?.value ?? 0) };
   } catch (error) {
     logger.error(`getUnreadCount failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -97,9 +88,6 @@ export const markAsRead = async (userUid: string, uid: string) => {
     return updated[0];
   } catch (error) {
     logger.error(`markAsRead failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };
@@ -119,9 +107,6 @@ export const markAllRead = async (userUid: string) => {
     return { success: true };
   } catch (error) {
     logger.error(`markAllRead failed: ${error?.message ?? error}`);
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     throw error;
   }
 };

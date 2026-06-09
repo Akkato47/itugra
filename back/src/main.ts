@@ -39,11 +39,18 @@ export const init = (async () => {
   });
 
   app.use(
-    (err: CustomError, _req: Request, res: Response, _next: NextFunction) => {
-      const statusCode = err.statusCode || 500;
-      const message = err.message || 'Internal Server Error.';
-      logger.error(message);
-      return res.status(statusCode).json({ success: false, message });
+    (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+      if (err instanceof CustomError) {
+        logger.warn(`${err.statusCode} ${err.message}`);
+        return res
+          .status(err.statusCode)
+          .json({ success: false, message: err.message });
+      }
+
+      logger.error((err as Error)?.stack ?? err);
+      return res
+        .status(500)
+        .json({ success: false, message: 'Internal Server Error.' });
     }
   );
 

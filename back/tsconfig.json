@@ -17,6 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
+    "useUnknownInCatchVariables": false,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },

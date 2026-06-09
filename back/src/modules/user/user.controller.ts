@@ -28,12 +28,14 @@ import { CreateRoadmapDto } from './dto/roadmap.dto';
 // }
 
 export async function getSkills(
-  req: Request,
+  req: Request<{}, {}, {}, { search?: string }>,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const result = await userService.getSkillsList();
+    const search =
+      typeof req.query.search === 'string' ? req.query.search.trim() : '';
+    const result = await userService.getSkillsList(search || undefined);
 
     return res.status(200).json(result);
   } catch (error) {
