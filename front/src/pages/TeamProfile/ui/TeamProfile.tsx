@@ -40,7 +40,7 @@ const TeamProfilePage = () => {
                   key={user.uid}
                   role={user.role}
                   username={user.fullName}
-                  uid={user.uid}
+                  uid={user.tag}
                   circleColor={user.color}
                 />
               ))}
