@@ -11,7 +11,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 import type http from 'http';
 import morgan from 'morgan';
-import { initSocket } from './realtime/socket';
+import { initSocket } from './lib/socket';
 import { startWorkers } from './queue/start-workers';
 
 export const app = express();

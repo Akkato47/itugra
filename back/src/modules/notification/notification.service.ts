@@ -6,7 +6,7 @@ import type { NotificationInferInsert } from '@/db/drizzle/schema/notification/s
 import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';
-import { emitToUser } from '@/realtime/socket';
+import { emitToUser } from '@/lib/socket';
 
 const removeByPayloadKey = async (key: string, value: string) => {
   try {

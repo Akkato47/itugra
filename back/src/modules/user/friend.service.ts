@@ -8,7 +8,7 @@ import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';
 import { notifyUser } from '@/lib/notify';
-import { emitToUser } from '@/realtime/socket';
+import { emitToUser } from '@/lib/socket';
 import { removeByRequestUid } from '@/modules/notification/notification.service';
 
 export type FriendshipStatus =

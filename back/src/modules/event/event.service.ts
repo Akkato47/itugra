@@ -24,7 +24,7 @@ import config from '@/config';
 import { logger } from '@/lib/loger';
 import { createGigaChatClient, extractJson } from '@/lib/gigachat';
 import { notifyUser } from '@/lib/notify';
-import { emitToUser } from '@/realtime/socket';
+import { emitToUser } from '@/lib/socket';
 import { enqueueEventModeration } from '@/queue/event-moderation.queue';
 import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';

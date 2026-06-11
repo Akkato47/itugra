@@ -28,7 +28,7 @@ import {
 } from './dto/delete-team.dto';
 import { logger } from '@/lib/loger';
 import { notifyUser } from '@/lib/notify';
-import { emitToUser } from '@/realtime/socket';
+import { emitToUser } from '@/lib/socket';
 import { removeByInviteUid } from '@/modules/notification/notification.service';
 import { NotificationType } from '@/db/drizzle/schema/notification/enums/notification-type.enum';
 

@@ -2,7 +2,7 @@ import { Worker } from 'bullmq';
 
 import { logger } from '@/lib/loger';
 import { createNotification } from '@/modules/notification/notification.service';
-import { emitToUser } from '@/realtime/socket';
+import { emitToUser } from '@/lib/socket';
 import { bullConnection } from './connection';
 import { NOTIFICATION_QUEUE } from './notification.queue';
 import type { NotificationJobData } from './notification.queue';
