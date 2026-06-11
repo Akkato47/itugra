@@ -1,0 +1,21 @@
+# Claude Code artifacts
+.claude/
+memory/
+MEMORY.md
+CLAUDE.md
+
+# Dependencies / build (safety net; per-app .gitignore also covers these)
+node_modules/
+dist/
+dist-ssr/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Logs & local data
+*.log
+logs/
+data/
+redis-data/
