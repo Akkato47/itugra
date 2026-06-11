@@ -2,8 +2,21 @@ import { CustomError } from '@/utils/custom_error';
 import { Request, Response, NextFunction } from 'express';
 import token from '@/modules/auth/lib/token';
 import { refresh } from '@/modules/auth/auth.service';
+import { getUserBanned } from '@/modules/user/user.service';
 import { extractAccessTokenFromCookie } from './lib/extractAccessTokenFromCookie';
 import { extractRefreshTokenFromCookie } from './lib/extractRefreshTokenFromCookie';
+
+const ensureNotBanned = async (
+  res: Response,
+  uid: string
+): Promise<boolean> => {
+  if (await getUserBanned(uid)) {
+    res.clearCookie('starter-access-token');
+    res.clearCookie('starter-refresh-token');
+    return false;
+  }
+  return true;
+};
 
 export async function isAuthenticated(
   req: Request,
@@ -21,6 +34,9 @@ export async function isAuthenticated(
       });
 
       if (user) {
+        if (!(await ensureNotBanned(res, user.uid))) {
+          return next(new CustomError(401, 'Unauthorized'));
+        }
         req.user = user;
         return next();
       }
@@ -49,6 +65,10 @@ export async function isAuthenticated(
       expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
       httpOnly: true,
     });
+
+    if (user && !(await ensureNotBanned(res, user.uid))) {
+      return next(new CustomError(401, 'Unauthorized'));
+    }
 
     req.user = user;
     return next();

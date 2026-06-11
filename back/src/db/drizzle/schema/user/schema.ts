@@ -55,6 +55,7 @@ export const users = pgTable(
       .$type<Via>()
       .$default(() => Via.BASE)
       .notNull(),
+    banned: boolean('banned').default(false).notNull(),
     // profileInfoUid: varchar("profile_info_uid", { length: 255 }),
   },
   (table) => {

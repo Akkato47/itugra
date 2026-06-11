@@ -12,7 +12,7 @@ import swaggerDocument from './swagger.json';
 import type http from 'http';
 import morgan from 'morgan';
 import { initSocket } from './realtime/socket';
-import { startNotificationWorker } from './queue/notification.worker';
+import { startWorkers } from './queue/start-workers';
 
 export const app = express();
 const port = config.app.port;
@@ -57,5 +57,5 @@ export const init = (async () => {
   DI.server = app.listen(port, () => logger.info(`listening in port:${port}`));
 
   initSocket(DI.server);
-  startNotificationWorker();
+  startWorkers();
 })();

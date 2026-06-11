@@ -1,0 +1,2290 @@
+{
+  "id": "95d0feea-308c-4104-8f99-4ad1970f7798",
+  "prevId": "6676cb42-2cfe-47dc-8258-38d413d1ec26",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.event": {
+      "name": "event",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "event_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_end": {
+          "name": "registration_end",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end": {
+          "name": "end",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userUid": {
+          "name": "userUid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "request_uid": {
+          "name": "request_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "event_userUid_users_uid_fk": {
+          "name": "event_userUid_users_uid_fk",
+          "tableFrom": "event",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userUid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "event_request_uid_request_uid_fk": {
+          "name": "event_request_uid_request_uid_fk",
+          "tableFrom": "event",
+          "tableTo": "request",
+          "columnsFrom": [
+            "request_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.eventDocs": {
+      "name": "eventDocs",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document": {
+          "name": "document",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "private": {
+          "name": "private",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "event_uid": {
+          "name": "event_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "event_request_uid": {
+          "name": "event_request_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "eventDocs_event_uid_event_uid_fk": {
+          "name": "eventDocs_event_uid_event_uid_fk",
+          "tableFrom": "eventDocs",
+          "tableTo": "event",
+          "columnsFrom": [
+            "event_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "eventDocs_event_request_uid_request_uid_fk": {
+          "name": "eventDocs_event_request_uid_request_uid_fk",
+          "tableFrom": "eventDocs",
+          "tableTo": "request",
+          "columnsFrom": [
+            "event_request_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.event_registration": {
+      "name": "event_registration",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_uid": {
+          "name": "event_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_uid": {
+          "name": "team_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "registration_kind_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'SOLO'"
+        },
+        "status": {
+          "name": "status",
+          "type": "registration_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'REGISTERED'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "event_registration_event_uid_event_uid_fk": {
+          "name": "event_registration_event_uid_event_uid_fk",
+          "tableFrom": "event_registration",
+          "tableTo": "event",
+          "columnsFrom": [
+            "event_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "event_registration_user_uid_users_uid_fk": {
+          "name": "event_registration_user_uid_users_uid_fk",
+          "tableFrom": "event_registration",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "event_registration_team_uid_team_uid_fk": {
+          "name": "event_registration_team_uid_team_uid_fk",
+          "tableFrom": "event_registration",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "event_registration_user_unique": {
+          "name": "event_registration_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "event_uid",
+            "user_uid"
+          ]
+        },
+        "event_registration_team_unique": {
+          "name": "event_registration_team_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "event_uid",
+            "team_uid"
+          ]
+        }
+      }
+    },
+    "public.request": {
+      "name": "request",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "event_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_end": {
+          "name": "registration_end",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end": {
+          "name": "end",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userUid": {
+          "name": "userUid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "watched": {
+          "name": "watched",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approved": {
+          "name": "approved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "moderation_status": {
+          "name": "moderation_status",
+          "type": "moderation_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "moderation_reason": {
+          "name": "moderation_reason",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "request_userUid_users_uid_fk": {
+          "name": "request_userUid_users_uid_fk",
+          "tableFrom": "request",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userUid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.participants": {
+      "name": "participants",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_uid": {
+          "name": "event_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "participants_user_uid_users_uid_fk": {
+          "name": "participants_user_uid_users_uid_fk",
+          "tableFrom": "participants",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "participants_event_uid_event_uid_fk": {
+          "name": "participants_event_uid_event_uid_fk",
+          "tableFrom": "participants",
+          "tableTo": "event",
+          "columnsFrom": [
+            "event_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "notification_type_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_read": {
+          "name": "is_read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_user_uid_users_uid_fk": {
+          "name": "notifications_user_uid_users_uid_fk",
+          "tableFrom": "notifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.custom_team_role": {
+      "name": "custom_team_role",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "abilities": {
+          "name": "abilities",
+          "type": "ability_enum[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "color": {
+          "name": "color",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_uid": {
+          "name": "team_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "custom_team_role_team_uid_team_uid_fk": {
+          "name": "custom_team_role_team_uid_team_uid_fk",
+          "tableFrom": "custom_team_role",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "custom_team_role_team_uid_foreign": {
+          "name": "custom_team_role_team_uid_foreign",
+          "tableFrom": "custom_team_role",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.team": {
+      "name": "team",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "about": {
+          "name": "about",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "team_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.team_invites": {
+      "name": "team_invites",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_uid": {
+          "name": "team_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ctr_uid": {
+          "name": "ctr_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inviter_uid": {
+          "name": "inviter_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invitee_uid": {
+          "name": "invitee_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_invites_team_uid_team_uid_fk": {
+          "name": "team_invites_team_uid_team_uid_fk",
+          "tableFrom": "team_invites",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "team_invites_ctr_uid_custom_team_role_uid_fk": {
+          "name": "team_invites_ctr_uid_custom_team_role_uid_fk",
+          "tableFrom": "team_invites",
+          "tableTo": "custom_team_role",
+          "columnsFrom": [
+            "ctr_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "team_invites_inviter_uid_users_uid_fk": {
+          "name": "team_invites_inviter_uid_users_uid_fk",
+          "tableFrom": "team_invites",
+          "tableTo": "users",
+          "columnsFrom": [
+            "inviter_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "team_invites_invitee_uid_users_uid_fk": {
+          "name": "team_invites_invitee_uid_users_uid_fk",
+          "tableFrom": "team_invites",
+          "tableTo": "users",
+          "columnsFrom": [
+            "invitee_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "team_invites_team_invitee_unique": {
+          "name": "team_invites_team_invitee_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "team_uid",
+            "invitee_uid"
+          ]
+        }
+      }
+    },
+    "public.user_team_role": {
+      "name": "user_team_role",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_uid": {
+          "name": "team_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ctr_uid": {
+          "name": "ctr_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_team_role_user_uid_users_uid_fk": {
+          "name": "user_team_role_user_uid_users_uid_fk",
+          "tableFrom": "user_team_role",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_team_role_team_uid_team_uid_fk": {
+          "name": "user_team_role_team_uid_team_uid_fk",
+          "tableFrom": "user_team_role",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_team_role_ctr_uid_custom_team_role_uid_fk": {
+          "name": "user_team_role_ctr_uid_custom_team_role_uid_fk",
+          "tableFrom": "user_team_role",
+          "tableTo": "custom_team_role",
+          "columnsFrom": [
+            "ctr_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "UTR_user_uid_foreign": {
+          "name": "UTR_user_uid_foreign",
+          "tableFrom": "user_team_role",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        },
+        "UTR_team_uid_foreign": {
+          "name": "UTR_team_uid_foreign",
+          "tableFrom": "user_team_role",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "UTR_role_uid_foreign": {
+          "name": "UTR_role_uid_foreign",
+          "tableFrom": "user_team_role",
+          "tableTo": "custom_team_role",
+          "columnsFrom": [
+            "ctr_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.category_questions": {
+      "name": "category_questions",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answers": {
+          "name": "answers",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.question_pool": {
+      "name": "question_pool",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answers": {
+          "name": "answers",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "question_pool_skill_uid_skill_pool_uid_fk": {
+          "name": "question_pool_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "question_pool",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.skill_pool": {
+      "name": "skill_pool",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.files": {
+      "name": "files",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uploader": {
+          "name": "uploader",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.images": {
+      "name": "images",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uploader": {
+          "name": "uploader",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thumbnail": {
+          "name": "thumbnail",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_education": {
+      "name": "user_education",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "direction": {
+          "name": "direction",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "format": {
+          "name": "format",
+          "type": "edu_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'FULL'"
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_education_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_education_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_education",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_experience": {
+      "name": "user_experience",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "present": {
+          "name": "present",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_experience_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_experience_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_experience",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_experience_profile_info_uid_foreign": {
+          "name": "user_experience_profile_info_uid_foreign",
+          "tableFrom": "user_experience",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_files": {
+      "name": "user_files",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "file_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file": {
+          "name": "file",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_files_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_files_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_files",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_files_profile_info_uid_foreign": {
+          "name": "user_files_profile_info_uid_foreign",
+          "tableFrom": "user_files",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_friends": {
+      "name": "user_friends",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "requester_uid": {
+          "name": "requester_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "addressee_uid": {
+          "name": "addressee_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "friend_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_friends_requester_uid_users_uid_fk": {
+          "name": "user_friends_requester_uid_users_uid_fk",
+          "tableFrom": "user_friends",
+          "tableTo": "users",
+          "columnsFrom": [
+            "requester_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_friends_addressee_uid_users_uid_fk": {
+          "name": "user_friends_addressee_uid_users_uid_fk",
+          "tableFrom": "user_friends",
+          "tableTo": "users",
+          "columnsFrom": [
+            "addressee_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_friends_requester_uid_foreign": {
+          "name": "user_friends_requester_uid_foreign",
+          "tableFrom": "user_friends",
+          "tableTo": "users",
+          "columnsFrom": [
+            "requester_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "user_friends_addressee_uid_foreign": {
+          "name": "user_friends_addressee_uid_foreign",
+          "tableFrom": "user_friends",
+          "tableTo": "users",
+          "columnsFrom": [
+            "addressee_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_friends_unique": {
+          "name": "user_friends_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "requester_uid",
+            "addressee_uid"
+          ]
+        }
+      }
+    },
+    "public.user_interests": {
+      "name": "user_interests",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_interests_skill_uid_skill_pool_uid_fk": {
+          "name": "user_interests_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "user_interests",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_interests_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_interests_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_interests",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_interests_profile_info_uid_foreign": {
+          "name": "user_interests_profile_info_uid_foreign",
+          "tableFrom": "user_interests",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_location": {
+      "name": "user_location",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "region": {
+          "name": "region",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_location_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_location_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_location",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_profle_info": {
+      "name": "user_profle_info",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_searching_job": {
+          "name": "is_searching_job",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "about": {
+          "name": "about",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chosen_category": {
+          "name": "chosen_category",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_profle_info_user_uid_users_uid_fk": {
+          "name": "user_profle_info_user_uid_users_uid_fk",
+          "tableFrom": "user_profle_info",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_roadmap": {
+      "name": "user_roadmap",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "done": {
+          "name": "done",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_roadmap_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_roadmap_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_roadmap",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user_skills": {
+      "name": "user_skills",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "skill_uid": {
+          "name": "skill_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_info_uid": {
+          "name": "profile_info_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_skills_skill_uid_skill_pool_uid_fk": {
+          "name": "user_skills_skill_uid_skill_pool_uid_fk",
+          "tableFrom": "user_skills",
+          "tableTo": "skill_pool",
+          "columnsFrom": [
+            "skill_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_skills_profile_info_uid_user_profle_info_uid_fk": {
+          "name": "user_skills_profile_info_uid_user_profle_info_uid_fk",
+          "tableFrom": "user_skills",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_skills_profile_info_uid_foreign": {
+          "name": "user_skills_profile_info_uid_foreign",
+          "tableFrom": "user_skills",
+          "tableTo": "user_profle_info",
+          "columnsFrom": [
+            "profile_info_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_skills_profile_skill_unique": {
+          "name": "user_skills_profile_skill_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "profile_info_uid",
+            "skill_uid"
+          ]
+        }
+      }
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "oauth_id": {
+          "name": "oauth_id",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag": {
+          "name": "tag",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mail": {
+          "name": "mail",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "role_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "birth_date": {
+          "name": "birth_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "background_image": {
+          "name": "background_image",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "via": {
+          "name": "via",
+          "type": "via_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_oauth_id_unique": {
+          "name": "users_oauth_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "oauth_id"
+          ]
+        },
+        "users_tag_unique": {
+          "name": "users_tag_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tag"
+          ]
+        },
+        "users_mail_unique": {
+          "name": "users_mail_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "mail"
+          ]
+        },
+        "users_phone_unique": {
+          "name": "users_phone_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "phone"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "public.event_enum": {
+      "name": "event_enum",
+      "schema": "public",
+      "values": [
+        "HACKATON",
+        "MEETUP"
+      ]
+    },
+    "public.moderation_status_enum": {
+      "name": "moderation_status_enum",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "public.registration_kind_enum": {
+      "name": "registration_kind_enum",
+      "schema": "public",
+      "values": [
+        "SOLO",
+        "TEAM"
+      ]
+    },
+    "public.registration_status_enum": {
+      "name": "registration_status_enum",
+      "schema": "public",
+      "values": [
+        "REGISTERED",
+        "CANCELLED"
+      ]
+    },
+    "public.status_enum": {
+      "name": "status_enum",
+      "schema": "public",
+      "values": [
+        "WAITING",
+        "CLOSED",
+        "END"
+      ]
+    },
+    "public.notification_type_enum": {
+      "name": "notification_type_enum",
+      "schema": "public",
+      "values": [
+        "FRIEND_REQUEST",
+        "FRIEND_ACCEPT",
+        "SYSTEM",
+        "TEAM_INVITE",
+        "EVENT"
+      ]
+    },
+    "public.ability_enum": {
+      "name": "ability_enum",
+      "schema": "public",
+      "values": [
+        "ALL",
+        "EDIT",
+        "POST",
+        "INVITE",
+        "DELETE",
+        "EVENTREG",
+        "NOTHING"
+      ]
+    },
+    "public.team_enum": {
+      "name": "team_enum",
+      "schema": "public",
+      "values": [
+        "TEMP",
+        "PERMANENT",
+        "BANNED"
+      ]
+    },
+    "public.edu_enum": {
+      "name": "edu_enum",
+      "schema": "public",
+      "values": [
+        "FULL",
+        "PART",
+        "DIST"
+      ]
+    },
+    "public.file_enum": {
+      "name": "file_enum",
+      "schema": "public",
+      "values": [
+        "DIP",
+        "PORTFOLIO",
+        "RESUME"
+      ]
+    },
+    "public.friend_status_enum": {
+      "name": "friend_status_enum",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "ACCEPTED"
+      ]
+    },
+    "public.role_enum": {
+      "name": "role_enum",
+      "schema": "public",
+      "values": [
+        "USER",
+        "ORG",
+        "ADMIN",
+        "SU"
+      ]
+    },
+    "public.via_enum": {
+      "name": "via_enum",
+      "schema": "public",
+      "values": [
+        "BASE",
+        "VK",
+        "YA",
+        "GOS",
+        "TG"
+      ]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

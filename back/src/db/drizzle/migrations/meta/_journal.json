@@ -50,6 +50,20 @@
       "when": 1781037616933,
       "tag": "0006_thankful_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781105314151,
+      "tag": "0007_next_natasha_romanoff",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1781106343083,
+      "tag": "0008_square_blade",
+      "breakpoints": true
     }
   ]
 }

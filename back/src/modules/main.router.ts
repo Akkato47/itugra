@@ -7,6 +7,7 @@ import teamRouter from './team/team.routes';
 import testRouter from './testing/testing.routes';
 import eventRouter from './event/event.routes';
 import notificationRouter from './notification/notification.routes';
+import adminRouter from './admin/admin.routes';
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use('/team', teamRouter);
 router.use('/test', testRouter);
 router.use('/event', eventRouter);
 router.use('/notification', notificationRouter);
+router.use('/admin', adminRouter);
 
 export default router;

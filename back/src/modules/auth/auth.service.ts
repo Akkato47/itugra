@@ -102,6 +102,9 @@ export const refresh = async (refreshToken: string) => {
     }
     const [userUid] = result[0].split(':');
     const user = await userService.getUserByUID(userUid);
+    if (user?.banned) {
+      throw new CustomError(HttpStatus.FORBIDDEN, 'Аккаунт заблокирован');
+    }
     const tokens = await jwtService.createTokenAsync({
       uid: userUid,
       role: user.role,
@@ -119,6 +122,9 @@ const validateUser = async (userData: LoginUserDto) => {
 
     if (!user || user.password == null) {
       throw new CustomError(HttpStatus.BAD_REQUEST);
+    }
+    if (user.banned) {
+      throw new CustomError(HttpStatus.FORBIDDEN, 'Аккаунт заблокирован');
     }
     const passwordEquals = await compare(userData.password, user.password);
 

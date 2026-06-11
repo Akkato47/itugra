@@ -9,7 +9,7 @@ export class CreateRequestDto implements Partial<InferInsertRequest> {
   type: EventEnum;
   registrationEnd: string;
   end: string;
-  categosryId: number[];
+  categoryId: number[];
 }
 
 export class MakeDecisions {

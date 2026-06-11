@@ -1,4 +1,5 @@
 import { CreateRequestDto, MakeDecisions } from './dto/request.dto';
+import { RegisterTeamDto } from './dto/register.dto';
 import type { Request, Response, NextFunction } from 'express';
 import * as eventService from './event.service';
 
@@ -57,6 +58,34 @@ export async function getEvents(
   }
 }
 
+export async function getUpcoming(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getUpcoming();
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getMyRequests(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getMyRequests(req.user.uid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createRequest(
   req: Request<{}, {}, CreateRequestDto>,
   res: Response,
@@ -78,6 +107,82 @@ export async function makeDecision(
 ) {
   try {
     const result = await eventService.makeDecisions(req.user.uid, req.body);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function registerSolo(
+  req: Request<{ eventUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.registerSolo(
+      req.user.uid,
+      req.params.eventUid
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function registerTeam(
+  req: Request<{}, {}, RegisterTeamDto>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.registerTeam(req.user.uid, req.body);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function cancelRegistration(
+  req: Request<{ registrationUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.cancelRegistration(
+      req.user.uid,
+      req.params.registrationUid
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getParticipants(
+  req: Request<{ eventUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getEventParticipants(req.params.eventUid);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getMyRegistrations(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await eventService.getMyRegistrations(req.user.uid);
 
     return res.status(200).json(result);
   } catch (error) {

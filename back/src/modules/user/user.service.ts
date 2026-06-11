@@ -46,6 +46,18 @@ export const getUserByUID = async (uid: string) => {
   }
 };
 
+export const getUserBanned = async (uid: string) => {
+  try {
+    const rows = await db
+      .select({ banned: users.banned })
+      .from(users)
+      .where(eq(users.uid, uid));
+    return rows[0]?.banned ?? false;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserByOAuthId = async (id: string) => {
   try {
     const user = await db.select().from(users).where(eq(users.oAuthId, id));

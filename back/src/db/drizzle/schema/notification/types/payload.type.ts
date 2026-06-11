@@ -8,5 +8,7 @@ export interface NotificationPayload {
   teamUid?: string;
   teamName?: string;
   roleName?: string;
+  eventUid?: string;
+  eventName?: string;
   [key: string]: unknown;
 }

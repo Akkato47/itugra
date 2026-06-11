@@ -1,6 +1,5 @@
 import { ImageType } from '@/modules/uploads/types/file.interface';
 import {
-  boolean,
   date,
   integer,
   jsonb,
@@ -14,6 +13,19 @@ import { StatusEnum } from './enums/status.enum';
 
 export const eventEnum = pgEnum('event_enum', ['HACKATON', 'MEETUP']);
 export const statusEnum = pgEnum('status_enum', ['WAITING', 'CLOSED', 'END']);
+export const moderationStatusEnum = pgEnum('moderation_status_enum', [
+  'PENDING',
+  'APPROVED',
+  'REJECTED',
+]);
+export const registrationKindEnum = pgEnum('registration_kind_enum', [
+  'SOLO',
+  'TEAM',
+]);
+export const registrationStatusEnum = pgEnum('registration_status_enum', [
+  'REGISTERED',
+  'CANCELLED',
+]);
 
 export const eventBaseSchema = {
   uid: uuid('uid').defaultRandom().primaryKey().notNull(),
