@@ -1,11 +1,14 @@
 import { FileIcon } from "@radix-ui/react-icons";
+import { type ChangeEvent } from "react";
 import { PatternFormat } from "react-number-format";
 import type { z } from "zod";
 
 import { ETypeEventEnum } from "@entities/event";
 
+import { postUpload } from "@shared/api";
 import { formateDate } from "@shared/lib/formateDate";
-import { Button, Checkbox, Input, Label, Textarea } from "@shared/ui";
+import { toast } from "@shared/model/use-toast";
+import { Button, Checkbox, CustomImage, Input, Label, Textarea } from "@shared/ui";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@shared/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select";
 
@@ -18,18 +21,54 @@ export const CreateEventRequestForm = () => {
   const createEventForm = useCreateEventForm();
   const { mutateAsync } = usePostCreateEventMutation();
 
+  const image = createEventForm.watch("image");
+
+  const changeImage = async (e: ChangeEvent<HTMLInputElement>) => {
+    const fileData = e.target.files && e.target.files[0];
+    if (!fileData) return;
+
+    const extension = fileData.name.split(".").at(-1)?.toLowerCase();
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"];
+    if (extension && !imageExtensions.includes(extension)) {
+      toast({
+        className: "bg-red-800 text-white hover:bg-red-700",
+        title: "Невалидное расширение",
+        description: ".jpg .jpeg .png .gif .bmp .svg .webp"
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileData);
+
+    try {
+      const res = await postUpload({ formData });
+      createEventForm.setValue(
+        "image",
+        {
+          name: res.data.name,
+          fileUrl: res.data.url,
+          uid: res.data.uid,
+          thumbnailUrl: res.data.thumbnail.url
+        },
+        { shouldDirty: true }
+      );
+    } catch (err: any) {
+      toast({
+        className: "bg-red-800 text-white hover:bg-red-700",
+        title: "Не удалось загрузить изображение",
+        description: err?.response?.data?.message
+      });
+    }
+  };
+
   const createEvent = async (data: z.infer<typeof createEventFormSchema>) => {
     await mutateAsync({
       params: {
         name: data.name,
         description: data.description,
         type: data.type,
-        image: {
-          uid: "string",
-          name: "string",
-          fileUrl: "string",
-          thumbnailUrl: "string"
-        },
+        image: data.image,
         end: formateDate(data.end, "dash"),
         registrationEnd: formateDate(data.registrationEnd, "dash"),
         categoryId: data.categoryId
@@ -87,12 +126,32 @@ export const CreateEventRequestForm = () => {
               )}
             />
           </div>
-          <div className='relative rounded-lg cursor-pointer w-full h-[200px] border-2 border-dashed border-slate-300 text-sm hover:bg-gray-100'>
-            <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full space-y-2 flex items-center flex-col'>
-              <FileIcon className='size-12' />
-              <p className='opacity-60'>Загрузите фото в формате .PNG или .JPEG</p>
-              <p className='opacity-60'>Максимальный размер файла: 10 МБ</p>
-            </div>
+          <div className='w-full'>
+            <Input
+              id='eventImageInput'
+              type='file'
+              accept='image/*'
+              className='hidden'
+              onChange={changeImage}
+            />
+            <Label
+              htmlFor='eventImageInput'
+              className='relative block overflow-hidden rounded-lg cursor-pointer w-full h-[200px] border-2 border-dashed border-slate-300 text-sm hover:bg-gray-100'
+            >
+              {image?.fileUrl ? (
+                <CustomImage
+                  src={image.fileUrl}
+                  alt='event preview'
+                  className='w-full h-full object-cover'
+                />
+              ) : (
+                <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full space-y-2 flex items-center flex-col'>
+                  <FileIcon className='size-12' />
+                  <p className='opacity-60'>Загрузите фото в формате .PNG или .JPEG</p>
+                  <p className='opacity-60'>Максимальный размер файла: 10 МБ</p>
+                </div>
+              )}
+            </Label>
           </div>
         </div>
         <div className='grid grid-cols-[200px_200px]'>

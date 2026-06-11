@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
+import { Link, NavLink, Navigate, Outlet } from "react-router-dom";
 
 import { NotificationsBell } from "@widgets/notifications-bell";
 
@@ -9,15 +9,19 @@ import { buttonVariants } from "@shared/constants/shade-cn";
 import { LogoIcon } from "@shared/icons";
 import { Avatar } from "@shared/ui";
 
+const navItems = [
+  { to: paths.ADMIN, label: "Дашборд", end: true },
+  { to: paths.ADMIN_MODERATION, label: "Модерация", end: false },
+  { to: paths.ADMIN_EVENTS, label: "Мероприятия", end: false },
+  { to: paths.ADMIN_USERS, label: "Пользователи", end: false },
+  { to: paths.ADMIN_TEAMS, label: "Команды", end: false }
+];
+
 const AdminLayout = () => {
   const { user } = useUser();
-  const f = useMatch(`${paths.ADMIN}/:requestUid`);
-  let isValidUid;
 
-  if (f?.params?.requestUid) {
-    const uid = f.params.requestUid;
-    isValidUid =
-      /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(uid);
+  if (!user || user.role !== "ADMIN") {
+    return <Navigate to={paths.PROFILE} replace />;
   }
 
   return (
@@ -41,30 +45,22 @@ const AdminLayout = () => {
         </div>
       </header>
       <main className='py-10 flex flex-col gap-10 container text-slate-900'>
-        {!isValidUid && (
-          <nav className='flex items-center gap-6'>
+        <nav className='flex flex-wrap items-center gap-6'>
+          {navItems.map((item) => (
             <NavLink
-              to={paths.ADMIN_REQUESTS}
+              key={item.to}
+              to={item.to}
+              end={item.end}
               className={({ isActive }) =>
                 isActive
                   ? buttonVariants({ variant: "default" })
                   : buttonVariants({ variant: "outline" })
               }
             >
-              Активные заявки
+              {item.label}
             </NavLink>
-            <NavLink
-              to={paths.ADMIN_REQUESTS_HISTORY}
-              className={({ isActive }) =>
-                isActive
-                  ? buttonVariants({ variant: "default" })
-                  : buttonVariants({ variant: "outline" })
-              }
-            >
-              История заявок
-            </NavLink>
-          </nav>
-        )}
+          ))}
+        </nav>
         <section className='ml-6'>
           <Outlet />
         </section>

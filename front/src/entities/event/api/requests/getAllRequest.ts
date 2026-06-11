@@ -1,4 +1,4 @@
-import type { ETypeEventEnum } from "@entities/event/types";
+import type { EModerationStatus, ETypeEventEnum } from "@entities/event/types";
 
 import { api } from "@shared/api";
 
@@ -8,6 +8,8 @@ export interface IGetAllRequestResponse {
   type: ETypeEventEnum;
   approved: boolean;
   watched: boolean;
+  moderationStatus: EModerationStatus;
+  moderationReason: string | null;
   userName: string;
   description: string;
   categoryId: number[];

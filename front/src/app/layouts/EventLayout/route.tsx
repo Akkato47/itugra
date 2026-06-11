@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import type { RouteObject } from "react-router-dom";
 
 import { createAllEventsPageRoute } from "@pages/Events/AllEvents";
+import { createCreatedEventsPageRoute } from "@pages/Events/CreatedEvents";
 import { createCreateEventPageRoute } from "@pages/Events/CreateEvent";
 import { createCurrentEventPageRoute } from "@pages/Events/CurrentEvent";
 import { createMyEventsPageRoute } from "@pages/Events/MyEvents";
@@ -20,6 +21,7 @@ export const createEventLayout = (): RouteObject => ({
   children: [
     createAllEventsPageRoute(),
     createMyEventsPageRoute(),
+    createCreatedEventsPageRoute(),
     createCurrentEventPageRoute(),
     createCreateEventPageRoute()
   ]

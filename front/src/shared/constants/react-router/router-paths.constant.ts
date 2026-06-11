@@ -11,6 +11,7 @@ export const paths = {
   EVENTS: "/events",
   MY_EVENTS: "myevents",
   CREATE_EVENT: "create-event",
+  CREATED_EVENTS: "created-events",
   EVENT: "event",
   ALL_EVENTS: "allevents",
   MY_ROADMAP: "/myroadmap",
@@ -22,6 +23,10 @@ export const paths = {
   ADMIN: "/admin",
   ADMIN_REQUESTS: "requests",
   ADMIN_REQUESTS_HISTORY: "requests-history",
+  ADMIN_MODERATION: "moderation",
+  ADMIN_EVENTS: "events",
+  ADMIN_USERS: "users",
+  ADMIN_TEAMS: "teams",
 
   // Настройки
   SETTINGS: "/settings",

@@ -4,6 +4,7 @@ export const createEventFormSchema = z.object({
   name: z.string().min(1, "Обязательное поле"),
   description: z.string().min(1, "Обязательное поле"),
   type: z.string().min(1, "Обязательное поле"),
+  image: z.custom<IImage>().optional(),
   registrationEnd: z
     .string()
     .min(1, "Обязательное поле")

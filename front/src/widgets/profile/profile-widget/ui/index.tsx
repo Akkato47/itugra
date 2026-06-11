@@ -67,7 +67,7 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
             <p className='leading-[143%]'>Настройки</p>
           </Link>
           <Link
-            to={`${paths.ADMIN}/${paths.ADMIN_REQUESTS}`}
+            to={paths.ADMIN}
             onClick={closeDropDown}
             className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
           >

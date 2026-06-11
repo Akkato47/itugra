@@ -1,4 +1,9 @@
-export type TNotificationType = "FRIEND_REQUEST" | "FRIEND_ACCEPT" | "SYSTEM";
+export type TNotificationType =
+  | "FRIEND_REQUEST"
+  | "FRIEND_ACCEPT"
+  | "SYSTEM"
+  | "TEAM_INVITE"
+  | "EVENT";
 
 export interface INotificationPayload {
   actorUid?: string;
@@ -6,6 +11,12 @@ export interface INotificationPayload {
   actorName?: string;
   actorImage?: string | null;
   requestUid?: string;
+  inviteUid?: string;
+  teamUid?: string;
+  teamName?: string;
+  roleName?: string;
+  eventUid?: string;
+  eventName?: string;
 }
 
 export interface INotification {

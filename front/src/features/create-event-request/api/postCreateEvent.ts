@@ -2,7 +2,7 @@ import { api } from "@shared/api";
 
 interface ICreateEvent {
   name: string;
-  image: IImage;
+  image?: IImage;
   type: string;
   description: string;
   registrationEnd: string;

@@ -1,37 +1,16 @@
 import { useEffect, useState } from "react";
 
-import { LandingEventCard } from "@entities/event";
+import { LandingEventCard, translateEventStatus, useGetUpcomingEventsQuery } from "@entities/event";
 
 import type { CarouselApi } from "@shared/ui";
 import { Carousel, CarouselContent, CarouselNext, CarouselPrevious, Heading } from "@shared/ui";
 
-const data = [
-  {
-    title: "Название мероприятия1",
-    desc: "Описание мероприятия описание мероприятия описание мероприятия",
-    date: "16 января 2024 - 20 января 2024",
-    latters: "✓ Заявки открыты",
-    image: "/images/iPhoneTest.png"
-  },
-  {
-    title: "Название мероприятия2",
-    desc: "Описание мероприятия описание мероприятия описание мероприятия",
-    date: "16 января 2024 - 20 января 2024",
-    latters: "✓ Заявки открыты",
-    image: "/images/iPhoneTest.png"
-  },
-  {
-    title: "Название мероприятия3",
-    desc: "Описание мероприятия описание мероприятия описание мероприятия",
-    date: "16 января 2024 - 20 января 2024",
-    latters: "✓ Заявки открыты",
-    image: "/images/iPhoneTest.png"
-  }
-];
-
 export const LandingCarousel = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+
+  const { data } = useGetUpcomingEventsQuery({});
+  const events = data?.data ?? [];
 
   useEffect(() => {
     if (!api) {
@@ -52,27 +31,39 @@ export const LandingCarousel = () => {
         <Heading tag='h2' variant='h2' className='text-slate-50'>
           Ближайшие мероприятия
         </Heading>
-        <div className=''>
-          <Carousel setApi={setApi} className='mt-10'>
-            <CarouselContent>
-              {data.map((item) => (
-                <LandingEventCard key={item.title} {...item} />
+        {events.length > 0 ? (
+          <div className=''>
+            <Carousel setApi={setApi} className='mt-10'>
+              <CarouselContent>
+                {events.map((event) => (
+                  <LandingEventCard
+                    key={event.uid}
+                    uid={event.uid}
+                    title={event.name}
+                    desc={event.description ?? ""}
+                    date={`${event.registrationEnd} — ${event.end}`}
+                    latters={translateEventStatus(event.status)}
+                    image={event.image?.fileUrl ?? "/images/iPhoneTest.png"}
+                  />
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+            <div className='flex justify-center items-center gap-5 mt-20'>
+              {events.map((event, index) => (
+                <div
+                  key={event.uid}
+                  className={`w-20 h-2 rounded-full ${
+                    index === current - 1 ? "bg-slate-600" : "bg-white"
+                  }`}
+                />
               ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-          <div className='flex justify-center items-center gap-5 mt-20'>
-            {data.map((_, index) => (
-              <div
-                key={_.title}
-                className={`w-20 h-2 rounded-full ${
-                  index === current - 1 ? "bg-slate-600" : "bg-white"
-                }`}
-              />
-            ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className='mt-10 text-xl text-slate-300'>Скоро здесь появятся мероприятия</p>
+        )}
       </div>
     </section>
   );

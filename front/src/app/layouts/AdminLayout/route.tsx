@@ -2,9 +2,11 @@ import { Suspense, lazy } from "react";
 import type { RouteObject } from "react-router-dom";
 
 import {
-  createAdminRequestsHistoryPageRoute,
-  createAdminRequestsPageRoute,
-  createEditRequestPageRoute
+  createAdminDashboardPageRoute,
+  createAdminEventsPageRoute,
+  createAdminModerationPageRoute,
+  createAdminTeamsPageRoute,
+  createAdminUsersPageRoute
 } from "@pages/Admin";
 
 import { paths } from "@shared/constants/react-router";
@@ -22,8 +24,10 @@ export const createAdminLayout = (): RouteObject => ({
   errorElement: <div className=''>Error</div>,
 
   children: [
-    createAdminRequestsPageRoute(),
-    createAdminRequestsHistoryPageRoute(),
-    createEditRequestPageRoute()
+    createAdminDashboardPageRoute(),
+    createAdminModerationPageRoute(),
+    createAdminEventsPageRoute(),
+    createAdminUsersPageRoute(),
+    createAdminTeamsPageRoute()
   ]
 });

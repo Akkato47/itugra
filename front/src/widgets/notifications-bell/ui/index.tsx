@@ -9,6 +9,8 @@ import {
 } from "@entities/notification";
 import type { INotification } from "@entities/notification";
 
+import { useEventModerationSocket } from "@entities/event";
+
 import { paths } from "@shared/constants/react-router";
 import { BellIcon } from "@shared/icons";
 import { cn } from "@shared/lib/shade-cn";
@@ -25,6 +27,7 @@ export const NotificationsBell = () => {
   const navigate = useNavigate();
 
   useNotificationsSocket();
+  useEventModerationSocket();
 
   const { data: countData } = useUnreadCountQuery();
   const { data: listData } = useNotificationsQuery();
@@ -39,7 +42,15 @@ export const NotificationsBell = () => {
       markRead.mutate({ params: { uid: notification.uid } });
     }
 
-    if (notification.payload?.actorTag) {
+    if (notification.type === "TEAM_INVITE") {
+      navigate(paths.TEAMS);
+    } else if (notification.type === "EVENT") {
+      if (notification.payload?.eventUid) {
+        navigate(`${paths.PROFILE}/${paths.EVENT}/${notification.payload.eventUid}`);
+      } else {
+        navigate(`${paths.PROFILE}/${paths.MY_EVENTS}`);
+      }
+    } else if (notification.payload?.actorTag) {
       navigate(`${paths.PROFILE}/${notification.payload.actorTag}`);
     }
   };

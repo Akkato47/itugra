@@ -1,4 +1,4 @@
-import type { IGetAllRequestResponse } from "@entities/event";
+import type { IEvent } from "@entities/event/types";
 
 import { api } from "@shared/api";
 
@@ -7,4 +7,4 @@ export type TGetEventConfig = TRequestConfig & {
 };
 
 export const getEventByUid = async ({ config, eventUid }: TGetEventConfig) =>
-  api.get<IGetAllRequestResponse>(`/event/info/${eventUid}`, config);
+  api.get<IEvent>(`/event/info/${eventUid}`, config);

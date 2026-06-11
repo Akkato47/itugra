@@ -1,7 +1,12 @@
+import { Link } from "react-router-dom";
+
+import { paths } from "@shared/constants/react-router";
+import { buttonVariants } from "@shared/constants/shade-cn";
 import { CalendarClockIcon } from "@shared/icons";
-import { Button, CarouselItem, CustomImage, Heading } from "@shared/ui";
+import { CarouselItem, CustomImage, Heading } from "@shared/ui";
 
 interface ILandingEventCardProps {
+  uid: string;
   title: string;
   desc: string;
   date: string;
@@ -9,8 +14,15 @@ interface ILandingEventCardProps {
   image: string;
 }
 
-export const LandingEventCard = ({ title, date, desc, image, latters }: ILandingEventCardProps) => (
-  <CarouselItem key={title} className='flex items-center gap-10'>
+export const LandingEventCard = ({
+  uid,
+  title,
+  date,
+  desc,
+  image,
+  latters
+}: ILandingEventCardProps) => (
+  <CarouselItem key={uid} className='flex items-center gap-10'>
     <div className='flex flex-col gap-5 flex-1 max-w-[60%]'>
       <Heading tag='h3' variant='h3' className='text-slate-50'>
         {title}
@@ -23,9 +35,12 @@ export const LandingEventCard = ({ title, date, desc, image, latters }: ILanding
         </span>
         <span>{latters}</span>
       </p>
-      <Button className='w-[229px]' variant={"outline"}>
+      <Link
+        to={`${paths.PROFILE}/${paths.EVENT}/${uid}`}
+        className={buttonVariants({ variant: "outline", className: "w-[229px]" })}
+      >
         Записаться на мероприятие
-      </Button>
+      </Link>
     </div>
     <CustomImage src={image} alt='event-photo' className='w-[360px] h-[272px]' />
   </CarouselItem>

@@ -13,6 +13,7 @@ export const useCreateEventForm = () =>
       type: "",
       end: "",
       registrationEnd: "",
-      categoryId: []
+      categoryId: [],
+      image: undefined
     }
   });

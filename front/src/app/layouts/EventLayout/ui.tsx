@@ -9,16 +9,6 @@ const EventLayout = () => (
     <main className='pb-10 flex flex-col gap-10 container text-slate-900'>
       <nav className='flex items-center gap-6'>
         <NavLink
-          to={paths.MY_EVENTS}
-          className={({ isActive }) =>
-            isActive
-              ? buttonVariants({ variant: "default" })
-              : buttonVariants({ variant: "outline" })
-          }
-        >
-          Мои мероприятия
-        </NavLink>
-        <NavLink
           to={paths.ALL_EVENTS}
           className={({ isActive }) =>
             isActive
@@ -27,6 +17,26 @@ const EventLayout = () => (
           }
         >
           Все мероприятия
+        </NavLink>
+        <NavLink
+          to={paths.MY_EVENTS}
+          className={({ isActive }) =>
+            isActive
+              ? buttonVariants({ variant: "default" })
+              : buttonVariants({ variant: "outline" })
+          }
+        >
+          Участвую
+        </NavLink>
+        <NavLink
+          to={paths.CREATED_EVENTS}
+          className={({ isActive }) =>
+            isActive
+              ? buttonVariants({ variant: "default" })
+              : buttonVariants({ variant: "outline" })
+          }
+        >
+          Созданные
         </NavLink>
         <NavLink
           to={paths.PROFILE + "/" + paths.CREATE_EVENT}
