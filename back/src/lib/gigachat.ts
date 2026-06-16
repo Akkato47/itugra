@@ -102,11 +102,15 @@ export function extractJson<T = unknown>(raw: string | undefined | null): T {
 
   try {
     return JSON.parse(json) as T;
-  } catch (error) {
-    logger.error(`Не удалось распарсить JSON из ответа модели: ${json}`);
-    throw new CustomError(
-      HttpStatus.BAD_GATEWAY,
-      'Модель вернула некорректный JSON'
-    );
+  } catch {
+    try {
+      return JSON.parse(json.replace(/,(\s*[}\]])/g, '$1')) as T;
+    } catch {
+      logger.error(`Не удалось распарсить JSON из ответа модели: ${json}`);
+      throw new CustomError(
+        HttpStatus.BAD_GATEWAY,
+        'Модель вернула некорректный JSON'
+      );
+    }
   }
 }
