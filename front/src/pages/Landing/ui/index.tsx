@@ -34,7 +34,7 @@ const LandingPage = () => {
       <main className='container space-y-14'>
         <section className='flex h-[calc(100vh-77px)] items-center justify-between'>
           <div className='max-w-[590px] space-y-6 text-zinc-900'>
-            <Heading tag='h1'>Развиваем IT предпринимательство в Югре вместе</Heading>
+            <Heading tag='h1'>Развиваем IT в Югре вместе</Heading>
             <p className='text-xl leading-[140%]'>
               Поможем вам воплотить идеи в успешные ИТ-стартапы в Югре.
             </p>
