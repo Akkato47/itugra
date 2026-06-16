@@ -876,17 +876,20 @@ export const generateRoadmap = async (
     const systemPrompt = [
       'Ты — опытный карьерный консультант для IT-специалистов.',
       'Твоя задача — составить персональный роудмап профессионального роста:',
-      'упорядоченный чеклист конкретных пунктов для изучения и освоения.',
+      'упорядоченный чеклист конкретных этапов для изучения и освоения.',
       'Анализируй в комплексе и ответы на вопросы, и желаемые навыки пользователя.',
       '',
       'Формат ответа — СТРОГО валидный JSON-массив объектов вида:',
-      '[{"name": "краткое название пункта"}]',
+      '[{"name":"краткое название этапа","description":"что именно изучить и сделать на этапе, 2-4 предложения","resources":[{"title":"название материала","url":"ссылка","type":"course|article|video|doc"}]}]',
       '',
       'Жёсткие требования к ответу:',
       '- Верни ТОЛЬКО JSON-массив. Без markdown, без ```json, без пояснений и текста до или после.',
-      '- Каждый объект содержит единственное строковое поле "name".',
-      '- От 8 до 15 пунктов, упорядоченных от базовых к продвинутым.',
-      '- Все названия на русском языке.',
+      '- Каждый объект содержит поля "name", "description" и "resources".',
+      '- От 8 до 15 этапов, упорядоченных от базовых к продвинутым.',
+      '- У каждого этапа от 2 до 5 материалов в "resources".',
+      '- "url" — ссылка на реальный популярный источник (официальная документация, известные курсы, статьи, видео).',
+      '- "type" строго одно из: "course", "article", "video", "doc".',
+      '- Все названия и описания на русском языке (url оставляй как есть).',
     ].join('\n');
 
     const userPrompt = [
@@ -907,13 +910,51 @@ export const generateRoadmap = async (
       ],
     });
 
-    const data = extractJson<Array<{ name?: string }>>(
-      response.choices[0]?.message?.content
-    );
+    const data = extractJson<
+      Array<{
+        name?: string;
+        description?: string;
+        resources?: { title?: string; url?: string; type?: string }[];
+      }>
+    >(response.choices[0]?.message?.content);
+
+    const allowedTypes = ['course', 'article', 'video', 'doc'];
 
     const items = (Array.isArray(data) ? data : [])
-      .map((item) => item?.name?.trim())
-      .filter((name): name is string => Boolean(name));
+      .map((item) => {
+        const name = item?.name?.trim();
+        if (!name) return null;
+
+        const description = item?.description?.trim() || null;
+
+        const resources = (
+          Array.isArray(item?.resources) ? item.resources : []
+        )
+          .map((resource) => {
+            const title = resource?.title?.trim();
+            const url = resource?.url?.trim();
+            if (!title || !url) return null;
+            const type = allowedTypes.includes(resource?.type)
+              ? resource.type
+              : 'article';
+            return { title, url, type };
+          })
+          .filter(
+            (resource): resource is { title: string; url: string; type: string } =>
+              Boolean(resource)
+          );
+
+        return { name, description, resources };
+      })
+      .filter(
+        (
+          item
+        ): item is {
+          name: string;
+          description: string | null;
+          resources: { title: string; url: string; type: string }[];
+        } => Boolean(item)
+      );
 
     if (items.length === 0) {
       throw new CustomError(
@@ -931,9 +972,11 @@ export const generateRoadmap = async (
       .where(eq(userRoadmap.profileInfoUid, profileInfo[0].uid));
 
     await db.insert(userRoadmap).values(
-      items.map((name, index) => ({
+      items.map((item, index) => ({
         profileInfoUid: profileInfo[0].uid,
-        name,
+        name: item.name,
+        description: item.description,
+        resources: item.resources,
         order: index,
       }))
     );
@@ -958,6 +1001,8 @@ export const getRoadmap = async (userUid: string) => {
       .select({
         uid: userRoadmap.uid,
         name: userRoadmap.name,
+        description: userRoadmap.description,
+        resources: userRoadmap.resources,
         order: userRoadmap.order,
         done: userRoadmap.done,
       })

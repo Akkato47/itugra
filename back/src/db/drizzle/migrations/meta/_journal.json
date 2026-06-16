@@ -64,6 +64,13 @@
       "when": 1781106343083,
       "tag": "0008_square_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1781613103526,
+      "tag": "0009_chubby_bloodaxe",
+      "breakpoints": true
     }
   ]
 }

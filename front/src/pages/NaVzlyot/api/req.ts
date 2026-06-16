@@ -18,11 +18,19 @@ export type PostGenerateTestingResponse = Quest[];
 export const postGenerateTesting = ({ params, config }: TPostGenerateTestingConfig) =>
   api.post<PostGenerateTestingResponse>("/test/generate", params, config);
 
+export interface IRoadmapResource {
+  title: string;
+  url: string;
+  type: string;
+}
+
 export interface ITask {
   uid: string;
   name: string;
   order: number;
   done: boolean;
+  description?: string | null;
+  resources?: IRoadmapResource[] | null;
 }
 
 export const getRoadmap = ({ config }: TRequestConfig) => api.get<ITask[]>("/user/roadmap", config);

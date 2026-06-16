@@ -1,12 +1,25 @@
+import { useState } from "react";
+
 import { Button, Checkbox, Heading } from "@shared/ui";
 import { Card } from "@shared/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog";
 
 import { useDeleteRoadmapMutation, usePatchToggleTaskMutation } from "../api/hooks";
 import type { ITask } from "../api/req";
 
+const resourceTypeLabels: Record<string, string> = {
+  course: "Курс",
+  article: "Статья",
+  video: "Видео",
+  doc: "Документация"
+};
+
 export const CheckList = ({ list }: { list: ITask[] }) => {
   const taskMutation = usePatchToggleTaskMutation();
   const deleteRoadmapMutation = useDeleteRoadmapMutation();
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+
+  const sortedList = [...list].sort((a, b) => a.order - b.order);
 
   return (
     <section>
@@ -23,42 +36,34 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
         </Button>
       </div>
       <div className='lg:flex-row flex flex-col gap-6 mt-5 '>
-        <Card>
+        <Card className='flex-1'>
           <ul>
-            {list
-              .sort((a, b) => {
-                const nameA = a.name.toUpperCase();
-                const nameB = b.name.toUpperCase();
-                if (nameA < nameB) {
-                  return -1;
-                }
-                if (nameA > nameB) {
-                  return 1;
-                }
-
-                return 0;
-              })
-              .map((task) => (
-                <li key={task.uid} className='flex items-center space-x-2 px-6 py-5'>
-                  <Checkbox
-                    checked={task.done}
-                    id={task.name}
-                    onCheckedChange={() => {
-                      taskMutation.mutateAsync({
-                        params: {
-                          uid: task.uid
-                        }
-                      });
-                    }}
-                  />
-                  <label
-                    htmlFor={task.uid}
-                    className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                  >
-                    {task.name}
-                  </label>
-                </li>
-              ))}
+            {sortedList.map((task) => (
+              <li
+                key={task.uid}
+                className='flex items-center gap-3 px-6 py-5 border-b border-b-slate-100 last:border-b-0'
+              >
+                <Checkbox
+                  checked={task.done}
+                  id={task.uid}
+                  onClick={(event) => event.stopPropagation()}
+                  onCheckedChange={() => {
+                    taskMutation.mutateAsync({
+                      params: {
+                        uid: task.uid
+                      }
+                    });
+                  }}
+                />
+                <button
+                  type='button'
+                  onClick={() => setSelectedTask(task)}
+                  className='flex-1 text-left text-sm font-medium leading-none hover:text-primary transition-colors'
+                >
+                  {task.name}
+                </button>
+              </li>
+            ))}
           </ul>
         </Card>
         <div className='flex flex-col gap-6'>
@@ -77,6 +82,40 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
           </Card>
         </div>
       </div>
+
+      <Dialog open={!!selectedTask} onOpenChange={(open) => !open && setSelectedTask(null)}>
+        <DialogContent className='max-h-[85vh] overflow-y-auto'>
+          <DialogHeader>
+            <DialogTitle>{selectedTask?.name}</DialogTitle>
+          </DialogHeader>
+          <p className='whitespace-pre-line text-sm text-slate-700'>
+            {selectedTask?.description?.trim() ||
+              "Описание появится после повторной генерации чек-листа."}
+          </p>
+          {selectedTask?.resources && selectedTask.resources.length > 0 && (
+            <div className='mt-2 flex flex-col gap-2'>
+              <p className='text-sm font-semibold'>Материалы</p>
+              <ul className='flex flex-col gap-2'>
+                {selectedTask.resources.map((resource) => (
+                  <li key={resource.url}>
+                    <a
+                      href={resource.url}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='flex items-center gap-2 text-sm text-primary hover:underline'
+                    >
+                      <span className='shrink-0 rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600'>
+                        {resourceTypeLabels[resource.type] ?? resource.type}
+                      </span>
+                      {resource.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
