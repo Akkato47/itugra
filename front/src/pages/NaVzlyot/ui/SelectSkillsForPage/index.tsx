@@ -61,7 +61,7 @@ export const SelectSkillsForPage = ({ chosenCategory }: { chosenCategory: number
         <div className='w-full my-10 text-center px-6 space-y-10'>
           <ul className='flex flex-wrap items-center gap-3'>
             {selectedSkills.map((skill, index) => (
-              <li key={index} className='bg-slate-100 py-2 pl-4 rounded-lg flex items-center'>
+              <li key={index} className='bg-muted py-2 pl-4 rounded-lg flex items-center'>
                 <p>{skill.name}</p>
                 <Button onClick={() => deleteSkill(skill.uid)} variant='ghost' size='sm'>
                   <Cross1Icon />
@@ -77,7 +77,7 @@ export const SelectSkillsForPage = ({ chosenCategory }: { chosenCategory: number
           >
             <div
               className={cn(
-                "w-full border border-slate-300 rounded-b-md overflow-y-scroll transition-all duration-700 ease-in-out",
+                "w-full border border-border rounded-b-md overflow-y-scroll transition-all duration-700 ease-in-out",
                 searchValue ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
               )}
             >

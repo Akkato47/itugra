@@ -96,7 +96,7 @@ export const EditProfileFiles = ({ files }: IEditProfileFilesProps) => {
               </Heading>
             </Label>
             {files.filter((file) => file.category === value.category).length !== 0 && (
-              <div className='bg-white border space-y-5 border-slate-300 px-6 py-4 rounded-lg'>
+              <div className='bg-card border space-y-5 border-border px-6 py-4 rounded-lg'>
                 {files
                   .filter((file) => file.category === value.category)
                   .map((file) => (

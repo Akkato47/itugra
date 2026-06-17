@@ -97,7 +97,7 @@ export const EditProfileForm = ({
 
   return (
     <Form {...editProfileForm}>
-      <form className='w-full px-11 space-y-6 relative mt-10 border-t border-slate-300 mb-8 pt-5'>
+      <form className='w-full px-11 space-y-6 relative mt-10 border-t border-border mb-8 pt-5'>
         <FormField
           control={editProfileForm.control}
           name='fullName'

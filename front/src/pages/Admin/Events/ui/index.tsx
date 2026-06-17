@@ -21,7 +21,7 @@ const AdminEventsPage = () => {
                 className='flex items-center justify-between gap-6 rounded-xl px-9 py-5 shadow-lg'
               >
                 <div className='space-y-1'>
-                  <Heading variant='h3' className='text-[#0066B3]'>
+                  <Heading variant='h3' className='text-brand'>
                     {event.name}
                   </Heading>
                   <p className='text-sm opacity-60'>

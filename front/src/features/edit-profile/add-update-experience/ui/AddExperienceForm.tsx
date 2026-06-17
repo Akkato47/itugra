@@ -54,7 +54,7 @@ export const AddExperienceForm = ({ userExperience }: IAddExperienceFormProps) =
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Название организации</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Название организации</FormLabel>
               <FormControl>
                 <Input
                   className='w-[320px]'
@@ -72,7 +72,7 @@ export const AddExperienceForm = ({ userExperience }: IAddExperienceFormProps) =
           name='position'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Должность</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Должность</FormLabel>
               <FormControl>
                 <Input
                   type='text'
@@ -86,7 +86,7 @@ export const AddExperienceForm = ({ userExperience }: IAddExperienceFormProps) =
           )}
         />
         <div className='space-y-2'>
-          <FormLabel className='font-bold text-black'>Время работы</FormLabel>
+          <FormLabel className='font-bold text-foreground'>Время работы</FormLabel>
           <div className='grid grid-cols-[1fr_1fr] grid-rows-2 justify-end'>
             <FormField
               control={editExperienceForm.control}
@@ -143,7 +143,7 @@ export const AddExperienceForm = ({ userExperience }: IAddExperienceFormProps) =
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className='text-black'>По настоящее время</FormLabel>
+                    <FormLabel className='text-foreground'>По настоящее время</FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>

@@ -36,7 +36,7 @@ const AdminUsersPage = () => {
             data.data.map((user) => (
               <div
                 key={user.uid}
-                className='flex items-center justify-between gap-6 rounded-xl border border-slate-200 px-5 py-3'
+                className='flex items-center justify-between gap-6 rounded-xl border border-border px-5 py-3'
               >
                 <div className='flex items-center gap-3'>
                   <Avatar

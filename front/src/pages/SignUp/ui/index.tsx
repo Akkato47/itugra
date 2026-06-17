@@ -31,11 +31,11 @@ const SignUpPage = () => (
         </Link>
         <p className='leading-[171%] text-center'>
           Регистрируясь, вы принимаете{" "}
-          <Link className='underline text-slate-700' to={"#"}>
+          <Link className='underline text-muted-foreground' to={"#"}>
             пользовательское соглашение
           </Link>{" "}
           и{" "}
-          <Link className='underline text-slate-700' to={"#"}>
+          <Link className='underline text-muted-foreground' to={"#"}>
             политику конфиденциальности
           </Link>
         </p>

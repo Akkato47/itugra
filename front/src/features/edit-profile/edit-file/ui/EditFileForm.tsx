@@ -29,7 +29,7 @@ export const EditFileForm = ({ name, uid }: IEditFileFormProps) => {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='leading-[143%] font-medium text-slate-900 text-base'>
+              <FormLabel className='leading-[143%] font-medium text-foreground text-base'>
                 Название
               </FormLabel>
               <FormControl>

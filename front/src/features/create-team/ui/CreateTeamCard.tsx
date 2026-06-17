@@ -15,7 +15,7 @@ export const CreateTeamCard = () => {
       <DialogTrigger asChild>
         <Button
           variant='ghost'
-          className='border-2 border-dashed w-full max-w-[264px] h-[352px] border-slate-300 rounded-lg'
+          className='border-2 border-dashed w-full max-w-[264px] h-[352px] border-border rounded-lg'
         >
           <PlusCircledIcon className='opacity-60 size-36' />
         </Button>

@@ -23,7 +23,7 @@ export const ParticipantsDialog = ({ eventUid }: { eventUid: string }) => {
             {participants.map((participant) => (
               <div
                 key={participant.registrationUid}
-                className='flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2'
+                className='flex items-center justify-between rounded-lg border border-border px-3 py-2'
               >
                 <span className='text-sm'>
                   {participant.kind === ERegistrationKind.TEAM

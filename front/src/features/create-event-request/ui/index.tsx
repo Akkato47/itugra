@@ -91,7 +91,7 @@ export const CreateEventRequestForm = () => {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='font-bold text-black'>Название мероприятия</FormLabel>
+                  <FormLabel className='font-bold text-foreground'>Название мероприятия</FormLabel>
                   <FormControl>
                     <Input
                       autoComplete='off'
@@ -109,7 +109,7 @@ export const CreateEventRequestForm = () => {
               name='type'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='font-bold text-black'>Тип мероприятия</FormLabel>
+                  <FormLabel className='font-bold text-foreground'>Тип мероприятия</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -136,7 +136,7 @@ export const CreateEventRequestForm = () => {
             />
             <Label
               htmlFor='eventImageInput'
-              className='relative block overflow-hidden rounded-lg cursor-pointer w-full h-[200px] border-2 border-dashed border-slate-300 text-sm hover:bg-gray-100'
+              className='relative block overflow-hidden rounded-lg cursor-pointer w-full h-[200px] border-2 border-dashed border-border text-sm hover:bg-gray-100'
             >
               {image?.fileUrl ? (
                 <CustomImage
@@ -160,7 +160,7 @@ export const CreateEventRequestForm = () => {
             name='registrationEnd'
             render={({ field }) => (
               <FormItem>
-                <Label className='font-bold text-black'>Окончание регистрации</Label>
+                <Label className='font-bold text-foreground'>Окончание регистрации</Label>
                 <FormControl>
                   <Input
                     type='text'
@@ -181,7 +181,7 @@ export const CreateEventRequestForm = () => {
             name='end'
             render={({ field }) => (
               <FormItem>
-                <Label className='font-bold text-black'>Окончание мероприятия</Label>
+                <Label className='font-bold text-foreground'>Окончание мероприятия</Label>
                 <FormControl>
                   <Input
                     type='text'
@@ -203,7 +203,7 @@ export const CreateEventRequestForm = () => {
           name='categoryId'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Категории</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Категории</FormLabel>
               <FormControl>
                 <div className='flex items-center gap-5'>
                   {categoryOptions.map((option) => (
@@ -238,7 +238,7 @@ export const CreateEventRequestForm = () => {
           name='description'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-lg font-bold text-black'>Описание мероприятия</FormLabel>
+              <FormLabel className='text-lg font-bold text-foreground'>Описание мероприятия</FormLabel>
               <FormControl>
                 <Textarea
                   autoComplete='off'

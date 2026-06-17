@@ -16,7 +16,7 @@ const MainLayout = () => {
 
   return (
     <>
-      <header className='border-b border-b-slate-300'>
+      <header className='border-b border-b-border'>
         <div className=' flex items-center justify-between py-2 container'>
           <Link to='/'>
             <LogoIcon />
@@ -27,7 +27,7 @@ const MainLayout = () => {
           </div>
         </div>
       </header>
-      <main className='grid grid-cols-[300px_1fr] py-10 container text-slate-900'>
+      <main className='grid grid-cols-[300px_1fr] py-10 container text-foreground'>
         <MainSidebar />
         <div className='ml-6'>
           <Outlet />

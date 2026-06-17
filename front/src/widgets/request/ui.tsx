@@ -22,7 +22,7 @@ export const RequestWidget = ({
   description,
   categoryId
 }: IRequestWidgetProps) => (
-  <section className='border border-slate-300 rounded-xl'>
+  <section className='border border-border rounded-xl'>
     <div className='py-6 px-10 space-y-4 relative'>
       <Link
         to={"#"}
@@ -32,7 +32,7 @@ export const RequestWidget = ({
       </Link>
       <div className='grid grid-cols-2'>
         <div className='space-y-6'>
-          <Heading variant='h2' className='text-[#0066B3]'>
+          <Heading variant='h2' className='text-brand'>
             {name}
           </Heading>
           <div className='grid grid-cols-[150px_1fr]'>

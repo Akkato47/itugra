@@ -26,7 +26,7 @@ const AdminLayout = () => {
 
   return (
     <>
-      <header className='border-b border-b-slate-300'>
+      <header className='border-b border-b-border'>
         <div className=' flex items-center justify-between py-2 container'>
           <Link to='/'>
             <LogoIcon />
@@ -44,7 +44,7 @@ const AdminLayout = () => {
           </div>
         </div>
       </header>
-      <main className='py-10 flex flex-col gap-10 container text-slate-900'>
+      <main className='py-10 flex flex-col gap-10 container text-foreground'>
         <nav className='flex flex-wrap items-center gap-6'>
           {navItems.map((item) => (
             <NavLink

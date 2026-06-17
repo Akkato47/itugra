@@ -53,16 +53,16 @@ const ProfilePage = () => {
                 </>
               )}
               <div className='flex items-center gap-4'>
-                <p className='font-bold text-slate-600 leading-[150%]'>Контактные данные</p>
-                <p className='text-slate-600 leading-[171%]'>{data.data.mail}</p>
-                <p className='text-slate-600 leading-[171%]'>{data.data.phone}</p>
+                <p className='font-bold text-muted-foreground leading-[150%]'>Контактные данные</p>
+                <p className='text-muted-foreground leading-[171%]'>{data.data.mail}</p>
+                <p className='text-muted-foreground leading-[171%]'>{data.data.phone}</p>
               </div>
               {currentUserJob ? (
                 <div className='flex items-center gap-3'>
                   <PersonIcon />
                   <p className='leading-[175%]'>
                     {currentUserJob.position} в компании{" "}
-                    <span className='text-[#0066b3]'>{currentUserJob.name}</span>
+                    <span className='text-brand'>{currentUserJob.name}</span>
                   </p>
                 </div>
               ) : (
@@ -101,7 +101,7 @@ const ProfilePage = () => {
           {selectedSection === "career" && (
             <>
               {(userProfile.userExperience.length !== 0 || userProfile.userSkills.length !== 0) && (
-                <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-slate-300'>
+                <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-border'>
                   <div className='w-full max-w-[650px] relative my-6'>
                     {userProfile.userSkills.length !== 0 && (
                       <>
@@ -110,7 +110,7 @@ const ProfilePage = () => {
                         </Heading>
                         <ul className='flex flex-wrap items-center gap-3 mt-4'>
                           {userProfile.userSkills.map((skill, index) => (
-                            <li key={index} className='bg-slate-100 py-2 px-4 rounded-lg'>
+                            <li key={index} className='bg-muted py-2 px-4 rounded-lg'>
                               {skill.name}
                             </li>
                           ))}
@@ -128,7 +128,7 @@ const ProfilePage = () => {
                               <Heading variant='h4' tag='h4'>
                                 {career.position}
                               </Heading>
-                              <p className='text-[#0066b3] leading-[175%]'>{career.name}</p>
+                              <p className='text-brand leading-[175%]'>{career.name}</p>
                               <p className='text-sm leading-[171%] opacity-50'>{`${career.startDate} - ${career.present ? "По настоящее время" : career.endDate}`}</p>
                             </li>
                           ))}
@@ -139,7 +139,7 @@ const ProfilePage = () => {
                 </section>
               )}
               {(userProfile.userEducation !== null || userProfile.userFiles.length !== 0) && (
-                <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-slate-300'>
+                <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-border'>
                   <div className='w-full max-w-[650px] space-y-3 relative my-6'>
                     <Heading variant='h4' tag='h3' className='text-center'>
                       Образование
@@ -162,7 +162,7 @@ const ProfilePage = () => {
                             <AccordionItem key={value.category} value={value.category}>
                               <AccordionTrigger>{value.translate}</AccordionTrigger>
                               <AccordionContent>
-                                <div className='bg-white border space-y-5 border-slate-300 px-6 py-4 rounded-lg'>
+                                <div className='bg-card border space-y-5 border-border px-6 py-4 rounded-lg'>
                                   {userProfile.userFiles
                                     .filter((file) => file.category === value.category)
                                     .map((file) => (

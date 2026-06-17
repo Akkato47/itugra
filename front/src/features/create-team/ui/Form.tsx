@@ -40,7 +40,7 @@ export const CreateTeamForm = ({ children, onSuccess }: ICreateTeamFormProps) =>
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Название команды</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Название команды</FormLabel>
               <FormControl>
                 <Input
                   autoComplete='off'

@@ -24,7 +24,7 @@ const CreatedEventsPage = () => {
                   className='flex items-start justify-between gap-10 py-6 px-9 shadow-lg rounded-xl'
                 >
                   <div className='space-y-2'>
-                    <Heading variant='h3' className='text-[#0066B3]'>
+                    <Heading variant='h3' className='text-brand'>
                       {request.name}
                     </Heading>
                     <p className='leading-[171%] text-sm opacity-60'>

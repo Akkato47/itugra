@@ -15,7 +15,7 @@ export const InviteCard = ({ invite }: IInviteCardProps) => {
   const isPending = accept.isPending || decline.isPending;
 
   return (
-    <div className='border w-full max-w-[264px] flex flex-col items-center gap-4 p-4 border-slate-300 rounded-lg'>
+    <div className='border w-full max-w-[264px] flex flex-col items-center gap-4 p-4 border-border rounded-lg'>
       <Avatar
         isEdit={false}
         size='profile'

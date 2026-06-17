@@ -14,7 +14,7 @@ export const FriendCard = ({ friend, children }: IFriendCardProps) => {
   const name = friend.fullName.split(" ");
 
   return (
-    <div className='border w-full max-w-[264px] flex flex-col items-center gap-4 p-4 border-slate-300 rounded-lg'>
+    <div className='border w-full max-w-[264px] flex flex-col items-center gap-4 p-4 border-border rounded-lg'>
       <Link to={`${paths.PROFILE}/${friend.tag}`}>
         <Avatar
           isEdit={false}

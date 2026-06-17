@@ -16,11 +16,11 @@ interface ITableProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Table = ({ children, heading, ...props }: ITableProps) => (
-  <div className='border border-slate-300 rounded-lg' {...props}>
+  <div className='border border-border rounded-lg' {...props}>
     <Heading
       tag='h2'
       variant='h4'
-      className='border-b border-slate-300 flex items-center justify-center w-full py-5'
+      className='border-b border-border flex items-center justify-center w-full py-5'
     >
       {heading}
     </Heading>
@@ -46,7 +46,7 @@ export const TableRow = ({ image, username, role, circleColor, uid, ...props }: 
       onMouseOver={() => setIsVisible(true)}
       {...props}
     >
-      <div className='grid grid-cols-[1fr_100px_1fr] items-center px-10 py-4 border-b border-b-slate-300 last:border-0'>
+      <div className='grid grid-cols-[1fr_100px_1fr] items-center px-10 py-4 border-b border-b-border hover:bg-muted last:border-0'>
         <div className='flex items-center gap-3'>
           <Avatar
             isEdit={false}

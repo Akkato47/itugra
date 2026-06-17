@@ -13,7 +13,7 @@ export const ProfileTabSwitch = ({
   setSelectedSection,
   friendsCount = 0
 }: IProfileTabSwitchProps) => (
-  <nav className='w-full max-w-[840px] flex items-center rounded-lg border border-slate-300 py-5 pl-10'>
+  <nav className='w-full max-w-[840px] flex items-center rounded-lg border border-border py-5 pl-10'>
     <Button
       onClick={() => setSelectedSection("records")}
       variant='link'

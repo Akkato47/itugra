@@ -19,7 +19,7 @@ export const SearchInput = ({
   <div className=''>
     <div
       className={cn(
-        "flex items-center border border-slate-300 px-5",
+        "flex items-center border border-border px-5",
         searchValue ? "rounded-t-lg" : "rounded-lg"
       )}
     >

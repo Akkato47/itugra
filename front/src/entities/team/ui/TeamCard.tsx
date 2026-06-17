@@ -33,7 +33,7 @@ export const TeamCard = ({ image, name, uid }: ITeamCardProps) => {
   };
 
   return (
-    <div className='border w-full max-w-[264px] flex items-center justify-center relative h-[352px] border-slate-300 rounded-lg'>
+    <div className='border w-full max-w-[264px] flex items-center justify-center relative h-[352px] border-border rounded-lg'>
       <div className='pt-4'>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>

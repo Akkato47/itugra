@@ -34,7 +34,7 @@ export const EditEducationForm = ({ education }: IEditEducationFormProps) => {
           name='university'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Учреждение</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Учреждение</FormLabel>
               <FormControl>
                 <Input
                   className='w-[320px]'
@@ -52,7 +52,7 @@ export const EditEducationForm = ({ education }: IEditEducationFormProps) => {
           name='direction'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Специальность</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Специальность</FormLabel>
               <FormControl>
                 <Input
                   type='text'
@@ -70,7 +70,7 @@ export const EditEducationForm = ({ education }: IEditEducationFormProps) => {
           name='educationPeriod'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Период обучения</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Период обучения</FormLabel>
               <FormControl>
                 <Input
                   type='text'
@@ -91,7 +91,7 @@ export const EditEducationForm = ({ education }: IEditEducationFormProps) => {
           name='format'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold text-black'>Форма обучения</FormLabel>
+              <FormLabel className='font-bold text-foreground'>Форма обучения</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className='w-[320px] h-[45px]'>

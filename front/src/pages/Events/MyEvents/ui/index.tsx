@@ -26,7 +26,7 @@ const MyEventsPage = () => {
                     to={`${paths.PROFILE}/${paths.EVENT}/${registration.eventUid}`}
                     className='space-y-2'
                   >
-                    <Heading variant='h3' className='text-[#0066B3]'>
+                    <Heading variant='h3' className='text-brand'>
                       {registration.eventName}
                     </Heading>
                     <p className='leading-[171%] text-sm opacity-60'>

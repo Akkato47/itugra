@@ -26,13 +26,13 @@ export const EditExperience = ({ userExperience }: IEditExperienceProps) => {
   return (
     <>
       {userExperience.length !== 0 && (
-        <ul className='mt-4 space-y-3 border border-slate-300 rounded-lg p-6'>
+        <ul className='mt-4 space-y-3 border border-border rounded-lg p-6'>
           {userExperience.map((career) => (
             <li key={career.uid} className='gap-1 flex flex-col items-start relative'>
               <Heading variant='h4' tag='h4'>
                 {career.position}
               </Heading>
-              <p className='text-[#0066b3] leading-[175%]'>{career.name}</p>
+              <p className='text-brand leading-[175%]'>{career.name}</p>
               <p className='text-sm leading-[171%] opacity-50'>{`${formateDate(career.startDate, "dote")} - ${career.present ? "По настоящее время" : formateDate(career.endDate, "dote")}`}</p>
               <div className='absolute flex items-center gap-3 top-1/2 -translate-y-1/2 right-0'>
                 <Dialog>

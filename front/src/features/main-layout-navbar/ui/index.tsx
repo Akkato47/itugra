@@ -29,10 +29,10 @@ export const MainLayoutNavbar = () => {
             <div
               title='Скоро'
               aria-disabled='true'
-              className='flex items-center gap-3 shadow-sidebarItemShadow border border-slate-200 rounded-lg py-3 px-5 bg-slate-50 opacity-50 cursor-not-allowed select-none'
+              className='flex items-center gap-3 shadow-sidebarItemShadow border border-border rounded-lg py-3 px-5 bg-muted opacity-50 cursor-not-allowed select-none'
             >
               {item.icon}
-              <p className='text-sm text-slate-400 leading-[171%]'>{item.title}</p>
+              <p className='text-sm text-muted-foreground leading-[171%]'>{item.title}</p>
             </div>
           )}
           {typeof item.link === "string" && !isDisabled && (
@@ -40,22 +40,22 @@ export const MainLayoutNavbar = () => {
               to={item.link === paths.PROFILE ? `${item.link}/${user?.tag}` : item.link}
               className={({ isActive }) =>
                 isActive || (pathname === paths.ALL_EVENTS && item.title === "Мои мероприятия")
-                  ? "flex items-center gap-3 shadow-sidebarItemShadow border border-slate-300 rounded-lg py-3 bg-slate-100 px-5"
-                  : "flex items-center gap-3 shadow-sidebarItemShadow border border-slate-300 rounded-lg py-3 px-5 hover:bg-white"
+                  ? "flex items-center gap-3 shadow-sidebarItemShadow border border-border rounded-lg py-3 bg-muted px-5"
+                  : "flex items-center gap-3 shadow-sidebarItemShadow border border-border rounded-lg py-3 px-5 hover:bg-muted"
               }
             >
               {item.icon}
-              <p className='text-sm text-slate-900 leading-[171%]'>{item.title}</p>
+              <p className='text-sm text-foreground leading-[171%]'>{item.title}</p>
             </NavLink>
           )}
           {typeof item.link === "number" && (
             <Button
               variant='link'
               onClick={() => navigate(state.prevPathName)}
-              className='flex items-center justify-start gap-3 shadow-sidebarItemShadow border border-slate-300 rounded-lg py-5 w-full hover:bg-white'
+              className='flex items-center justify-start gap-3 shadow-sidebarItemShadow border border-border rounded-lg py-5 w-full hover:bg-muted'
             >
               {item.icon}
-              <p className='text-sm text-slate-900 leading-[171%]'> {item.title}</p>
+              <p className='text-sm text-foreground leading-[171%]'> {item.title}</p>
             </Button>
           )}
         </Fragment>

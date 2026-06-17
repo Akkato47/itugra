@@ -47,7 +47,7 @@ export const MainProfileInfo = ({
 
   return (
     <section {...props} className='w-full max-w-[840px]'>
-      <div className='flex flex-col items-center rounded-lg border border-slate-300'>
+      <div className='flex flex-col items-center rounded-lg border border-border'>
         {backgroundImage ? (
           <CustomImage
             src={backgroundImage?.fileUrl}

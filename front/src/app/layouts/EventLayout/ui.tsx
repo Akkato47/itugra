@@ -6,7 +6,7 @@ import { buttonVariants } from "@shared/constants/shade-cn";
 
 const EventLayout = () => (
   <>
-    <main className='pb-10 flex flex-col gap-10 container text-slate-900'>
+    <main className='pb-10 flex flex-col gap-10 container text-foreground'>
       <nav className='flex items-center gap-6'>
         <NavLink
           to={paths.ALL_EVENTS}

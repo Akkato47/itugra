@@ -12,7 +12,7 @@ const SettingsPage = () => {
       {isSuccess && (
         <div className='flex justify-center flex-col gap-6'>
           <section className='w-full max-w-[840px]'>
-            <div className='flex flex-col items-center rounded-lg border border-slate-300'>
+            <div className='flex flex-col items-center rounded-lg border border-border'>
               <EditPorfile userProfile={data.data} />
             </div>
           </section>

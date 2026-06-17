@@ -22,7 +22,7 @@ const LandingPage = () => {
   const { user } = useUser();
   return (
     <>
-      <header className='border-b border-b-slate-300'>
+      <header className='border-b border-b-border'>
         <nav className='mx-32 flex items-center justify-between'>
           <Link to='/'>
             <LogoIcon />
@@ -33,7 +33,7 @@ const LandingPage = () => {
 
       <main className='container space-y-14'>
         <section className='flex h-[calc(100vh-77px)] items-center justify-between'>
-          <div className='max-w-[590px] space-y-6 text-zinc-900'>
+          <div className='max-w-[590px] space-y-6 text-foreground'>
             <Heading tag='h1'>Развиваем IT в Югре вместе</Heading>
             <p className='text-xl leading-[140%]'>
               Поможем вам воплотить идеи в успешные ИТ-стартапы в Югре.
@@ -56,10 +56,10 @@ const LandingPage = () => {
         </section>
 
         <section className='text-center space-y-4'>
-          <Heading className='text-zinc-900' tag='h2' variant='h2'>
+          <Heading className='text-foreground' tag='h2' variant='h2'>
             Место Роста - это удобно
           </Heading>
-          <Heading className='text-zinc-900' tag='h4' variant='h4'>
+          <Heading className='text-foreground' tag='h4' variant='h4'>
             You gon run it for these hunnids, girl, or nah?
             <br />
             Show me, is you really bout your money, girl, or nah?

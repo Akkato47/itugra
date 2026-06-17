@@ -88,7 +88,7 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
           <DialogHeader>
             <DialogTitle>{selectedTask?.name}</DialogTitle>
           </DialogHeader>
-          <p className='whitespace-pre-line text-sm text-slate-700'>
+          <p className='whitespace-pre-line text-sm text-muted-foreground'>
             {selectedTask?.description?.trim() ||
               "Описание появится после повторной генерации чек-листа."}
           </p>
@@ -104,7 +104,7 @@ export const CheckList = ({ list }: { list: ITask[] }) => {
                       rel='noreferrer'
                       className='flex items-center gap-2 text-sm text-primary hover:underline'
                     >
-                      <span className='shrink-0 rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600'>
+                      <span className='shrink-0 rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground'>
                         {resourceTypeLabels[resource.type] ?? resource.type}
                       </span>
                       {resource.title}

@@ -23,7 +23,7 @@ export const EventCard = ({
     <div className='flex gap-10 py-6 px-9 shadow-lg rounded-xl'>
       <CustomImage src='/images/createTeamImage.webp' alt='event_image' className='h-full w-48' />
       <div className='space-y-2'>
-        <Heading variant='h3' className='text-[#0066B3]'>
+        <Heading variant='h3' className='text-brand'>
           {name}
         </Heading>
         <p className='leading-[171%] text-sm'>{description}</p>

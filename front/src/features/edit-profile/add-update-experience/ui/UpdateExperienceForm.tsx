@@ -101,7 +101,7 @@ export const UpdateExperienceForm = ({ userExperience }: IUpdateExperienceFormPr
           )}
         />
         <div className='space-y-2'>
-          <FormLabel className='font-bold text-black'>Время работы</FormLabel>
+          <FormLabel className='font-bold text-foreground'>Время работы</FormLabel>
           <div className='grid grid-cols-[1fr_1fr] grid-rows-2 justify-end'>
             <FormField
               control={editExperienceForm.control}
@@ -158,7 +158,7 @@ export const UpdateExperienceForm = ({ userExperience }: IUpdateExperienceFormPr
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className='text-black'>По настоящее время</FormLabel>
+                    <FormLabel className='text-foreground'>По настоящее время</FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>

@@ -15,7 +15,7 @@ const EducationSettingsPage = () => {
   return (
     <>
       {isSuccess && (
-        <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-slate-300'>
+        <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-border'>
           <div className='w-full space-y-7 px-6 relative my-6'>
             <Heading variant='h3' tag='h3' className='text-center'>
               Образование

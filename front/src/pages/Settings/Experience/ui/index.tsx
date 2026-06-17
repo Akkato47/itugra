@@ -11,7 +11,7 @@ const WorkSettingsPage = () => {
   const { data, isSuccess } = useGetUserExperience({});
 
   return (
-    <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-slate-300'>
+    <section className='w-full max-w-[840px] flex flex-col items-center rounded-lg border border-border'>
       <div className='w-full my-10 text-center px-6 space-y-10'>
         <Heading variant='h2' tag='h2'>
           Опыт работы

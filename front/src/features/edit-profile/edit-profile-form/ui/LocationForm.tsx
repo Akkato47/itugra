@@ -59,7 +59,7 @@ export const LocationForm = ({ location, setUserLcoation, setIsOpen }: ILocation
           name='city'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='pb-2 font-bold text-black'>Город</FormLabel>
+              <FormLabel className='pb-2 font-bold text-foreground'>Город</FormLabel>
               <FormControl>
                 <Input type='text' placeholder='Введите город' {...field} />
               </FormControl>

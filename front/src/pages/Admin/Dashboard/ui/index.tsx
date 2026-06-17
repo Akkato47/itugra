@@ -3,9 +3,9 @@ import { Heading, Skeleton } from "@shared/ui";
 import { useAdminStatsQuery } from "../api/useAdminStatsQuery";
 
 const StatCard = ({ label, value }: { label: string; value: number }) => (
-  <div className='rounded-xl border border-slate-200 px-6 py-5 shadow-sm'>
+  <div className='rounded-xl border border-border px-6 py-5 shadow-sm'>
     <p className='text-sm opacity-60'>{label}</p>
-    <Heading variant='h2' className='text-[#0066B3]'>
+    <Heading variant='h2' className='text-brand'>
       {value}
     </Heading>
   </div>

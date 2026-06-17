@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import type { IAuthResponse } from "@features/sign-in";
 import { LogoutButton } from "@features/sign-out";
+import { ThemeToggle } from "@features/theme";
 
 import { paths } from "@shared/constants/react-router";
 import { cn } from "@shared/lib/shade-cn";
@@ -42,17 +43,19 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-fit'>
         <DropdownMenuLabel className='flex items-center flex-col justify-center text-sm gap-1 my-1'>
-          <p className='leading-[143%] text-slate-700 font-semibold'>
+          <p className='leading-[143%] text-foreground font-semibold'>
             {user.shortInfo.fullName.split(" ")[1]}
           </p>
-          <p className='leading-[143%] text-slate-400 font-semibold'>{user.shortInfo.mail}</p>
+          <p className='leading-[143%] text-muted-foreground font-semibold'>
+            {user.shortInfo.mail}
+          </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className='px-2 space-y-2'>
           <Link
             to='#'
             onClick={closeDropDown}
-            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
+            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-muted'
           >
             <Share1Icon className='size-5' />
             <p className='leading-[143%]'>Поделиться</p>
@@ -61,7 +64,7 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
             to={paths.PERSONAL_DATA_SETTINGS}
             state={{ prevPathName: pathname }}
             onClick={closeDropDown}
-            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
+            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-muted'
           >
             <GearIcon className='size-5' />
             <p className='leading-[143%]'>Настройки</p>
@@ -69,11 +72,12 @@ export const ProfileWidget = ({ user }: IProfileWidgetProps) => {
           <Link
             to={paths.ADMIN}
             onClick={closeDropDown}
-            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-slate-100'
+            className='flex items-center gap-2 py-1 px-2 rounded-md hover:bg-muted'
           >
             <AccessibilityIcon className='size-5' />
             <p className='leading-[143%]'>Админ панель</p>
           </Link>
+          <ThemeToggle />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <LogoutButton />
